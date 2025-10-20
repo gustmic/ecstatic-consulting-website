@@ -14,6 +14,7 @@ const Index = () => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add("animate-slide-up");
+            entry.target.classList.remove("opacity-0");
           }
         });
       },
@@ -51,14 +52,24 @@ const Index = () => {
           <p className="text-xl md:text-2xl text-primary-foreground/90 mb-12 max-w-3xl mx-auto animate-slide-up">
             Empowering business growth through strategic insights, data analytics, and technology solutions
           </p>
-          <Button 
-            size="lg" 
-            variant="secondary"
-            className="animate-scale-in text-lg px-8 py-6 shadow-lg hover:shadow-xl"
-            onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
-          >
-            Explore Our Services
-          </Button>
+          <div className="flex gap-4 justify-center">
+            <Button 
+              size="lg" 
+              variant="secondary"
+              className="animate-scale-in text-lg px-8 py-6 shadow-lg hover:shadow-xl"
+              onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
+            >
+              Explore Our Services
+            </Button>
+            <Button 
+              size="lg" 
+              variant="outline"
+              className="animate-scale-in text-lg px-8 py-6 shadow-lg hover:shadow-xl bg-white/10 border-white text-white hover:bg-white hover:text-primary"
+              onClick={() => window.location.href = '/about'}
+            >
+              About Us
+            </Button>
+          </div>
         </div>
         
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
@@ -120,7 +131,12 @@ const Index = () => {
           <p className="text-xl text-primary-foreground/90 mb-8 max-w-2xl mx-auto">
             Let's discuss how we can help you turn your challenges into opportunities
           </p>
-          <Button size="lg" variant="secondary" className="text-lg px-8 py-6">
+          <Button 
+            size="lg" 
+            variant="secondary" 
+            className="text-lg px-8 py-6"
+            onClick={() => window.location.href = '/about#contact'}
+          >
             Book a Consultation
           </Button>
         </div>

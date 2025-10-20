@@ -13,6 +13,8 @@ import AdminDashboard from "./pages/AdminDashboard";
 import NewPost from "./pages/NewPost";
 import BlogList from "./pages/BlogList";
 import BlogPost from "./pages/BlogPost";
+import About from "./pages/About";
+import Cases from "./pages/Cases";
 
 const queryClient = new QueryClient();
 
@@ -30,9 +32,10 @@ const App = () => (
           <Route path="/admin" element={<Auth />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/new-post" element={<NewPost />} />
+          <Route path="/about" element={<About />} />
           <Route path="/:category/blog" element={<BlogList />} />
           <Route path="/:category/blog/:id" element={<BlogPost />} />
-          <Route path="/:category/cases" element={<BlogList />} />
+          <Route path="/:category/cases" element={<Cases />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

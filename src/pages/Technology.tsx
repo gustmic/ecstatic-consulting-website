@@ -24,8 +24,8 @@ const Technology = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
       
-      {/* Hero */}
-      <section className="relative pt-32 pb-20 overflow-hidden">
+      {/* Hero - Static Banner */}
+      <section className="relative h-[40vh] flex items-center overflow-hidden">
         <div 
           className="absolute inset-0 z-0"
           style={{
@@ -145,7 +145,11 @@ const Technology = () => {
                 View Case Studies
               </Button>
             </Link>
-            <Button size="lg" variant="secondary">
+            <Button 
+              size="lg" 
+              variant="secondary"
+              onClick={() => window.location.href = '/about#contact'}
+            >
               Book Consultation
             </Button>
           </div>
