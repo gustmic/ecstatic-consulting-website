@@ -24,8 +24,8 @@ const Strategy = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
       
-      {/* Hero - Static Banner */}
-      <section className="relative h-[40vh] flex items-center overflow-hidden">
+      {/* Hero - Sticky Banner */}
+      <section className="sticky top-0 z-40 h-[30vh] md:h-[40vh] flex items-center overflow-hidden">
         <div 
           className="absolute inset-0 z-0"
           style={{
@@ -37,12 +37,12 @@ const Strategy = () => {
           <div className="absolute inset-0 bg-gradient-to-br from-primary/85 to-secondary/70" />
         </div>
         
-        <div className="container mx-auto px-6 z-10 relative">
+        <div className="container mx-auto px-4 md:px-6 z-10 relative">
           <div className="max-w-3xl">
-            <h1 className="font-serif text-5xl md:text-6xl font-bold text-primary-foreground mb-6">
+            <h1 className="font-serif text-3xl md:text-5xl lg:text-6xl font-bold text-primary-foreground mb-3 md:mb-6">
               Strategic Consulting
             </h1>
-            <p className="text-xl text-primary-foreground/90">
+            <p className="text-base md:text-xl text-primary-foreground/90">
               Paving the way for sustainable growth, market competitiveness, and optimal business performance
             </p>
           </div>
@@ -50,8 +50,8 @@ const Strategy = () => {
       </section>
 
       {/* Challenge Section */}
-      <section className="py-20 bg-muted/30">
-        <div className="container mx-auto px-6">
+      <section className="py-12 md:py-20 bg-muted/30">
+        <div className="container mx-auto px-4 md:px-6">
           <div className="max-w-4xl mx-auto">
             <h2 className="font-serif text-4xl font-bold text-foreground mb-6 text-center">
               Common Strategic Challenges
@@ -77,8 +77,8 @@ const Strategy = () => {
       </section>
 
       {/* Solution Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-6">
+      <section className="py-12 md:py-20">
+        <div className="container mx-auto px-4 md:px-6">
           <div className="max-w-4xl mx-auto">
             <h2 className="font-serif text-4xl font-bold text-foreground mb-6 text-center">
               Our Strategic Solutions
@@ -129,8 +129,8 @@ const Strategy = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-primary to-secondary">
-        <div className="container mx-auto px-6 text-center">
+      <section className="py-12 md:py-20 bg-gradient-to-br from-primary to-secondary">
+        <div className="container mx-auto px-4 md:px-6 text-center">
           <h2 className="font-serif text-4xl font-bold text-primary-foreground mb-6">
             Ready to Chart Your Strategic Course?
           </h2>
