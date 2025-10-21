@@ -12,18 +12,46 @@ import { useToast } from "@/hooks/use-toast";
 const AdminDashboard = () => {
   const [user, setUser] = useState<User | null>(null);
   const [posts, setPosts] = useState<any[]>([]);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    const checkAdminStatus = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      
       if (!session) {
         navigate("/admin");
-      } else {
-        setUser(session.user);
-        fetchPosts(session.user.id);
+        return;
       }
-    });
+
+      setUser(session.user);
+
+      // Check if user has admin role
+      const { data: roleData } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", session.user.id)
+        .eq("role", "admin")
+        .maybeSingle();
+
+      if (!roleData) {
+        toast({
+          variant: "destructive",
+          title: "Access Denied",
+          description: "You do not have admin privileges.",
+        });
+        navigate("/");
+        return;
+      }
+
+      setIsAdmin(true);
+      fetchPosts(session.user.id);
+      setLoading(false);
+    };
+
+    checkAdminStatus();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (!session) {
@@ -34,7 +62,7 @@ const AdminDashboard = () => {
     });
 
     return () => subscription.unsubscribe();
-  }, [navigate]);
+  }, [navigate, toast]);
 
   const fetchPosts = async (userId: string) => {
     const { data, error } = await supabase
@@ -59,11 +87,15 @@ const AdminDashboard = () => {
     navigate("/");
   };
 
+  if (loading || !isAdmin) {
+    return null;
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
       
-      <div className="container mx-auto px-6 pt-32 pb-20">
+      <div className="container mx-auto px-4 md:px-6 pt-32 pb-20">
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="font-serif text-4xl font-bold mb-2">Admin Dashboard</h1>

@@ -15,6 +15,7 @@ import BlogList from "./pages/BlogList";
 import BlogPost from "./pages/BlogPost";
 import About from "./pages/About";
 import Cases from "./pages/Cases";
+import SetupAdmin from "./pages/SetupAdmin";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +33,7 @@ const App = () => (
           <Route path="/admin" element={<Auth />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/new-post" element={<NewPost />} />
+          <Route path="/admin/setup" element={<SetupAdmin />} />
           <Route path="/about" element={<About />} />
           <Route path="/:category/blog" element={<BlogList />} />
           <Route path="/:category/blog/:id" element={<BlogPost />} />

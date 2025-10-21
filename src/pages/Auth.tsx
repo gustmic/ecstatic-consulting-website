@@ -9,10 +9,8 @@ import { useToast } from "@/hooks/use-toast";
 import logo from "@/assets/logo.webp";
 
 const Auth = () => {
-  const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -39,37 +37,17 @@ const Auth = () => {
     setLoading(true);
 
     try {
-      if (isLogin) {
-        const { error } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-        if (error) throw error;
+      if (error) throw error;
 
-        toast({
-          title: "Welcome back!",
-          description: "Successfully logged in.",
-        });
-      } else {
-        const { error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            data: {
-              full_name: fullName,
-            },
-            emailRedirectTo: `${window.location.origin}/`,
-          },
-        });
-
-        if (error) throw error;
-
-        toast({
-          title: "Account created!",
-          description: "Please check your email to confirm your account.",
-        });
-      }
+      toast({
+        title: "Welcome back!",
+        description: "Successfully logged in.",
+      });
     } catch (error: any) {
       toast({
         variant: "destructive",
@@ -89,24 +67,10 @@ const Auth = () => {
         </div>
 
         <h2 className="font-serif text-3xl font-bold text-center mb-6">
-          {isLogin ? "Admin Login" : "Create Admin Account"}
+          Admin Login
         </h2>
 
         <form onSubmit={handleAuth} className="space-y-4">
-          {!isLogin && (
-            <div>
-              <Label htmlFor="fullName">Full Name</Label>
-              <Input
-                id="fullName"
-                type="text"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                required
-                placeholder="John Doe"
-              />
-            </div>
-          )}
-
           <div>
             <Label htmlFor="email">Email</Label>
             <Input
@@ -133,21 +97,9 @@ const Auth = () => {
           </div>
 
           <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? "Processing..." : isLogin ? "Sign In" : "Sign Up"}
+            {loading ? "Processing..." : "Sign In"}
           </Button>
         </form>
-
-        <div className="mt-6 text-center">
-          <button
-            type="button"
-            onClick={() => setIsLogin(!isLogin)}
-            className="text-sm text-primary hover:underline"
-          >
-            {isLogin
-              ? "Need an account? Sign up"
-              : "Already have an account? Sign in"}
-          </button>
-        </div>
       </Card>
     </div>
   );
