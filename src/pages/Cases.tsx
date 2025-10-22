@@ -8,6 +8,7 @@ interface CaseStudy {
   description: string;
   category: string;
   image?: string;
+  featured?: boolean;
 }
 
 const caseStudies: Record<string, { title: string; categories: { name: string; cases: CaseStudy[] }[] }> = {
@@ -21,6 +22,7 @@ const caseStudies: Record<string, { title: string; categories: { name: string; c
             title: "Market Position Assessment for Tech Startup",
             description: "Comprehensive competitive analysis revealing key market gaps and strategic positioning opportunities, leading to 40% market share growth.",
             category: "Competitive Analysis",
+            featured: true,
           },
           {
             title: "Industry Landscape Mapping for Healthcare Provider",
@@ -71,6 +73,7 @@ const caseStudies: Record<string, { title: string; categories: { name: string; c
             title: "Customer Churn Prediction Model",
             description: "Developed machine learning model predicting customer churn with 85% accuracy, enabling proactive retention strategies.",
             category: "Predictive Analysis",
+            featured: true,
           },
           {
             title: "Sales Forecasting System for Retail",
@@ -136,6 +139,7 @@ const caseStudies: Record<string, { title: string; categories: { name: string; c
             title: "Critical System Performance Issue Resolution",
             description: "Diagnosed and resolved performance bottleneck affecting 10,000+ users, restoring system performance to optimal levels within 48 hours.",
             category: "Troubleshooting",
+            featured: true,
           },
           {
             title: "Cloud Infrastructure Stability Enhancement",

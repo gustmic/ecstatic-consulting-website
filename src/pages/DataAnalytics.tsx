@@ -2,10 +2,16 @@ import Navigation from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import dataImage from "@/assets/data-bg.jpg";
-import { CheckCircle2, ArrowRight } from "lucide-react";
+import { CheckCircle2, ArrowRight, ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import TestimonialsCarousel from "@/components/TestimonialsCarousel";
+import CaseStudySpotlight from "@/components/CaseStudySpotlight";
+import { useState } from "react";
 
 const DataAnalytics = () => {
+  const [challengesOpen, setChallengesOpen] = useState(false);
+  
   const challenges = [
     "Overwhelming data volumes with limited actionable insights",
     "Disconnected data sources and siloed information",
@@ -49,32 +55,50 @@ const DataAnalytics = () => {
         </div>
       </section>
 
-      {/* Challenge Section */}
+      {/* Challenge Section - Collapsible */}
       <section className="py-12 md:py-20 bg-muted/30">
         <div className="container mx-auto px-4 md:px-6">
           <div className="max-w-4xl mx-auto">
-            <h2 className="font-serif text-4xl font-bold text-foreground mb-6 text-center">
-              Data Analytics Challenges
-            </h2>
-            <p className="text-muted-foreground text-center mb-12 text-lg">
-              Struggling to extract value from your data?
-            </p>
-            
-            <div className="grid md:grid-cols-2 gap-6">
-              {challenges.map((challenge, index) => (
-                <Card key={index} className="p-6 hover:shadow-lg transition-shadow">
-                  <div className="flex gap-4">
-                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-destructive/10 flex items-center justify-center mt-1">
-                      <div className="w-2 h-2 rounded-full bg-destructive" />
-                    </div>
-                    <p className="text-foreground">{challenge}</p>
-                  </div>
-                </Card>
-              ))}
-            </div>
+            <Collapsible open={challengesOpen} onOpenChange={setChallengesOpen}>
+              <CollapsibleTrigger className="w-full group">
+                <div className="flex items-center justify-center gap-3 mb-6">
+                  <h2 className="font-serif text-4xl font-bold text-foreground">
+                    Data Analytics Challenges
+                  </h2>
+                  <ChevronDown className={`h-8 w-8 text-primary transition-transform duration-300 ${challengesOpen ? 'rotate-180' : ''}`} />
+                </div>
+                <p className="text-muted-foreground text-center mb-8 text-lg">
+                  Struggling to extract value from your data?
+                </p>
+              </CollapsibleTrigger>
+              
+              <CollapsibleContent className="animate-accordion-down">
+                <div className="grid md:grid-cols-2 gap-6 mt-6">
+                  {challenges.map((challenge, index) => (
+                    <Card key={index} className="p-6 hover:shadow-lg transition-shadow">
+                      <div className="flex gap-4">
+                        <div className="flex-shrink-0 w-6 h-6 rounded-full bg-destructive/10 flex items-center justify-center mt-1">
+                          <div className="w-2 h-2 rounded-full bg-destructive" />
+                        </div>
+                        <p className="text-foreground">{challenge}</p>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
           </div>
         </div>
       </section>
+
+      {/* Case Study Spotlight */}
+      <CaseStudySpotlight
+        title="Customer Churn Prediction Model"
+        description="Developed machine learning model predicting customer churn with 85% accuracy, enabling proactive retention strategies."
+        category="Predictive Analysis"
+        link="/data-analytics/cases"
+        icon="📊"
+      />
 
       {/* Solution Section */}
       <section className="py-12 md:py-20">
@@ -127,6 +151,9 @@ const DataAnalytics = () => {
           </div>
         </div>
       </section>
+
+      {/* Testimonials Carousel */}
+      <TestimonialsCarousel serviceArea="Data Analytics" />
 
       {/* CTA Section */}
       <section className="py-12 md:py-20 bg-gradient-to-br from-secondary to-accent">

@@ -2,10 +2,16 @@ import Navigation from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import technologyImage from "@/assets/technology-bg.jpg";
-import { CheckCircle2, ArrowRight } from "lucide-react";
+import { CheckCircle2, ArrowRight, ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import TestimonialsCarousel from "@/components/TestimonialsCarousel";
+import CaseStudySpotlight from "@/components/CaseStudySpotlight";
+import { useState } from "react";
 
 const Technology = () => {
+  const [challengesOpen, setChallengesOpen] = useState(false);
+  
   const challenges = [
     "Legacy systems hindering innovation and agility",
     "Lack of integration between critical business tools",
@@ -49,32 +55,50 @@ const Technology = () => {
         </div>
       </section>
 
-      {/* Challenge Section */}
+      {/* Challenge Section - Collapsible */}
       <section className="py-12 md:py-20 bg-muted/30">
         <div className="container mx-auto px-4 md:px-6">
           <div className="max-w-4xl mx-auto">
-            <h2 className="font-serif text-4xl font-bold text-foreground mb-6 text-center">
-              Technology Transformation Challenges
-            </h2>
-            <p className="text-muted-foreground text-center mb-12 text-lg">
-              Is your technology holding you back?
-            </p>
-            
-            <div className="grid md:grid-cols-2 gap-6">
-              {challenges.map((challenge, index) => (
-                <Card key={index} className="p-6 hover:shadow-lg transition-shadow">
-                  <div className="flex gap-4">
-                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-destructive/10 flex items-center justify-center mt-1">
-                      <div className="w-2 h-2 rounded-full bg-destructive" />
-                    </div>
-                    <p className="text-foreground">{challenge}</p>
-                  </div>
-                </Card>
-              ))}
-            </div>
+            <Collapsible open={challengesOpen} onOpenChange={setChallengesOpen}>
+              <CollapsibleTrigger className="w-full group">
+                <div className="flex items-center justify-center gap-3 mb-6">
+                  <h2 className="font-serif text-4xl font-bold text-foreground">
+                    Technology Transformation Challenges
+                  </h2>
+                  <ChevronDown className={`h-8 w-8 text-primary transition-transform duration-300 ${challengesOpen ? 'rotate-180' : ''}`} />
+                </div>
+                <p className="text-muted-foreground text-center mb-8 text-lg">
+                  Is your technology holding you back?
+                </p>
+              </CollapsibleTrigger>
+              
+              <CollapsibleContent className="animate-accordion-down">
+                <div className="grid md:grid-cols-2 gap-6 mt-6">
+                  {challenges.map((challenge, index) => (
+                    <Card key={index} className="p-6 hover:shadow-lg transition-shadow">
+                      <div className="flex gap-4">
+                        <div className="flex-shrink-0 w-6 h-6 rounded-full bg-destructive/10 flex items-center justify-center mt-1">
+                          <div className="w-2 h-2 rounded-full bg-destructive" />
+                        </div>
+                        <p className="text-foreground">{challenge}</p>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
           </div>
         </div>
       </section>
+
+      {/* Case Study Spotlight */}
+      <CaseStudySpotlight
+        title="Critical System Performance Issue Resolution"
+        description="Diagnosed and resolved performance bottleneck affecting 10,000+ users, restoring system performance to optimal levels within 48 hours."
+        category="Troubleshooting"
+        link="/technology/cases"
+        icon="🔧"
+      />
 
       {/* Solution Section */}
       <section className="py-12 md:py-20">
@@ -127,6 +151,9 @@ const Technology = () => {
           </div>
         </div>
       </section>
+
+      {/* Testimonials Carousel */}
+      <TestimonialsCarousel serviceArea="Technology" />
 
       {/* CTA Section */}
       <section className="py-12 md:py-20 bg-gradient-to-br from-accent to-primary">
