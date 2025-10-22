@@ -95,40 +95,44 @@ const About = () => {
         <div className="container mx-auto max-w-6xl">
           <h2 className="font-serif text-4xl font-bold mb-16 text-center">Our Team</h2>
           
-          <div className="grid md:grid-cols-2 gap-12">
+          <div className="grid md:grid-cols-2 gap-8">
             {/* Micael Gustavsson */}
             <div className="bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-              <div className="aspect-square overflow-hidden">
-                <img 
-                  src={micaelImage} 
-                  alt="Micael Gustavsson" 
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="p-8">
-                <h3 className="font-serif text-2xl font-bold mb-2">Micael Gustavsson</h3>
-                <p className="text-primary font-medium mb-4">Principal Consultant, Strategy & Analytics</p>
-                <p className="text-muted-foreground leading-relaxed">
-                  Micael has 15+ years of experience in strategy and business consulting guiding Fortune Global 500 companies like Compaq, Nokia, and Telenor through critical growth initiatives and business model innovations.
-                </p>
+              <div className="flex gap-6 p-6">
+                <div className="flex-shrink-0">
+                  <img 
+                    src={micaelImage} 
+                    alt="Micael Gustavsson" 
+                    className="w-32 h-32 object-cover rounded-lg"
+                  />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-serif text-xl font-bold mb-1">Micael Gustavsson</h3>
+                  <p className="text-primary font-medium text-sm mb-3">Head of Strategy & Analytics</p>
+                  <p className="text-muted-foreground text-sm leading-relaxed">
+                    Micael has 15+ years of experience in strategy and business consulting guiding Fortune Global 500 companies like Compaq, Nokia, and Telenor through critical growth initiatives and business model innovations.
+                  </p>
+                </div>
               </div>
             </div>
 
             {/* Reinhold Rutks */}
             <div className="bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-              <div className="aspect-square overflow-hidden">
-                <img 
-                  src={reinholdImage} 
-                  alt="Reinhold Rutks" 
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="p-8">
-                <h3 className="font-serif text-2xl font-bold mb-2">Reinhold Rutks</h3>
-                <p className="text-primary font-medium mb-4">Principal Consultant, Technology & Engineering</p>
-                <p className="text-muted-foreground leading-relaxed">
-                  Reinhold has 30+ years of experience of solving complex engineering challenges through both strategic and hands-on technical insight in manufacturing processes.
-                </p>
+              <div className="flex gap-6 p-6">
+                <div className="flex-shrink-0">
+                  <img 
+                    src={reinholdImage} 
+                    alt="Reinhold Rutks" 
+                    className="w-32 h-32 object-cover rounded-lg"
+                  />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-serif text-xl font-bold mb-1">Reinhold Rutks</h3>
+                  <p className="text-primary font-medium text-sm mb-3">Head of Technology & Engineering</p>
+                  <p className="text-muted-foreground text-sm leading-relaxed">
+                    Reinhold has 30+ years of experience of solving complex engineering challenges through both strategic and hands-on technical insight in manufacturing processes.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
