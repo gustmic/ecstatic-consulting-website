@@ -231,6 +231,48 @@ export type Database = {
         }
         Relationships: []
       }
+      testimonials: {
+        Row: {
+          client_company: string
+          client_name: string
+          client_title: string | null
+          created_at: string
+          id: string
+          image_url: string | null
+          is_featured: boolean
+          logo_url: string | null
+          quote: string
+          service_area: string | null
+          updated_at: string
+        }
+        Insert: {
+          client_company: string
+          client_name: string
+          client_title?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          is_featured?: boolean
+          logo_url?: string | null
+          quote: string
+          service_area?: string | null
+          updated_at?: string
+        }
+        Update: {
+          client_company?: string
+          client_name?: string
+          client_title?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          is_featured?: boolean
+          logo_url?: string | null
+          quote?: string
+          service_area?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_preferences: {
         Row: {
           created_at: string

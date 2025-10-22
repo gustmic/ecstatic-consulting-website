@@ -12,6 +12,8 @@ import Technology from "./pages/Technology";
 import Auth from "./pages/Auth";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminLanding from "./pages/AdminLanding";
+import AdminContent from "./pages/AdminContent";
+import AdminTestimonials from "./pages/AdminTestimonials";
 import NewPost from "./pages/NewPost";
 import BlogList from "./pages/BlogList";
 import BlogPost from "./pages/BlogPost";
@@ -42,6 +44,8 @@ const App = () => (
             <Route path="/admin" element={<Auth />} />
             <Route path="/admin/setup" element={<SetupAdmin />} />
             <Route path="/admin/landing" element={<AdminLanding />} />
+            <Route path="/admin/content" element={<AdminContent />} />
+            <Route path="/admin/testimonials" element={<AdminTestimonials />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/admin/new-post" element={<NewPost />} />
             <Route path="/admin/crm" element={<CRMDashboard />} />
