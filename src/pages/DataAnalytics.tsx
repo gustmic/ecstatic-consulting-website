@@ -139,18 +139,11 @@ const DataAnalytics = () => {
                 View Case Studies
               </Button>
             </Link>
-            <Button 
-              size="lg" 
-              variant="secondary"
-              onClick={() => {
-                window.location.href = '/about#contact';
-                setTimeout(() => {
-                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 100);
-              }}
-            >
-              Book Consultation
-            </Button>
+            <Link to="/about#contact">
+              <Button size="lg" variant="secondary">
+                Book Consultation
+              </Button>
+            </Link>
           </div>
         </div>
       </section>

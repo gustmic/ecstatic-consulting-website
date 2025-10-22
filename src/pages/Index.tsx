@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import ServiceCard from "@/components/ServiceCard";
 import heroImage from "@/assets/hero-bg.jpg";
@@ -131,19 +132,15 @@ const Index = () => {
           <p className="text-xl text-primary-foreground/90 mb-8 max-w-2xl mx-auto">
             Let's discuss how we can help you turn your challenges into opportunities
           </p>
-          <Button 
-            size="lg" 
-            variant="secondary" 
-            className="text-lg px-8 py-6"
-            onClick={() => {
-              window.location.href = '/about#contact';
-              setTimeout(() => {
-                document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-              }, 100);
-            }}
-          >
-            Book a Consultation
-          </Button>
+          <Link to="/about#contact">
+            <Button 
+              size="lg" 
+              variant="secondary" 
+              className="text-lg px-8 py-6"
+            >
+              Book a Consultation
+            </Button>
+          </Link>
         </div>
       </section>
 
