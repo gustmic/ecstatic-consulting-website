@@ -21,9 +21,10 @@ interface ContactsTableProps {
   contacts: Contact[];
   onEdit: (contact: Contact) => void;
   onDelete: (id: string) => void;
+  onEmail?: (contact: Contact) => void;
 }
 
-const ContactsTable = ({ contacts, onEdit, onDelete }: ContactsTableProps) => {
+const ContactsTable = ({ contacts, onEdit, onDelete, onEmail }: ContactsTableProps) => {
   const getStageColor = (stage: string) => {
     const colors: Record<string, string> = {
       Lead: "bg-gray-500",
@@ -97,6 +98,15 @@ const ContactsTable = ({ contacts, onEdit, onDelete }: ContactsTableProps) => {
               </TableCell>
               <TableCell className="text-right">
                 <div className="flex gap-2 justify-end">
+                  {onEmail && (
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => onEmail(contact)}
+                    >
+                      <Mail className="h-4 w-4" />
+                    </Button>
+                  )}
                   <Button
                     size="sm"
                     variant="ghost"

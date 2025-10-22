@@ -4,18 +4,29 @@ import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, Plus, Search } from "lucide-react";
+import { ArrowLeft, Plus, Search, LayoutGrid, Table as TableIcon, Download } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import ContactsTable from "@/components/crm/ContactsTable";
 import ContactModal from "@/components/crm/ContactModal";
+import KanbanView from "@/components/crm/KanbanView";
+import ContactDetail from "@/components/crm/ContactDetail";
+import EmailModal from "@/components/crm/EmailModal";
+import { formatDate, formatCurrency } from "@/lib/formatters";
 
 const Contacts = () => {
   const [loading, setLoading] = useState(true);
   const [contacts, setContacts] = useState<any[]>([]);
   const [filteredContacts, setFilteredContacts] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [viewMode, setViewMode] = useState<"table" | "kanban">("table");
+  const [stageFilter, setStageFilter] = useState<string>("all");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingContact, setEditingContact] = useState<any>(null);
+  const [detailContactId, setDetailContactId] = useState<string | null>(null);
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const [emailContactId, setEmailContactId] = useState<string | null>(null);
+  const [isEmailOpen, setIsEmailOpen] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -36,19 +47,24 @@ const Contacts = () => {
   }, [navigate]);
 
   useEffect(() => {
-    // Filter contacts based on search query
-    if (searchQuery.trim() === "") {
-      setFilteredContacts(contacts);
-    } else {
+    // Filter contacts based on search query and stage
+    let filtered = contacts;
+
+    if (stageFilter !== "all") {
+      filtered = filtered.filter(c => c.stage === stageFilter);
+    }
+
+    if (searchQuery.trim() !== "") {
       const query = searchQuery.toLowerCase();
-      const filtered = contacts.filter(contact => 
+      filtered = filtered.filter(contact => 
         contact.name.toLowerCase().includes(query) ||
         contact.email.toLowerCase().includes(query) ||
         (contact.company && contact.company.toLowerCase().includes(query))
       );
-      setFilteredContacts(filtered);
     }
-  }, [searchQuery, contacts]);
+
+    setFilteredContacts(filtered);
+  }, [searchQuery, contacts, stageFilter]);
 
   const fetchContacts = async () => {
     const { data, error } = await supabase
@@ -138,6 +154,79 @@ const Contacts = () => {
     fetchContacts();
   };
 
+  const handleStageChange = async (contactId: string, newStage: string) => {
+    const { error } = await supabase
+      .from('contacts')
+      .update({ stage: newStage })
+      .eq('id', contactId);
+
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: "Error updating stage",
+        description: error.message,
+      });
+    } else {
+      // Log interaction
+      const { data: { session } } = await supabase.auth.getSession();
+      const contact = contacts.find(c => c.id === contactId);
+      
+      await supabase.from('interactions').insert({
+        contact_id: contactId,
+        type: 'Follow-up',
+        subject: `Stage changed to ${newStage}`,
+        notes: `Stage changed from ${contact?.stage} to ${newStage}`,
+        logged_by: session?.user.id,
+        date: new Date().toISOString().split('T')[0],
+      });
+
+      toast({ title: "Stage updated" });
+      fetchContacts();
+    }
+  };
+
+  const handleViewContact = (contact: any) => {
+    setDetailContactId(contact.id);
+    setIsDetailOpen(true);
+  };
+
+  const handleExportCSV = () => {
+    const headers = ["Name", "Company", "Email", "Stage", "Phone", "Last Contacted", "Next Follow-Up"];
+    const rows = filteredContacts.map(c => [
+      c.name,
+      c.company || "",
+      c.email,
+      c.stage,
+      c.phone || "",
+      c.last_contacted ? formatDate(c.last_contacted) : "",
+      c.next_followup ? formatDate(c.next_followup) : "",
+    ]);
+
+    const csvContent = [
+      headers.join(";"),
+      ...rows.map(row => row.join(";"))
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    const today = new Date().toISOString().split('T')[0];
+    
+    link.setAttribute("href", url);
+    link.setAttribute("download", `ecstatic_contacts_${today}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    toast({ title: "Contacts exported" });
+  };
+
+  const handleEmailContact = (contact: any) => {
+    setEmailContactId(contact.id);
+    setIsEmailOpen(true);
+  };
+
   if (loading) {
     return null;
   }
@@ -164,14 +253,20 @@ const Contacts = () => {
             </p>
           </div>
           
-          <Button onClick={handleAddContact}>
-            <Plus className="mr-2 h-4 w-4" />
-            Add Contact
-          </Button>
+          <div className="flex items-center gap-3">
+            <Button onClick={handleAddContact}>
+              <Plus className="mr-2 h-4 w-4" />
+              Add Contact
+            </Button>
+            <Button variant="outline" onClick={handleExportCSV}>
+              <Download className="mr-2 h-4 w-4" />
+              Export CSV
+            </Button>
+          </div>
         </div>
 
-        <div className="mb-6">
-          <div className="relative max-w-md">
+        <div className="flex items-center gap-4 mb-6">
+          <div className="relative flex-1 max-w-md">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Search contacts..."
@@ -180,19 +275,83 @@ const Contacts = () => {
               className="pl-10"
             />
           </div>
+
+          <Select value={stageFilter} onValueChange={setStageFilter}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Filter by stage" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Stages</SelectItem>
+              <SelectItem value="Lead">Lead</SelectItem>
+              <SelectItem value="Prospect">Prospect</SelectItem>
+              <SelectItem value="Proposal">Proposal</SelectItem>
+              <SelectItem value="Contract">Contract</SelectItem>
+              <SelectItem value="Client">Client</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <div className="flex gap-2 border rounded-md p-1">
+            <Button
+              variant={viewMode === "table" ? "default" : "ghost"}
+              size="sm"
+              onClick={() => setViewMode("table")}
+            >
+              <TableIcon className="h-4 w-4" />
+            </Button>
+            <Button
+              variant={viewMode === "kanban" ? "default" : "ghost"}
+              size="sm"
+              onClick={() => setViewMode("kanban")}
+            >
+              <LayoutGrid className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
 
-        <ContactsTable
-          contacts={filteredContacts}
-          onEdit={handleEditContact}
-          onDelete={handleDeleteContact}
-        />
+        {viewMode === "table" ? (
+          <ContactsTable
+            contacts={filteredContacts}
+            onEdit={handleEditContact}
+            onDelete={handleDeleteContact}
+            onEmail={handleEmailContact}
+          />
+        ) : (
+          <KanbanView
+            contacts={filteredContacts}
+            onContactClick={handleViewContact}
+            onStageChange={handleStageChange}
+          />
+        )}
 
         <ContactModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           onSave={handleSaveContact}
           contact={editingContact}
+        />
+
+        <ContactDetail
+          isOpen={isDetailOpen}
+          onClose={() => setIsDetailOpen(false)}
+          contactId={detailContactId}
+          onEdit={() => {
+            const contact = contacts.find(c => c.id === detailContactId);
+            if (contact) {
+              setIsDetailOpen(false);
+              handleEditContact(contact);
+            }
+          }}
+        />
+
+        <EmailModal
+          isOpen={isEmailOpen}
+          onClose={() => {
+            setIsEmailOpen(false);
+            fetchContacts(); // Refresh to show updated last_contacted
+          }}
+          contactId={emailContactId}
+          contactEmail={contacts.find(c => c.id === emailContactId)?.email}
+          contactName={contacts.find(c => c.id === emailContactId)?.name}
         />
       </div>
     </div>
