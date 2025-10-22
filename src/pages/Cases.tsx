@@ -2,6 +2,9 @@ import { useParams, Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import strategyImage from "@/assets/strategy-bg.jpg";
+import dataImage from "@/assets/data-bg.jpg";
+import technologyImage from "@/assets/technology-bg.jpg";
 
 interface CaseStudy {
   title: string;
@@ -215,6 +218,14 @@ const caseStudies: Record<string, { title: string; categories: { name: string; c
 const Cases = () => {
   const { category } = useParams<{ category: string }>();
   const categoryData = category ? caseStudies[category] : null;
+  
+  const bannerImages: Record<string, string> = {
+    strategy: strategyImage,
+    "data-analytics": dataImage,
+    technology: technologyImage,
+  };
+  
+  const bannerImage = category ? bannerImages[category] : undefined;
 
   if (!categoryData) {
     return (
@@ -236,7 +247,16 @@ const Cases = () => {
       
       {/* Hero - Static Banner */}
       <section className="relative h-[25vh] md:h-[30vh] flex items-center overflow-hidden">
-        <div className="absolute inset-0 z-0 bg-gradient-to-br from-primary/85 to-secondary/70" />
+        <div 
+          className="absolute inset-0 z-0"
+          style={bannerImage ? {
+            backgroundImage: `url(${bannerImage})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          } : {}}
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/85 to-secondary/70" />
+        </div>
         
         <div className="container mx-auto px-4 md:px-6 z-10 relative">
           <div className="max-w-3xl">
