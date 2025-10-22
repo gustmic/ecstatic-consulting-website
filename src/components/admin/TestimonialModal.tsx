@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,16 +27,29 @@ interface TestimonialModalProps {
 }
 
 const TestimonialModal = ({ open, onOpenChange, onSave, testimonial }: TestimonialModalProps) => {
-  const [formData, setFormData] = useState<Testimonial>(
-    testimonial || {
-      client_name: "",
-      client_title: "",
-      client_company: "",
-      quote: "",
-      service_area: "Strategy",
-      is_featured: false,
+  const [formData, setFormData] = useState<Testimonial>({
+    client_name: "",
+    client_title: "",
+    client_company: "",
+    quote: "",
+    service_area: "Strategy",
+    is_featured: false,
+  });
+
+  useEffect(() => {
+    if (testimonial) {
+      setFormData(testimonial);
+    } else {
+      setFormData({
+        client_name: "",
+        client_title: "",
+        client_company: "",
+        quote: "",
+        service_area: "Strategy",
+        is_featured: false,
+      });
     }
-  );
+  }, [testimonial, open]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
