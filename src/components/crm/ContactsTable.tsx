@@ -1,0 +1,124 @@
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { Pencil, Trash2, Mail } from "lucide-react";
+import { formatDate } from "@/lib/formatters";
+
+interface Contact {
+  id: string;
+  name: string;
+  company?: string;
+  email: string;
+  stage: string;
+  tags?: string[];
+  last_contacted?: string;
+  next_followup?: string;
+  phone?: string;
+}
+
+interface ContactsTableProps {
+  contacts: Contact[];
+  onEdit: (contact: Contact) => void;
+  onDelete: (id: string) => void;
+}
+
+const ContactsTable = ({ contacts, onEdit, onDelete }: ContactsTableProps) => {
+  const getStageColor = (stage: string) => {
+    const colors: Record<string, string> = {
+      Lead: "bg-gray-500",
+      Prospect: "bg-blue-500",
+      Proposal: "bg-yellow-500",
+      Contract: "bg-green-500",
+      Client: "bg-purple-500",
+    };
+    return colors[stage] || "bg-gray-500";
+  };
+
+  if (contacts.length === 0) {
+    return (
+      <Card className="p-12 text-center">
+        <p className="text-muted-foreground mb-4">No contacts found</p>
+        <p className="text-sm text-muted-foreground">Start by adding your first contact</p>
+      </Card>
+    );
+  }
+
+  return (
+    <Card>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Name</TableHead>
+            <TableHead>Company</TableHead>
+            <TableHead>Email</TableHead>
+            <TableHead>Stage</TableHead>
+            <TableHead>Tags</TableHead>
+            <TableHead>Last Contact</TableHead>
+            <TableHead>Next Follow-Up</TableHead>
+            <TableHead className="text-right">Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {contacts.map((contact) => (
+            <TableRow key={contact.id}>
+              <TableCell className="font-medium">{contact.name}</TableCell>
+              <TableCell>{contact.company || "-"}</TableCell>
+              <TableCell>{contact.email}</TableCell>
+              <TableCell>
+                <Badge className={getStageColor(contact.stage)}>
+                  {contact.stage}
+                </Badge>
+              </TableCell>
+              <TableCell>
+                {contact.tags && contact.tags.length > 0 ? (
+                  <div className="flex gap-1 flex-wrap">
+                    {contact.tags.map((tag, idx) => (
+                      <Badge key={idx} variant="outline" className="text-xs">
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
+                ) : (
+                  "-"
+                )}
+              </TableCell>
+              <TableCell>
+                {contact.last_contacted ? formatDate(contact.last_contacted) : "-"}
+              </TableCell>
+              <TableCell>
+                {contact.next_followup ? (
+                  <span className={new Date(contact.next_followup) < new Date() ? "text-destructive font-medium" : ""}>
+                    {formatDate(contact.next_followup)}
+                  </span>
+                ) : (
+                  "-"
+                )}
+              </TableCell>
+              <TableCell className="text-right">
+                <div className="flex gap-2 justify-end">
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => onEdit(contact)}
+                  >
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => onDelete(contact.id)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </Card>
+  );
+};
+
+export default ContactsTable;

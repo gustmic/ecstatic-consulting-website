@@ -30,7 +30,7 @@ const Progress = () => {
     },
     {
       title: "3. CRM Dashboard (Priority Page)",
-      status: "partial",
+      status: "complete",
       items: [
         { done: true, text: "Summary cards (Contacts, Projects, Pipeline, Next Follow-Up)" },
         { done: true, text: "Pipeline value weighted calculation" },
@@ -39,21 +39,21 @@ const Progress = () => {
         { done: true, text: "Recent activity feed (last 10 interactions)" },
         { done: true, text: "Swedish number formatting (1 200 000 kr)" },
         { done: true, text: "Swedish date formatting (14 dec 2025)" },
-        { done: false, text: "Revenue projection chart (6-month stacked bar)" },
-        { done: false, text: "Chart tooltips with breakdown" },
+        { done: true, text: "Revenue projection chart (6-month stacked bar)" },
+        { done: true, text: "Chart tooltips with breakdown" },
       ]
     },
     {
       title: "4. Contacts Page",
-      status: "not-started",
+      status: "partial",
       items: [
-        { done: false, text: "Table view with columns (Name, Company, Stage, Email, Tags, etc.)" },
+        { done: true, text: "Table view with columns (Name, Company, Stage, Email, Tags, etc.)" },
         { done: false, text: "Pipeline/Kanban view with drag-and-drop" },
-        { done: false, text: "Search with fuzzy matching (Swedish characters)" },
+        { done: true, text: "Search with fuzzy matching (Swedish characters)" },
         { done: false, text: "Filters (Stage, Tags, Follow-Up Status, Company)" },
         { done: false, text: "Bulk actions (Add Tag, Change Stage, Delete)" },
         { done: false, text: "Export to CSV with Swedish formatting" },
-        { done: false, text: "Add/Edit contact modal" },
+        { done: true, text: "Add/Edit contact modal" },
         { done: false, text: "Contact detail modal with interaction timeline" },
         { done: false, text: "Inline editing for basic fields" },
       ]
