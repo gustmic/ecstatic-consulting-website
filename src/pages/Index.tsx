@@ -135,7 +135,12 @@ const Index = () => {
             size="lg" 
             variant="secondary" 
             className="text-lg px-8 py-6"
-            onClick={() => window.location.href = '/about#contact'}
+            onClick={() => {
+              window.location.href = '/about#contact';
+              setTimeout(() => {
+                document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }, 100);
+            }}
           >
             Book a Consultation
           </Button>

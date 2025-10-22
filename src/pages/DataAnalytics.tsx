@@ -142,7 +142,12 @@ const DataAnalytics = () => {
             <Button 
               size="lg" 
               variant="secondary"
-              onClick={() => window.location.href = '/about#contact'}
+              onClick={() => {
+                window.location.href = '/about#contact';
+                setTimeout(() => {
+                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+              }}
             >
               Book Consultation
             </Button>
