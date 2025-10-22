@@ -90,7 +90,7 @@ const Progress = () => {
         { done: true, text: "Manage stages and probabilities" },
         { done: true, text: "Manage service types" },
         { done: true, text: "Tag management" },
-        { done: false, text: "User preferences" },
+        { done: true, text: "User preferences (view, notifications, format)" },
       ]
     },
     {

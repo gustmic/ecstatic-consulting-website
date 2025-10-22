@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Search } from "lucide-react";
+import { ArrowLeft, Search, Settings } from "lucide-react";
 import SummaryCards from "@/components/crm/SummaryCards";
 import UpcomingFollowUps from "@/components/crm/UpcomingFollowUps";
 import RecentActivity from "@/components/crm/RecentActivity";
@@ -242,13 +242,27 @@ const CRMDashboard = () => {
             </p>
           </div>
           
-          <Button variant="outline" onClick={() => setSearchOpen(true)}>
-            <Search className="mr-2 h-4 w-4" />
-            Search
-            <kbd className="ml-2 pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
-              <span className="text-xs">⌘</span>K
-            </kbd>
-          </Button>
+          <div className="flex gap-2">
+            <Link to="/admin/crm/preferences">
+              <Button variant="outline" size="sm">
+                <Settings className="mr-2 h-4 w-4" />
+                Preferences
+              </Button>
+            </Link>
+            <Link to="/admin/crm/settings">
+              <Button variant="outline" size="sm">
+                <Settings className="mr-2 h-4 w-4" />
+                Settings
+              </Button>
+            </Link>
+            <Button variant="outline" onClick={() => setSearchOpen(true)}>
+              <Search className="mr-2 h-4 w-4" />
+              Search
+              <kbd className="ml-2 pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
+                <span className="text-xs">⌘</span>K
+              </kbd>
+            </Button>
+          </div>
         </div>
 
         <div className="space-y-8">

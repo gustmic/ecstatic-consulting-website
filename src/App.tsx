@@ -23,6 +23,7 @@ import CRMDashboard from "./pages/crm/Dashboard";
 import Contacts from "./pages/crm/Contacts";
 import Projects from "./pages/crm/Projects";
 import Settings from "./pages/crm/Settings";
+import Preferences from "./pages/crm/Preferences";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +48,7 @@ const App = () => (
             <Route path="/admin/crm/contacts" element={<Contacts />} />
             <Route path="/admin/crm/projects" element={<Projects />} />
             <Route path="/admin/crm/settings" element={<Settings />} />
+            <Route path="/admin/crm/preferences" element={<Preferences />} />
             <Route path="/progress" element={<Progress />} />
             <Route path="/about" element={<About />} />
             <Route path="/:category/blog" element={<BlogList />} />
