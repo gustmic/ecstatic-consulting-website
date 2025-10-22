@@ -2,23 +2,13 @@ import Navigation from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import strategyImage from "@/assets/strategy-bg.jpg";
-import { CheckCircle2, ArrowRight, ChevronDown } from "lucide-react";
+import { CheckCircle2, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import TestimonialsCarousel from "@/components/TestimonialsCarousel";
 import CaseStudySpotlight from "@/components/CaseStudySpotlight";
-import { useState } from "react";
+import { HeroChallenge } from "@/components/HeroChallenge";
 
 const Strategy = () => {
-  const [challengesOpen, setChallengesOpen] = useState(false);
-  
-  const challenges = [
-    "Uncertain market positioning and competitive differentiation",
-    "Unclear growth strategy and market expansion opportunities",
-    "Inefficient resource allocation and organizational structure",
-    "Lack of strategic alignment across departments",
-  ];
-
   const solutions = [
     "Comprehensive market analysis and competitive positioning",
     "Data-driven growth strategies and expansion roadmaps",
@@ -55,41 +45,18 @@ const Strategy = () => {
         </div>
       </section>
 
-      {/* Challenge Section - Collapsible */}
-      <section className="py-12 md:py-20 bg-muted/30">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="max-w-4xl mx-auto">
-            <Collapsible open={challengesOpen} onOpenChange={setChallengesOpen}>
-              <CollapsibleTrigger className="w-full group">
-                <div className="flex items-center justify-center gap-3 mb-6">
-                  <h2 className="font-serif text-4xl font-bold text-foreground">
-                    Common Strategic Challenges
-                  </h2>
-                  <ChevronDown className={`h-8 w-8 text-primary transition-transform duration-300 ${challengesOpen ? 'rotate-180' : ''}`} />
-                </div>
-                <p className="text-muted-foreground text-center mb-8 text-lg">
-                  Does your organization face any of these obstacles?
-                </p>
-              </CollapsibleTrigger>
-              
-              <CollapsibleContent className="animate-accordion-down">
-                <div className="grid md:grid-cols-2 gap-6 mt-6">
-                  {challenges.map((challenge, index) => (
-                    <Card key={index} className="p-6 hover:shadow-lg transition-shadow">
-                      <div className="flex gap-4">
-                        <div className="flex-shrink-0 w-6 h-6 rounded-full bg-destructive/10 flex items-center justify-center mt-1">
-                          <div className="w-2 h-2 rounded-full bg-destructive" />
-                        </div>
-                        <p className="text-foreground">{challenge}</p>
-                      </div>
-                    </Card>
-                  ))}
-                </div>
-              </CollapsibleContent>
-            </Collapsible>
-          </div>
-        </div>
-      </section>
+      {/* Hero Challenge Section */}
+      <HeroChallenge
+        industry="manufacturing (OEM)"
+        problem="Facing razor-thin margins and outdated machinery, this manufacturing company was stuck in a commoditized OEM model with no differentiation. They needed to completely reimagine their business model to survive."
+        problemMetric="Operating margins: 1-2% | Growing competition from low-cost suppliers"
+        solution="Reinventing their Business Model - We helped them transform from a pure OEM supplier to a strategic B2B partner offering integrated after-market services and solutions."
+        results={{
+          metric1: "5 new strategic partnerships established (2 preferred, 3 specialized)",
+          metric2: "Margins increased from 1-2% to 9%",
+          metric3: "Profit multiplied by 12x over 18 months"
+        }}
+      />
 
       {/* Case Study Spotlight */}
       <CaseStudySpotlight

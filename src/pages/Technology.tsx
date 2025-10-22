@@ -2,23 +2,13 @@ import Navigation from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import technologyImage from "@/assets/technology-bg.jpg";
-import { CheckCircle2, ArrowRight, ChevronDown } from "lucide-react";
+import { CheckCircle2, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import TestimonialsCarousel from "@/components/TestimonialsCarousel";
 import CaseStudySpotlight from "@/components/CaseStudySpotlight";
-import { useState } from "react";
+import { HeroChallenge } from "@/components/HeroChallenge";
 
 const Technology = () => {
-  const [challengesOpen, setChallengesOpen] = useState(false);
-  
-  const challenges = [
-    "Legacy systems hindering innovation and agility",
-    "Lack of integration between critical business tools",
-    "Cybersecurity vulnerabilities and compliance gaps",
-    "Inefficient IT operations consuming excessive resources",
-  ];
-
   const solutions = [
     "Modern cloud infrastructure and migration strategies",
     "Enterprise integration and API development",
@@ -55,41 +45,18 @@ const Technology = () => {
         </div>
       </section>
 
-      {/* Challenge Section - Collapsible */}
-      <section className="py-12 md:py-20 bg-muted/30">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="max-w-4xl mx-auto">
-            <Collapsible open={challengesOpen} onOpenChange={setChallengesOpen}>
-              <CollapsibleTrigger className="w-full group">
-                <div className="flex items-center justify-center gap-3 mb-6">
-                  <h2 className="font-serif text-4xl font-bold text-foreground">
-                    Technology Transformation Challenges
-                  </h2>
-                  <ChevronDown className={`h-8 w-8 text-primary transition-transform duration-300 ${challengesOpen ? 'rotate-180' : ''}`} />
-                </div>
-                <p className="text-muted-foreground text-center mb-8 text-lg">
-                  Is your technology holding you back?
-                </p>
-              </CollapsibleTrigger>
-              
-              <CollapsibleContent className="animate-accordion-down">
-                <div className="grid md:grid-cols-2 gap-6 mt-6">
-                  {challenges.map((challenge, index) => (
-                    <Card key={index} className="p-6 hover:shadow-lg transition-shadow">
-                      <div className="flex gap-4">
-                        <div className="flex-shrink-0 w-6 h-6 rounded-full bg-destructive/10 flex items-center justify-center mt-1">
-                          <div className="w-2 h-2 rounded-full bg-destructive" />
-                        </div>
-                        <p className="text-foreground">{challenge}</p>
-                      </div>
-                    </Card>
-                  ))}
-                </div>
-              </CollapsibleContent>
-            </Collapsible>
-          </div>
-        </div>
-      </section>
+      {/* Hero Challenge Section */}
+      <HeroChallenge
+        industry="retail"
+        problem="This retail chain was drowning in legacy point-of-sale systems and disconnected inventory management. Customer data was scattered across 15 different systems, making personalization impossible and causing massive inefficiencies."
+        problemMetric="15 disconnected systems | 48-hour inventory sync delays | 0% omnichannel capability"
+        solution="Unified Technology Ecosystem - We designed and implemented a cloud-based integrated platform that connected all systems, enabled real-time inventory management, and created a single customer view."
+        results={{
+          metric1: "Real-time inventory visibility across 200+ locations",
+          metric2: "Customer satisfaction increased by 45%",
+          metric3: "Operational costs reduced by 32% while sales grew 28%"
+        }}
+      />
 
       {/* Case Study Spotlight */}
       <CaseStudySpotlight

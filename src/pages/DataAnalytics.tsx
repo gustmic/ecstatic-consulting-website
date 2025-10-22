@@ -2,23 +2,13 @@ import Navigation from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import dataImage from "@/assets/data-bg.jpg";
-import { CheckCircle2, ArrowRight, ChevronDown } from "lucide-react";
+import { CheckCircle2, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import TestimonialsCarousel from "@/components/TestimonialsCarousel";
 import CaseStudySpotlight from "@/components/CaseStudySpotlight";
-import { useState } from "react";
+import { HeroChallenge } from "@/components/HeroChallenge";
 
 const DataAnalytics = () => {
-  const [challengesOpen, setChallengesOpen] = useState(false);
-  
-  const challenges = [
-    "Overwhelming data volumes with limited actionable insights",
-    "Disconnected data sources and siloed information",
-    "Lack of predictive capabilities for strategic planning",
-    "Inability to measure ROI on business initiatives",
-  ];
-
   const solutions = [
     "Advanced analytics platforms with intuitive dashboards",
     "Unified data architecture and integration solutions",
@@ -55,41 +45,18 @@ const DataAnalytics = () => {
         </div>
       </section>
 
-      {/* Challenge Section - Collapsible */}
-      <section className="py-12 md:py-20 bg-muted/30">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="max-w-4xl mx-auto">
-            <Collapsible open={challengesOpen} onOpenChange={setChallengesOpen}>
-              <CollapsibleTrigger className="w-full group">
-                <div className="flex items-center justify-center gap-3 mb-6">
-                  <h2 className="font-serif text-4xl font-bold text-foreground">
-                    Data Analytics Challenges
-                  </h2>
-                  <ChevronDown className={`h-8 w-8 text-primary transition-transform duration-300 ${challengesOpen ? 'rotate-180' : ''}`} />
-                </div>
-                <p className="text-muted-foreground text-center mb-8 text-lg">
-                  Struggling to extract value from your data?
-                </p>
-              </CollapsibleTrigger>
-              
-              <CollapsibleContent className="animate-accordion-down">
-                <div className="grid md:grid-cols-2 gap-6 mt-6">
-                  {challenges.map((challenge, index) => (
-                    <Card key={index} className="p-6 hover:shadow-lg transition-shadow">
-                      <div className="flex gap-4">
-                        <div className="flex-shrink-0 w-6 h-6 rounded-full bg-destructive/10 flex items-center justify-center mt-1">
-                          <div className="w-2 h-2 rounded-full bg-destructive" />
-                        </div>
-                        <p className="text-foreground">{challenge}</p>
-                      </div>
-                    </Card>
-                  ))}
-                </div>
-              </CollapsibleContent>
-            </Collapsible>
-          </div>
-        </div>
-      </section>
+      {/* Hero Challenge Section */}
+      <HeroChallenge
+        industry="healthcare provider"
+        problem="A regional healthcare network was making critical decisions based on 60-90 day old data. Patient outcomes were suffering, resources were being misallocated, and they had no way to predict capacity needs or identify at-risk patients early."
+        problemMetric="60-90 day data lag | No predictive capabilities | 23% readmission rate"
+        solution="Predictive Analytics Platform - We built a real-time analytics system with AI-powered predictive models that transformed their data from historical reports into actionable intelligence for proactive care."
+        results={{
+          metric1: "Real-time dashboards enabling same-day decision making",
+          metric2: "Readmission rate reduced from 23% to 11%",
+          metric3: "Early intervention increased patient outcomes by 34% while reducing costs by $8.2M annually"
+        }}
+      />
 
       {/* Case Study Spotlight */}
       <CaseStudySpotlight
