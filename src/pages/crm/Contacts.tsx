@@ -27,6 +27,8 @@ const Contacts = () => {
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [emailContactId, setEmailContactId] = useState<string | null>(null);
   const [isEmailOpen, setIsEmailOpen] = useState(false);
+  const [selectedContacts, setSelectedContacts] = useState<string[]>([]);
+  const [bulkAction, setBulkAction] = useState<string>("");
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -227,6 +229,40 @@ const Contacts = () => {
     setIsEmailOpen(true);
   };
 
+  const handleBulkAction = async () => {
+    if (selectedContacts.length === 0 || !bulkAction) return;
+
+    if (bulkAction === "delete") {
+      if (!confirm(`Delete ${selectedContacts.length} contacts?`)) return;
+      
+      const { error } = await supabase
+        .from('contacts')
+        .delete()
+        .in('id', selectedContacts);
+
+      if (!error) {
+        toast({ title: `${selectedContacts.length} contacts deleted` });
+        setSelectedContacts([]);
+        fetchContacts();
+      }
+    } else if (bulkAction.startsWith("stage:")) {
+      const newStage = bulkAction.split(":")[1];
+      
+      const { error } = await supabase
+        .from('contacts')
+        .update({ stage: newStage })
+        .in('id', selectedContacts);
+
+      if (!error) {
+        toast({ title: `Stage updated for ${selectedContacts.length} contacts` });
+        setSelectedContacts([]);
+        fetchContacts();
+      }
+    }
+    
+    setBulkAction("");
+  };
+
   if (loading) {
     return null;
   }
@@ -290,6 +326,27 @@ const Contacts = () => {
             </SelectContent>
           </Select>
 
+          {selectedContacts.length > 0 && (
+            <>
+              <Select value={bulkAction} onValueChange={setBulkAction}>
+                <SelectTrigger className="w-[200px]">
+                  <SelectValue placeholder="Bulk actions" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="stage:Lead">Change to Lead</SelectItem>
+                  <SelectItem value="stage:Prospect">Change to Prospect</SelectItem>
+                  <SelectItem value="stage:Proposal">Change to Proposal</SelectItem>
+                  <SelectItem value="stage:Contract">Change to Contract</SelectItem>
+                  <SelectItem value="stage:Client">Change to Client</SelectItem>
+                  <SelectItem value="delete">Delete Selected</SelectItem>
+                </SelectContent>
+              </Select>
+              <Button onClick={handleBulkAction} disabled={!bulkAction}>
+                Apply to {selectedContacts.length}
+              </Button>
+            </>
+          )}
+
           <div className="flex gap-2 border rounded-md p-1">
             <Button
               variant={viewMode === "table" ? "default" : "ghost"}
@@ -314,6 +371,8 @@ const Contacts = () => {
             onEdit={handleEditContact}
             onDelete={handleDeleteContact}
             onEmail={handleEmailContact}
+            selectedContacts={selectedContacts}
+            onSelectionChange={setSelectedContacts}
           />
         ) : (
           <KanbanView

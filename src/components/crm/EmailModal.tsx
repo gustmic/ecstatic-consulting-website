@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 
 interface EmailModalProps {
@@ -16,10 +17,35 @@ interface EmailModalProps {
 }
 
 const EmailModal = ({ isOpen, onClose, contactId, contactEmail, contactName }: EmailModalProps) => {
+  const [template, setTemplate] = useState("");
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
   const [sending, setSending] = useState(false);
   const { toast } = useToast();
+
+  const templates = {
+    "follow-up": {
+      subject: "Following up on our conversation",
+      body: `Hi ${contactName || "there"},\n\nI wanted to follow up on our recent conversation.\n\nLooking forward to hearing from you.\n\nBest regards`
+    },
+    "meeting": {
+      subject: "Meeting Request",
+      body: `Hi ${contactName || "there"},\n\nI'd like to schedule a meeting to discuss how we can help with your needs.\n\nPlease let me know your availability.\n\nBest regards`
+    },
+    "proposal": {
+      subject: "Proposal for Your Consideration",
+      body: `Hi ${contactName || "there"},\n\nAttached is our proposal for the project we discussed.\n\nI'm happy to answer any questions you may have.\n\nBest regards`
+    }
+  };
+
+  const handleTemplateChange = (templateKey: string) => {
+    setTemplate(templateKey);
+    if (templateKey && templates[templateKey as keyof typeof templates]) {
+      const t = templates[templateKey as keyof typeof templates];
+      setSubject(t.subject);
+      setBody(t.body);
+    }
+  };
 
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -70,6 +96,20 @@ const EmailModal = ({ isOpen, onClose, contactId, contactEmail, contactName }: E
         </DialogHeader>
 
         <form onSubmit={handleSend} className="space-y-4">
+          <div>
+            <Label htmlFor="template">Email Template</Label>
+            <Select value={template} onValueChange={handleTemplateChange}>
+              <SelectTrigger>
+                <SelectValue placeholder="Choose a template (optional)" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="follow-up">Follow-up</SelectItem>
+                <SelectItem value="meeting">Meeting Request</SelectItem>
+                <SelectItem value="proposal">Proposal</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
           <div>
             <Label htmlFor="to">To</Label>
             <Input id="to" value={contactEmail} disabled />

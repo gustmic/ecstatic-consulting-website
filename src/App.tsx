@@ -1,3 +1,4 @@
+import ErrorBoundary from "./components/ErrorBoundary";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -27,34 +28,36 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/strategy" element={<Strategy />} />
-          <Route path="/data-analytics" element={<DataAnalytics />} />
-          <Route path="/technology" element={<Technology />} />
-          <Route path="/admin" element={<Auth />} />
-          <Route path="/admin/landing" element={<AdminLanding />} />
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          <Route path="/admin/new-post" element={<NewPost />} />
-          <Route path="/admin/crm" element={<CRMDashboard />} />
-          <Route path="/admin/crm/contacts" element={<Contacts />} />
-          <Route path="/admin/crm/projects" element={<Projects />} />
-          <Route path="/admin/crm/settings" element={<Settings />} />
-          <Route path="/admin/setup" element={<SetupAdmin />} />
-          <Route path="/progress" element={<Progress />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/:category/blog" element={<BlogList />} />
-          <Route path="/:category/blog/:id" element={<BlogPost />} />
-          <Route path="/:category/cases" element={<Cases />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+    <ErrorBoundary>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/strategy" element={<Strategy />} />
+            <Route path="/data-analytics" element={<DataAnalytics />} />
+            <Route path="/technology" element={<Technology />} />
+            <Route path="/admin" element={<Auth />} />
+            <Route path="/admin/setup" element={<SetupAdmin />} />
+            <Route path="/admin/landing" element={<AdminLanding />} />
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/new-post" element={<NewPost />} />
+            <Route path="/admin/crm" element={<CRMDashboard />} />
+            <Route path="/admin/crm/contacts" element={<Contacts />} />
+            <Route path="/admin/crm/projects" element={<Projects />} />
+            <Route path="/admin/crm/settings" element={<Settings />} />
+            <Route path="/progress" element={<Progress />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/:category/blog" element={<BlogList />} />
+            <Route path="/:category/blog/:id" element={<BlogPost />} />
+            <Route path="/:category/cases" element={<Cases />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </ErrorBoundary>
   </QueryClientProvider>
 );
 

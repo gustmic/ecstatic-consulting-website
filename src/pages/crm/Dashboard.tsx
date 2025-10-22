@@ -3,11 +3,12 @@ import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Search } from "lucide-react";
 import SummaryCards from "@/components/crm/SummaryCards";
 import UpcomingFollowUps from "@/components/crm/UpcomingFollowUps";
 import RecentActivity from "@/components/crm/RecentActivity";
 import RevenueChart from "@/components/crm/RevenueChart";
+import GlobalSearch from "@/components/GlobalSearch";
 import { useToast } from "@/hooks/use-toast";
 import { getMonthName } from "@/lib/formatters";
 
@@ -20,6 +21,7 @@ const CRMDashboard = () => {
   const [followUps, setFollowUps] = useState<any[]>([]);
   const [recentActivities, setRecentActivities] = useState<any[]>([]);
   const [revenueData, setRevenueData] = useState<any[]>([]);
+  const [searchOpen, setSearchOpen] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -232,11 +234,21 @@ const CRMDashboard = () => {
           </Link>
         </div>
 
-        <div className="mb-8">
-          <h1 className="font-serif text-4xl font-bold mb-2">CRM Dashboard</h1>
-          <p className="text-muted-foreground">
-            Manage your contacts, projects, and revenue
-          </p>
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <h1 className="font-serif text-4xl font-bold mb-2">CRM Dashboard</h1>
+            <p className="text-muted-foreground">
+              Manage your contacts, projects, and revenue
+            </p>
+          </div>
+          
+          <Button variant="outline" onClick={() => setSearchOpen(true)}>
+            <Search className="mr-2 h-4 w-4" />
+            Search
+            <kbd className="ml-2 pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
+              <span className="text-xs">⌘</span>K
+            </kbd>
+          </Button>
         </div>
 
         <div className="space-y-8">
@@ -258,6 +270,8 @@ const CRMDashboard = () => {
 
           <RecentActivity activities={recentActivities} />
         </div>
+        
+        <GlobalSearch open={searchOpen} setOpen={setSearchOpen} />
       </div>
     </div>
   );

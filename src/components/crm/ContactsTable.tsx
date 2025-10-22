@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Card } from "@/components/ui/card";
 import { Pencil, Trash2, Mail } from "lucide-react";
 import { formatDate } from "@/lib/formatters";
@@ -22,9 +24,11 @@ interface ContactsTableProps {
   onEdit: (contact: Contact) => void;
   onDelete: (id: string) => void;
   onEmail?: (contact: Contact) => void;
+  selectedContacts?: string[];
+  onSelectionChange?: (ids: string[]) => void;
 }
 
-const ContactsTable = ({ contacts, onEdit, onDelete, onEmail }: ContactsTableProps) => {
+const ContactsTable = ({ contacts, onEdit, onDelete, onEmail, selectedContacts = [], onSelectionChange }: ContactsTableProps) => {
   const getStageColor = (stage: string) => {
     const colors: Record<string, string> = {
       Lead: "bg-gray-500",
@@ -34,6 +38,22 @@ const ContactsTable = ({ contacts, onEdit, onDelete, onEmail }: ContactsTablePro
       Client: "bg-purple-500",
     };
     return colors[stage] || "bg-gray-500";
+  };
+
+  const handleSelectAll = () => {
+    if (selectedContacts.length === contacts.length) {
+      onSelectionChange?.([]);
+    } else {
+      onSelectionChange?.(contacts.map(c => c.id));
+    }
+  };
+
+  const handleSelectContact = (id: string) => {
+    if (selectedContacts.includes(id)) {
+      onSelectionChange?.(selectedContacts.filter(cid => cid !== id));
+    } else {
+      onSelectionChange?.([...selectedContacts, id]);
+    }
   };
 
   if (contacts.length === 0) {
@@ -50,6 +70,14 @@ const ContactsTable = ({ contacts, onEdit, onDelete, onEmail }: ContactsTablePro
       <Table>
         <TableHeader>
           <TableRow>
+            {onSelectionChange && (
+              <TableHead className="w-12">
+                <Checkbox
+                  checked={selectedContacts.length === contacts.length}
+                  onCheckedChange={handleSelectAll}
+                />
+              </TableHead>
+            )}
             <TableHead>Name</TableHead>
             <TableHead>Company</TableHead>
             <TableHead>Email</TableHead>
@@ -63,6 +91,14 @@ const ContactsTable = ({ contacts, onEdit, onDelete, onEmail }: ContactsTablePro
         <TableBody>
           {contacts.map((contact) => (
             <TableRow key={contact.id}>
+              {onSelectionChange && (
+                <TableCell>
+                  <Checkbox
+                    checked={selectedContacts.includes(contact.id)}
+                    onCheckedChange={() => handleSelectContact(contact.id)}
+                  />
+                </TableCell>
+              )}
               <TableCell className="font-medium">{contact.name}</TableCell>
               <TableCell>{contact.company || "-"}</TableCell>
               <TableCell>{contact.email}</TableCell>
