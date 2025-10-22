@@ -5,7 +5,7 @@ import { User } from "@supabase/supabase-js";
 import Navigation from "@/components/Navigation";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FileText, Users, LayoutDashboard } from "lucide-react";
+import { LayoutDashboard, FileText, LogOut } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const AdminLanding = () => {
@@ -63,11 +63,12 @@ const AdminLanding = () => {
             <div>
               <h1 className="font-serif text-4xl font-bold mb-2">Admin Portal</h1>
               <p className="text-muted-foreground">
-                Welcome back, {user?.email}
+                Welcome, {user?.email}
               </p>
             </div>
             
             <Button variant="outline" onClick={handleSignOut}>
+              <LogOut className="mr-2 h-4 w-4" />
               Sign Out
             </Button>
           </div>
@@ -77,18 +78,18 @@ const AdminLanding = () => {
               className="p-8 hover:shadow-lg transition-all cursor-pointer group"
               onClick={() => navigate("/admin/crm")}
             >
-              <div className="flex flex-col items-center text-center space-y-4">
+              <div className="flex flex-col items-center text-center gap-4">
                 <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                  <Users className="w-8 h-8 text-primary" />
+                  <LayoutDashboard className="h-8 w-8 text-primary" />
                 </div>
                 <div>
-                  <h2 className="font-serif text-2xl font-semibold mb-2">CRM & PSA</h2>
+                  <h2 className="font-serif text-2xl font-semibold mb-2">CRM System</h2>
                   <p className="text-muted-foreground">
-                    Manage contacts, projects, and revenue forecasts
+                    Manage contacts, projects, and client relationships
                   </p>
                 </div>
-                <Button className="w-full">
-                  Open CRM Dashboard
+                <Button className="mt-4">
+                  Access CRM
                 </Button>
               </div>
             </Card>
@@ -97,9 +98,9 @@ const AdminLanding = () => {
               className="p-8 hover:shadow-lg transition-all cursor-pointer group"
               onClick={() => navigate("/admin/dashboard")}
             >
-              <div className="flex flex-col items-center text-center space-y-4">
+              <div className="flex flex-col items-center text-center gap-4">
                 <div className="w-16 h-16 rounded-full bg-accent/10 flex items-center justify-center group-hover:bg-accent/20 transition-colors">
-                  <FileText className="w-8 h-8 text-accent" />
+                  <FileText className="h-8 w-8 text-accent" />
                 </div>
                 <div>
                   <h2 className="font-serif text-2xl font-semibold mb-2">Blog System</h2>
@@ -107,8 +108,8 @@ const AdminLanding = () => {
                     Create and manage blog posts for the website
                   </p>
                 </div>
-                <Button variant="secondary" className="w-full">
-                  Open Blog Dashboard
+                <Button className="mt-4" variant="outline">
+                  Access Blog
                 </Button>
               </div>
             </Card>
