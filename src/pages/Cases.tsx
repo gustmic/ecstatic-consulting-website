@@ -234,15 +234,19 @@ const Cases = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
       
-      {/* Hero Section */}
-      <section className="relative h-[40vh] flex items-center justify-center bg-gradient-to-br from-primary/20 to-secondary/20">
-        <div className="relative z-10 text-center px-6">
-          <h1 className="font-serif text-5xl md:text-6xl font-bold mb-4">
-            {categoryData.title}
-          </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Real-world examples of our expertise in action
-          </p>
+      {/* Hero - Static Banner */}
+      <section className="relative h-[25vh] md:h-[30vh] flex items-center overflow-hidden">
+        <div className="absolute inset-0 z-0 bg-gradient-to-br from-primary/85 to-secondary/70" />
+        
+        <div className="container mx-auto px-4 md:px-6 z-10 relative">
+          <div className="max-w-3xl">
+            <h1 className="font-serif text-3xl md:text-5xl lg:text-6xl font-bold text-primary-foreground mb-3 md:mb-6">
+              {categoryData.title}
+            </h1>
+            <p className="text-base md:text-xl text-primary-foreground/90">
+              Real-world examples of our expertise in action
+            </p>
+          </div>
         </div>
       </section>
 
