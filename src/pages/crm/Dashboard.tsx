@@ -7,7 +7,9 @@ import { ArrowLeft } from "lucide-react";
 import SummaryCards from "@/components/crm/SummaryCards";
 import UpcomingFollowUps from "@/components/crm/UpcomingFollowUps";
 import RecentActivity from "@/components/crm/RecentActivity";
+import RevenueChart from "@/components/crm/RevenueChart";
 import { useToast } from "@/hooks/use-toast";
+import { getMonthName } from "@/lib/formatters";
 
 const CRMDashboard = () => {
   const [loading, setLoading] = useState(true);
@@ -17,6 +19,7 @@ const CRMDashboard = () => {
   const [nextFollowUp, setNextFollowUp] = useState<{ date: string; contactName: string } | null>(null);
   const [followUps, setFollowUps] = useState<any[]>([]);
   const [recentActivities, setRecentActivities] = useState<any[]>([]);
+  const [revenueData, setRevenueData] = useState<any[]>([]);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -113,6 +116,71 @@ const CRMDashboard = () => {
       date: i.date,
       subject: i.subject
     })) || []);
+
+    // Calculate revenue projection for next 6 months
+    await calculateRevenueProjection();
+  };
+
+  const calculateRevenueProjection = async () => {
+    const { data: projects } = await supabase
+      .from('projects')
+      .select('*');
+
+    if (!projects) return;
+
+    // Get next 6 months
+    const months: { month: string; confirmed: number; potential: number }[] = [];
+    const today = new Date();
+    
+    for (let i = 0; i < 6; i++) {
+      const date = new Date(today.getFullYear(), today.getMonth() + i, 1);
+      months.push({
+        month: `${getMonthName(date.getMonth())} ${date.getFullYear()}`,
+        confirmed: 0,
+        potential: 0,
+      });
+    }
+
+    // Stage probabilities
+    const stageProbabilities: Record<string, number> = {
+      Lead: 0.2,
+      Prospect: 0.4,
+      Proposal: 0.6,
+      Contract: 1.0,
+      Planned: 0.6,
+      Ongoing: 1.0,
+      Completed: 1.0,
+    };
+
+    // Distribute project revenue across months
+    projects.forEach((project) => {
+      const startDate = new Date(project.start_date);
+      const endDate = new Date(project.end_date);
+      const monthsInProject = Math.max(1, 
+        (endDate.getFullYear() - startDate.getFullYear()) * 12 + 
+        (endDate.getMonth() - startDate.getMonth()) + 1
+      );
+      const monthlyValue = project.project_value_kr / monthsInProject;
+
+      months.forEach((month, idx) => {
+        const monthDate = new Date(today.getFullYear(), today.getMonth() + idx, 1);
+        const monthEnd = new Date(today.getFullYear(), today.getMonth() + idx + 1, 0);
+
+        // Check if project overlaps with this month
+        if (startDate <= monthEnd && endDate >= monthDate) {
+          const isConfirmed = project.status === 'Ongoing' || project.status === 'Completed';
+          const probability = stageProbabilities[project.status] || 0;
+
+          if (isConfirmed) {
+            month.confirmed += monthlyValue;
+          } else {
+            month.potential += monthlyValue * probability;
+          }
+        }
+      });
+    });
+
+    setRevenueData(months);
   };
 
   const handleCompleteFollowUp = async (contactId: string) => {
@@ -185,6 +253,8 @@ const CRMDashboard = () => {
             onSnooze={handleSnoozeFollowUp}
             onEmail={handleEmailFollowUp}
           />
+
+          <RevenueChart data={revenueData} />
 
           <RecentActivity activities={recentActivities} />
         </div>
