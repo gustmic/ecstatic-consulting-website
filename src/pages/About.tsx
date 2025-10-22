@@ -6,6 +6,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import micaelImage from "@/assets/micael-gustavsson.webp";
+import reinholdImage from "@/assets/reinhold-rutks.webp";
 
 const About = () => {
   const { toast } = useToast();
@@ -94,38 +96,38 @@ const About = () => {
           <h2 className="font-serif text-4xl font-bold mb-16 text-center">Our Team</h2>
           
           <div className="grid md:grid-cols-2 gap-12">
-            {/* Consultant 1 */}
-            <div className="bg-card rounded-lg p-8 shadow-sm hover:shadow-md transition-shadow">
-              <div className="mb-6">
-                <h3 className="font-serif text-2xl font-bold mb-2">Senior Consultant</h3>
-                <p className="text-primary font-medium">Strategy & Analytics</p>
+            {/* Micael Gustavsson */}
+            <div className="bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+              <div className="aspect-square overflow-hidden">
+                <img 
+                  src={micaelImage} 
+                  alt="Micael Gustavsson" 
+                  className="w-full h-full object-cover"
+                />
               </div>
-              <p className="text-muted-foreground leading-relaxed mb-4">
-                With over 15 years of experience in strategic consulting and data analytics, our senior 
-                consultant brings deep expertise in transforming business challenges into growth opportunities. 
-                Specialized in competitive analysis, market expansion strategies, and data-driven decision making.
-              </p>
-              <div className="pt-4 border-t border-border">
-                <p className="text-sm text-muted-foreground">
-                  <strong>Expertise:</strong> Strategic Planning, Data Analytics, Business Intelligence
+              <div className="p-8">
+                <h3 className="font-serif text-2xl font-bold mb-2">Micael Gustavsson</h3>
+                <p className="text-primary font-medium mb-4">Principal Consultant, Strategy & Analytics</p>
+                <p className="text-muted-foreground leading-relaxed">
+                  Micael has 15+ years of experience in strategy and business consulting guiding Fortune Global 500 companies like Compaq, Nokia, and Telenor through critical growth initiatives and business model innovations.
                 </p>
               </div>
             </div>
 
-            {/* Consultant 2 */}
-            <div className="bg-card rounded-lg p-8 shadow-sm hover:shadow-md transition-shadow">
-              <div className="mb-6">
-                <h3 className="font-serif text-2xl font-bold mb-2">Technology Lead</h3>
-                <p className="text-primary font-medium">Technology & Innovation</p>
+            {/* Reinhold Rutks */}
+            <div className="bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+              <div className="aspect-square overflow-hidden">
+                <img 
+                  src={reinholdImage} 
+                  alt="Reinhold Rutks" 
+                  className="w-full h-full object-cover"
+                />
               </div>
-              <p className="text-muted-foreground leading-relaxed mb-4">
-                Leading our technology practice with 12+ years of experience in digital transformation and 
-                product development. Expert in translating business needs into scalable technical solutions, 
-                with a focus on innovation, feasibility studies, and technology implementation.
-              </p>
-              <div className="pt-4 border-t border-border">
-                <p className="text-sm text-muted-foreground">
-                  <strong>Expertise:</strong> Digital Transformation, Product Design, Technical Strategy
+              <div className="p-8">
+                <h3 className="font-serif text-2xl font-bold mb-2">Reinhold Rutks</h3>
+                <p className="text-primary font-medium mb-4">Principal Consultant, Technology & Engineering</p>
+                <p className="text-muted-foreground leading-relaxed">
+                  Reinhold has 30+ years of experience of solving complex engineering challenges through both strategic and hands-on technical insight in manufacturing processes.
                 </p>
               </div>
             </div>
