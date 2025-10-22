@@ -23,8 +23,8 @@ Deno.serve(async (req) => {
       }
     );
 
-    const adminEmail = 'admin@ecstatic.consulting';
-    const adminPassword = Deno.env.get('ADMIN_PASSWORD');
+  const adminEmail = 'micael.gustavsson@ecstatic.consulting';
+  const adminPassword = Deno.env.get('ADMIN_PASSWORD');
 
     if (!adminPassword) {
       throw new Error('ADMIN_PASSWORD not configured');
