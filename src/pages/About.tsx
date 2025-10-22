@@ -103,7 +103,7 @@ const About = () => {
                   <img 
                     src={micaelImage} 
                     alt="Micael Gustavsson" 
-                    className="w-32 h-32 object-cover rounded-lg"
+                    className="w-40 h-auto object-contain rounded-lg"
                   />
                 </div>
                 <div className="flex-1">
@@ -123,7 +123,7 @@ const About = () => {
                   <img 
                     src={reinholdImage} 
                     alt="Reinhold Rutks" 
-                    className="w-32 h-32 object-cover rounded-lg"
+                    className="w-40 h-auto object-contain rounded-lg"
                   />
                 </div>
                 <div className="flex-1">
