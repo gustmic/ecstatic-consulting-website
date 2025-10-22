@@ -25,7 +25,7 @@ const DataAnalytics = () => {
       <Navigation />
       
       {/* Hero - Sticky Banner */}
-      <section className="sticky top-0 z-40 h-[30vh] md:h-[40vh] flex items-center overflow-hidden">
+      <section className="sticky top-0 z-40 h-[25vh] md:h-[30vh] flex items-center overflow-hidden">
         <div 
           className="absolute inset-0 z-0"
           style={{
