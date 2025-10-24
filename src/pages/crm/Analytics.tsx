@@ -7,12 +7,17 @@ import { Card } from "@/components/ui/card";
 import { ArrowLeft, TrendingUp, Clock, DollarSign, Users } from "lucide-react";
 import ConversionFunnel from "@/components/crm/ConversionFunnel";
 import WinLossAnalysis from "@/components/crm/WinLossAnalysis";
+import DealVelocityChart from "@/components/crm/DealVelocityChart";
+import EngagementScoreCard from "@/components/crm/EngagementScoreCard";
 import { formatCurrency } from "@/lib/formatters";
+import { calculateEngagementScore, getEngagementTier, calculateDealVelocity } from "@/lib/analytics";
 
 const Analytics = () => {
   const [loading, setLoading] = useState(true);
   const [funnelData, setFunnelData] = useState<any[]>([]);
   const [winLossData, setWinLossData] = useState<any>(null);
+  const [velocityData, setVelocityData] = useState<any[]>([]);
+  const [engagementData, setEngagementData] = useState<any>(null);
   const [metrics, setMetrics] = useState({
     overallConversion: 0,
     avgDealCycle: 0,
@@ -38,12 +43,17 @@ const Analytics = () => {
   }, [navigate]);
 
   const fetchAnalyticsData = async () => {
-    // Fetch all contacts with their stages
+    // Fetch all contacts with their stages and engagement data
     const { data: contacts } = await supabase
       .from('contacts')
-      .select('stage, created_at, engagement_score');
+      .select('id, name, company, stage, created_at, engagement_score, last_contacted, next_followup');
 
     if (!contacts) return;
+
+    // Fetch all interactions
+    const { data: interactions } = await supabase
+      .from('interactions')
+      .select('id, contact_id, type, date, created_at');
 
     // Calculate funnel data
     const stages = ['Lead', 'Prospect', 'Proposal', 'Contract', 'Client'];
@@ -119,6 +129,45 @@ const Analytics = () => {
       totalPipelineValue,
       engagementHealth,
     });
+
+    // Calculate deal velocity
+    const velocity = calculateDealVelocity(contacts as any);
+    setVelocityData(velocity);
+
+    // Calculate engagement scores and tiers
+    const contactsWithScores = contacts.map(contact => ({
+      ...contact,
+      score: calculateEngagementScore(contact as any, interactions || []),
+      tier: getEngagementTier(calculateEngagementScore(contact as any, interactions || []))
+    }));
+
+    // Group by tier
+    const tierCounts = {
+      A: contactsWithScores.filter(c => c.tier === 'A').length,
+      B: contactsWithScores.filter(c => c.tier === 'B').length,
+      C: contactsWithScores.filter(c => c.tier === 'C').length,
+      D: contactsWithScores.filter(c => c.tier === 'D').length,
+    };
+
+    const tierData = [
+      { tier: 'A', count: tierCounts.A, color: '#22c55e' },
+      { tier: 'B', count: tierCounts.B, color: '#3b82f6' },
+      { tier: 'C', count: tierCounts.C, color: '#eab308' },
+      { tier: 'D', count: tierCounts.D, color: '#ef4444' },
+    ];
+
+    // Get top 10 engaged contacts
+    const topContacts = contactsWithScores
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 10)
+      .map(c => ({
+        name: c.name,
+        company: c.company || '',
+        score: c.score,
+        tier: c.tier
+      }));
+
+    setEngagementData({ tierData, topContacts });
   };
 
   if (loading) {
@@ -185,10 +234,23 @@ const Analytics = () => {
           </Card>
         </div>
 
-        {/* Charts */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Charts - Phase 1 */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           <ConversionFunnel data={funnelData} />
           {winLossData && <WinLossAnalysis data={winLossData} />}
+        </div>
+
+        {/* Charts - Phase 2 */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {velocityData.length > 0 && (
+            <DealVelocityChart data={velocityData} overallCycle={metrics.avgDealCycle} />
+          )}
+          {engagementData && (
+            <EngagementScoreCard 
+              tierData={engagementData.tierData} 
+              topContacts={engagementData.topContacts} 
+            />
+          )}
         </div>
       </div>
     </div>
@@ -196,3 +258,4 @@ const Analytics = () => {
 };
 
 export default Analytics;
+

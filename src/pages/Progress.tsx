@@ -20,14 +20,14 @@ const Progress = () => {
     },
     {
       title: "Phase 2: Time & Relationship Insights",
-      status: "not-started",
+      status: "complete",
       items: [
-        { done: false, text: "Create DealVelocityChart component" },
-        { done: false, text: "Calculate average time in each stage" },
-        { done: false, text: "Build EngagementScoreCard component" },
-        { done: false, text: "Implement engagement scoring algorithm" },
-        { done: false, text: "Display engagement tier distribution (A/B/C/D)" },
-        { done: false, text: "Show top 10 most engaged contacts" },
+        { done: true, text: "Create DealVelocityChart component" },
+        { done: true, text: "Calculate average time in each stage" },
+        { done: true, text: "Build EngagementScoreCard component" },
+        { done: true, text: "Implement engagement scoring algorithm" },
+        { done: true, text: "Display engagement tier distribution (A/B/C/D)" },
+        { done: true, text: "Show top 10 most engaged contacts" },
       ]
     },
     {
