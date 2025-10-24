@@ -30,6 +30,7 @@ const Contacts = () => {
   const [isEmailOpen, setIsEmailOpen] = useState(false);
   const [selectedContacts, setSelectedContacts] = useState<string[]>([]);
   const [bulkAction, setBulkAction] = useState<string>("");
+  const [stages, setStages] = useState<string[]>([]);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -51,13 +52,14 @@ const Contacts = () => {
       }
 
       await fetchContacts();
+      await fetchStages();
       setLoading(false);
     };
 
     checkAuth();
 
-    // Set up realtime subscription
-    const channel = supabase
+    // Set up realtime subscription for contacts
+    const contactsChannel = supabase
       .channel('contacts-changes')
       .on('postgres_changes', {
         event: '*',
@@ -68,8 +70,21 @@ const Contacts = () => {
       })
       .subscribe();
 
+    // Set up realtime subscription for settings
+    const settingsChannel = supabase
+      .channel('contacts-settings-changes')
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'settings'
+      }, () => {
+        fetchStages();
+      })
+      .subscribe();
+
     return () => {
-      supabase.removeChannel(channel);
+      supabase.removeChannel(contactsChannel);
+      supabase.removeChannel(settingsChannel);
     };
   }, [navigate]);
 
@@ -92,6 +107,18 @@ const Contacts = () => {
 
     setFilteredContacts(filtered);
   }, [searchQuery, contacts, stageFilter]);
+
+  const fetchStages = async () => {
+    const { data } = await supabase
+      .from('settings')
+      .select('value')
+      .eq('key', 'stages')
+      .single();
+    
+    if (data) {
+      setStages(data.value as string[]);
+    }
+  };
 
   const fetchContacts = async () => {
     const { data, error } = await supabase
@@ -343,11 +370,9 @@ const Contacts = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Stages</SelectItem>
-              <SelectItem value="Lead">Lead</SelectItem>
-              <SelectItem value="Prospect">Prospect</SelectItem>
-              <SelectItem value="Proposal">Proposal</SelectItem>
-              <SelectItem value="Contract">Contract</SelectItem>
-              <SelectItem value="Client">Client</SelectItem>
+              {stages.map(stage => (
+                <SelectItem key={stage} value={stage}>{stage}</SelectItem>
+              ))}
             </SelectContent>
           </Select>
 
@@ -358,11 +383,9 @@ const Contacts = () => {
                   <SelectValue placeholder="Bulk actions" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="stage:Lead">Change to Lead</SelectItem>
-                  <SelectItem value="stage:Prospect">Change to Prospect</SelectItem>
-                  <SelectItem value="stage:Proposal">Change to Proposal</SelectItem>
-                  <SelectItem value="stage:Contract">Change to Contract</SelectItem>
-                  <SelectItem value="stage:Client">Change to Client</SelectItem>
+                  {stages.map(stage => (
+                    <SelectItem key={stage} value={`stage:${stage}`}>Change to {stage}</SelectItem>
+                  ))}
                   <SelectItem value="delete">Delete Selected</SelectItem>
                 </SelectContent>
               </Select>
