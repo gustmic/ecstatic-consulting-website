@@ -14,7 +14,7 @@ interface HelpTooltipProps {
 
 export function HelpTooltip({ title, description, actionable }: HelpTooltipProps) {
   return (
-    <TooltipProvider>
+    <TooltipProvider delayDuration={100}>
       <Tooltip>
         <TooltipTrigger asChild>
           <HelpCircle className="h-4 w-4 text-muted-foreground hover:text-foreground cursor-help transition-colors" />
