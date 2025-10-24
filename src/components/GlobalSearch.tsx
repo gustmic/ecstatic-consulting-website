@@ -81,7 +81,11 @@ const GlobalSearch = ({ open, setOpen }: GlobalSearchProps) => {
         onValueChange={setSearchQuery}
       />
       <CommandList>
-        <CommandEmpty>No results found.</CommandEmpty>
+        <CommandEmpty>
+          {searchQuery.length > 1 
+            ? "No results found." 
+            : "Type to search contacts and projects..."}
+        </CommandEmpty>
         
         {contacts.length > 0 && (
           <CommandGroup heading="Contacts">
@@ -120,29 +124,6 @@ const GlobalSearch = ({ open, setOpen }: GlobalSearchProps) => {
             ))}
           </CommandGroup>
         )}
-
-        <CommandGroup heading="Pages">
-          <CommandItem onSelect={() => handleSelect("/admin/crm")}>
-            <LayoutDashboard className="mr-2 h-4 w-4" />
-            <span>Dashboard</span>
-          </CommandItem>
-          <CommandItem onSelect={() => handleSelect("/admin/crm/contacts")}>
-            <Users className="mr-2 h-4 w-4" />
-            <span>All Contacts</span>
-          </CommandItem>
-          <CommandItem onSelect={() => handleSelect("/admin/crm/projects")}>
-            <Briefcase className="mr-2 h-4 w-4" />
-            <span>All Projects</span>
-          </CommandItem>
-          <CommandItem onSelect={() => handleSelect("/admin/crm/analytics")}>
-            <BarChart3 className="mr-2 h-4 w-4" />
-            <span>Analytics</span>
-          </CommandItem>
-          <CommandItem onSelect={() => handleSelect("/admin/crm/settings")}>
-            <Settings className="mr-2 h-4 w-4" />
-            <span>Settings</span>
-          </CommandItem>
-        </CommandGroup>
       </CommandList>
     </CommandDialog>
   );
