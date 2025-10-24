@@ -6,104 +6,53 @@ import { Badge } from "@/components/ui/badge";
 const Progress = () => {
   const sections = [
     {
-      title: "1. Database Schema & Setup",
-      status: "complete",
+      title: "Phase 1: Foundation & Core Pipeline Insights",
+      status: "not-started",
       items: [
-        { done: true, text: "Contacts table with RLS policies" },
-        { done: true, text: "Interactions table for logging activities" },
-        { done: true, text: "Projects table with client relationships" },
-        { done: true, text: "Settings table for configuration" },
-        { done: true, text: "Trigram indexes for Swedish name search" },
-        { done: true, text: "Admin user setup (micael.gustavsson@ecstatic.consulting)" },
-        { done: true, text: "Overdue follow-up triggers" },
+        { done: false, text: "Create Analytics page at /admin/crm/analytics" },
+        { done: false, text: "Add routing configuration in App.tsx" },
+        { done: false, text: "Add database fields (actual_hours, hourly_rate, lead_source, engagement_score)" },
+        { done: false, text: "Create ConversionFunnel component with stage visualization" },
+        { done: false, text: "Build Win/Loss Analysis component with metrics" },
+        { done: false, text: "Add navigation link from CRM Dashboard" },
+        { done: false, text: "Implement 4 key metric cards at top of page" },
       ]
     },
     {
-      title: "2. Authentication & Navigation",
-      status: "complete",
+      title: "Phase 2: Time & Relationship Insights",
+      status: "not-started",
       items: [
-        { done: true, text: "Admin login page" },
-        { done: true, text: "Admin landing page with CRM/Blog options" },
-        { done: true, text: "Session management & auth checks" },
-        { done: true, text: "Role-based access with user_roles table" },
+        { done: false, text: "Create DealVelocityChart component" },
+        { done: false, text: "Calculate average time in each stage" },
+        { done: false, text: "Build EngagementScoreCard component" },
+        { done: false, text: "Implement engagement scoring algorithm" },
+        { done: false, text: "Display engagement tier distribution (A/B/C/D)" },
+        { done: false, text: "Show top 10 most engaged contacts" },
       ]
     },
     {
-      title: "3. CRM Dashboard (Priority Page)",
-      status: "complete",
+      title: "Phase 3: Pricing & Profitability Insights",
+      status: "not-started",
       items: [
-        { done: true, text: "Summary cards (Contacts, Projects, Pipeline, Next Follow-Up)" },
-        { done: true, text: "Pipeline value weighted calculation" },
-        { done: true, text: "Upcoming follow-ups table with overdue detection" },
-        { done: true, text: "Complete/Snooze/Email actions on follow-ups" },
-        { done: true, text: "Recent activity feed (last 10 interactions)" },
-        { done: true, text: "Swedish number formatting (1 200 000 kr)" },
-        { done: true, text: "Swedish date formatting (14 dec 2025)" },
-        { done: true, text: "Revenue projection chart (6-month stacked bar)" },
-        { done: true, text: "Chart tooltips with breakdown" },
+        { done: false, text: "Create ServiceProfitability component" },
+        { done: false, text: "Group projects by service type" },
+        { done: false, text: "Calculate revenue, hours, and profit margins" },
+        { done: false, text: "Add sorting and filtering to profitability table" },
+        { done: false, text: "Display utilization percentages" },
       ]
     },
     {
-      title: "4. Contacts Page",
-      status: "complete",
+      title: "Phase 4: Polish & Advanced Features",
+      status: "not-started",
       items: [
-        { done: true, text: "Table view with columns (Name, Company, Stage, Email, Tags, etc.)" },
-        { done: true, text: "Pipeline/Kanban view with drag-and-drop" },
-        { done: true, text: "Search with fuzzy matching (Swedish characters)" },
-        { done: true, text: "Filters (Stage, Tags, Follow-Up Status, Company)" },
-        { done: true, text: "Bulk actions (Add Tag, Change Stage, Delete)" },
-        { done: true, text: "Export to CSV with Swedish formatting" },
-        { done: true, text: "Add/Edit contact modal" },
-        { done: true, text: "Contact detail modal with interaction timeline" },
-        { done: true, text: "Inline editing for basic fields" },
-      ]
-    },
-    {
-      title: "5. Projects Page",
-      status: "complete",
-      items: [
-        { done: true, text: "Projects table view" },
-        { done: true, text: "Add/Edit project modal" },
-        { done: true, text: "Client selection from contacts" },
-        { done: true, text: "Project type selection (Strategy/Technical/Data)" },
-        { done: true, text: "Date range validation" },
-        { done: true, text: "Revenue tracking" },
-        { done: true, text: "Project status management" },
-      ]
-    },
-    {
-      title: "6. Email Integration (Resend)",
-      status: "complete",
-      items: [
-        { done: true, text: "Send email edge function" },
-        { done: true, text: "Email compose modal" },
-        { done: true, text: "Auto-log interaction when email sent" },
-        { done: true, text: "Update last_contacted date" },
-        { done: true, text: "Email templates for common scenarios" },
-        { done: true, text: "Success/error toast notifications" },
-      ]
-    },
-    {
-      title: "7. Settings Page",
-      status: "complete",
-      items: [
-        { done: true, text: "Manage stages and probabilities" },
-        { done: true, text: "Manage service types" },
-        { done: true, text: "Tag management" },
-        { done: true, text: "User preferences (view, notifications, format)" },
-      ]
-    },
-    {
-      title: "8. UI/UX Polish",
-      status: "complete",
-      items: [
-        { done: true, text: "Responsive mobile design" },
-        { done: true, text: "Loading states and skeletons" },
-        { done: true, text: "Error boundaries" },
-        { done: true, text: "Keyboard shortcuts (Cmd+K search)" },
-        { done: true, text: "Toast notifications for all actions" },
-        { done: true, text: "Confirmation dialogs for destructive actions" },
-        { done: true, text: "Empty states with helpful CTAs" },
+        { done: false, text: "Add date range filters (30/90/365 days, all time)" },
+        { done: false, text: "Implement loading states for all components" },
+        { done: false, text: "Add empty states with helpful messages" },
+        { done: false, text: "Make all charts responsive on mobile" },
+        { done: false, text: "Add chart tooltips with detailed breakdowns" },
+        { done: false, text: "Create analytics helper functions in lib/analytics.ts" },
+        { done: false, text: "Add error boundaries and toast notifications" },
+        { done: false, text: "Final testing and refinement" },
       ]
     },
   ];
@@ -136,10 +85,10 @@ const Progress = () => {
         <div className="max-w-5xl mx-auto">
           <div className="mb-8">
             <h1 className="font-serif text-4xl font-bold mb-2">
-              CRM/PSA Implementation Progress
+              CRM Analytics Dashboard Implementation
             </h1>
             <p className="text-muted-foreground mb-6">
-              Ecstatic Consulting Internal Dashboard
+              Comprehensive analytics for data-driven consultancy decisions
             </p>
             
             <Card className="p-6 mb-6">
@@ -202,26 +151,24 @@ const Progress = () => {
             ))}
           </div>
 
-          <Card className="p-6 mt-8 bg-green-500/10 border-green-500/20">
-            <h3 className="font-semibold mb-2 text-green-700 dark:text-green-400">🎉 100% Complete!</h3>
+          <Card className="p-6 mt-8 bg-blue-500/10 border-blue-500/20">
+            <h3 className="font-semibold mb-2 text-blue-700 dark:text-blue-400">📊 Analytics Goals</h3>
             <p className="text-sm text-muted-foreground mb-4">
-              The complete CRM/PSA system is built and ready for production use.
+              Answer key business questions with data-driven insights:
             </p>
             <ul className="list-disc list-inside space-y-2 text-sm text-muted-foreground mb-4">
-              <li>Full contact management with kanban, table views, and bulk actions</li>
-              <li>Project tracking with revenue forecasting and Swedish formatting</li>
-              <li>Email integration with templates and auto-logging</li>
-              <li>Configurable settings for stages, service types, and tags</li>
-              <li>Global search with Cmd/Ctrl+K shortcut</li>
-              <li>Error boundaries for production reliability</li>
+              <li><strong>Where should we focus our time?</strong> - Conversion funnel & deal velocity</li>
+              <li><strong>Are we pricing correctly?</strong> - Service profitability analysis</li>
+              <li><strong>What's our pipeline health?</strong> - Win/loss rates & stage metrics</li>
+              <li><strong>Which relationships are worth nurturing?</strong> - Engagement scoring</li>
             </ul>
             <div className="bg-background/50 rounded p-4 border">
-              <p className="text-sm font-medium mb-2">🚀 Next Steps:</p>
+              <p className="text-sm font-medium mb-2">🎯 Phase Approach:</p>
               <ol className="list-decimal list-inside space-y-1 text-sm text-muted-foreground">
-                <li>Visit <code className="bg-muted px-1 rounded">/admin/setup</code> to initialize admin user</li>
-                <li>Configure RESEND_API_KEY secret for email functionality</li>
-                <li>Verify sender domain at resend.com</li>
-                <li>Start adding contacts and projects!</li>
+                <li>Foundation + Core Pipeline Insights (Funnel, Win/Loss)</li>
+                <li>Time & Relationship Insights (Velocity, Engagement)</li>
+                <li>Pricing Insights (Service Profitability)</li>
+                <li>Polish & Advanced Features (Filters, UX refinement)</li>
               </ol>
             </div>
           </Card>
