@@ -17,6 +17,7 @@ interface ProjectModalProps {
 
 const ProjectModal = ({ isOpen, onClose, onSave, project }: ProjectModalProps) => {
   const [contacts, setContacts] = useState<any[]>([]);
+  const [serviceTypes, setServiceTypes] = useState<string[]>([]);
   const [formData, setFormData] = useState({
     name: "",
     client_id: "",
@@ -31,7 +32,20 @@ const ProjectModal = ({ isOpen, onClose, onSave, project }: ProjectModalProps) =
 
   useEffect(() => {
     fetchContacts();
+    fetchServiceTypes();
   }, []);
+
+  const fetchServiceTypes = async () => {
+    const { data } = await supabase
+      .from('settings')
+      .select('value')
+      .eq('key', 'service_types')
+      .single();
+    
+    if (data?.value) {
+      setServiceTypes(data.value as string[]);
+    }
+  };
 
   useEffect(() => {
     if (project) {
@@ -130,9 +144,11 @@ const ProjectModal = ({ isOpen, onClose, onSave, project }: ProjectModalProps) =
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Strategy">Strategy</SelectItem>
-                  <SelectItem value="Technical">Technical</SelectItem>
-                  <SelectItem value="Data Analytics">Data Analytics</SelectItem>
+                  {serviceTypes.map(type => (
+                    <SelectItem key={type} value={type}>
+                      {type}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>

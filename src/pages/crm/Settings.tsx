@@ -149,7 +149,27 @@ const Settings = () => {
   const handleRemoveServiceType = async (type: string) => {
     const updatedTypes = serviceTypes.filter(t => t !== type);
     await saveSettings('service_types', updatedTypes);
+    
+    // Update all projects that have this type to null
+    const { error: updateError } = await supabase
+      .from('projects')
+      .update({ type: null })
+      .eq('type', type);
+    
+    if (updateError) {
+      toast({
+        variant: "destructive",
+        title: "Error updating projects",
+        description: updateError.message,
+      });
+      return;
+    }
+    
     setServiceTypes(updatedTypes);
+    toast({ 
+      title: "Service type removed",
+      description: "All projects with this type have been updated"
+    });
   };
 
   const handleProbabilityChange = async (stage: string, value: number) => {
