@@ -35,9 +35,10 @@ const ProjectsTable = ({ projects, onEdit, onDelete }: ProjectsTableProps) => {
 
   const getTypeColor = (type: string) => {
     const colors: Record<string, string> = {
-      Strategy: "bg-purple-500",
+      Strategy: "bg-blue-500",
       Technical: "bg-blue-500",
-      "Data Analytics": "bg-green-500",
+      "Data Analytics": "bg-red-500",
+      Technology: "bg-green-700",
     };
     return colors[type] || "bg-gray-500";
   };
