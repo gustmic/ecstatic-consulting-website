@@ -130,6 +130,8 @@ const CRMDashboard = () => {
 
     if (!projects) return;
 
+    console.log('Projects for revenue calculation:', projects);
+
     // Get next 6 months
     const months: { month: string; confirmed: number; potential: number }[] = [];
     const today = new Date();
@@ -182,6 +184,7 @@ const CRMDashboard = () => {
       });
     });
 
+    console.log('Calculated revenue data:', months);
     setRevenueData(months);
   };
 
