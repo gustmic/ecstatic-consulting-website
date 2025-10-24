@@ -31,11 +31,11 @@ interface ContactsTableProps {
 const ContactsTable = ({ contacts, onEdit, onDelete, onEmail, selectedContacts = [], onSelectionChange }: ContactsTableProps) => {
   const getStageColor = (stage: string) => {
     const colors: Record<string, string> = {
-      Lead: "bg-gray-500",
-      Prospect: "bg-blue-500",
-      Proposal: "bg-yellow-500",
-      Contract: "bg-green-500",
-      Client: "bg-purple-500",
+      "Qualified Prospect": "bg-blue-600",
+      "First Meeting": "bg-cyan-600",
+      "Proposal": "bg-amber-600",
+      "Client Won": "bg-green-600",
+      "Client Lost": "bg-red-600",
     };
     return colors[stage] || "bg-gray-500";
   };
