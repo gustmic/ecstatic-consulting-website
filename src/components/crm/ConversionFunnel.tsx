@@ -39,6 +39,23 @@ const CustomTooltip = ({ active, payload }: any) => {
 };
 
 const ConversionFunnel = ({ data }: ConversionFunnelProps) => {
+  if (data.length === 0) {
+    return (
+      <Card className="p-6">
+        <h2 className="font-serif text-2xl font-semibold mb-2">Conversion Funnel</h2>
+        <p className="text-sm text-muted-foreground mb-6">
+          Track how contacts move through your pipeline stages
+        </p>
+        <div className="flex flex-col items-center justify-center py-12 text-center">
+          <p className="text-muted-foreground mb-4">No contact data available</p>
+          <p className="text-sm text-muted-foreground">
+            Add contacts to see your conversion funnel
+          </p>
+        </div>
+      </Card>
+    );
+  }
+
   return (
     <Card className="p-6">
       <h2 className="font-serif text-2xl font-semibold mb-2">Conversion Funnel</h2>

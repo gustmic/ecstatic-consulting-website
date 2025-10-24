@@ -27,6 +27,23 @@ const CustomTooltip = ({ active, payload }: any) => {
 };
 
 const DealVelocityChart = ({ data, overallCycle }: DealVelocityChartProps) => {
+  if (data.length === 0) {
+    return (
+      <Card className="p-6">
+        <h2 className="font-serif text-2xl font-semibold mb-2">Deal Velocity</h2>
+        <p className="text-sm text-muted-foreground mb-6">
+          Average time spent in each pipeline stage
+        </p>
+        <div className="flex flex-col items-center justify-center py-12 text-center">
+          <p className="text-muted-foreground mb-4">No velocity data available</p>
+          <p className="text-sm text-muted-foreground">
+            Contact data needed to calculate deal velocity
+          </p>
+        </div>
+      </Card>
+    );
+  }
+
   return (
     <Card className="p-6">
       <h2 className="font-serif text-2xl font-semibold mb-2">Deal Velocity</h2>

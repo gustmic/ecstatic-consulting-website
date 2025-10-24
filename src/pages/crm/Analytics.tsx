@@ -4,7 +4,16 @@ import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowLeft, TrendingUp, Clock, DollarSign, Users } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { ArrowLeft, TrendingUp, Clock, DollarSign, Users, Calendar } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
 import ConversionFunnel from "@/components/crm/ConversionFunnel";
 import WinLossAnalysis from "@/components/crm/WinLossAnalysis";
 import DealVelocityChart from "@/components/crm/DealVelocityChart";
@@ -26,7 +35,9 @@ const Analytics = () => {
     totalPipelineValue: 0,
     engagementHealth: 0,
   });
+  const [dateRange, setDateRange] = useState<'30' | '90' | '365' | 'all'>('all');
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -38,17 +49,41 @@ const Analytics = () => {
       }
 
       await fetchAnalyticsData();
-      setLoading(false);
     };
 
     checkAuth();
-  }, [navigate]);
+  }, [navigate, dateRange]);
 
   const fetchAnalyticsData = async () => {
-    // Fetch all contacts with their stages and engagement data
-    const { data: contacts } = await supabase
-      .from('contacts')
-      .select('id, name, company, stage, created_at, engagement_score, last_contacted, next_followup');
+    try {
+      setLoading(true);
+
+      // Calculate date filter
+      let dateFilter: Date | null = null;
+      if (dateRange !== 'all') {
+        const days = parseInt(dateRange);
+        dateFilter = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
+      }
+
+      // Fetch all contacts with their stages and engagement data
+      let contactsQuery = supabase
+        .from('contacts')
+        .select('id, name, company, stage, created_at, engagement_score, last_contacted, next_followup');
+      
+      if (dateFilter) {
+        contactsQuery = contactsQuery.gte('created_at', dateFilter.toISOString());
+      }
+
+      const { data: contacts, error: contactsError } = await contactsQuery;
+
+      if (contactsError) {
+        toast({
+          title: "Error fetching contacts",
+          description: contactsError.message,
+          variant: "destructive",
+        });
+        return;
+      }
 
     if (!contacts) return;
 
@@ -113,9 +148,15 @@ const Analytics = () => {
     }
 
     // Total pipeline value and fetch projects for profitability
-    const { data: projects } = await supabase
+    let projectsQuery = supabase
       .from('projects')
-      .select('id, name, type, project_value_kr, actual_hours, hourly_rate, status');
+      .select('id, name, type, project_value_kr, actual_hours, hourly_rate, status, created_at');
+    
+    if (dateFilter) {
+      projectsQuery = projectsQuery.gte('created_at', dateFilter.toISOString());
+    }
+
+    const { data: projects } = await projectsQuery;
     
     const totalPipelineValue = projects
       ?.filter(p => p.status !== 'Client' && p.status !== 'Completed')
@@ -175,11 +216,53 @@ const Analytics = () => {
     if (projects && projects.length > 0) {
       const profitability = groupProjectsByServiceType(projects as any);
       setProfitabilityData(profitability);
+    } else {
+      setProfitabilityData([]);
+    }
+    } catch (error: any) {
+      toast({
+        title: "Error loading analytics",
+        description: error.message || "Failed to load analytics data",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
   if (loading) {
-    return null;
+    return (
+      <div className="min-h-screen bg-background">
+        <Navigation />
+        
+        <div className="container mx-auto px-4 md:px-6 pt-32 pb-20">
+          <div className="mb-6">
+            <Skeleton className="h-10 w-48" />
+          </div>
+
+          <div className="mb-8">
+            <Skeleton className="h-10 w-64 mb-2" />
+            <Skeleton className="h-6 w-96" />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            {[1, 2, 3, 4].map((i) => (
+              <Card key={i} className="p-6">
+                <Skeleton className="h-20 w-full" />
+              </Card>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {[1, 2].map((i) => (
+              <Card key={i} className="p-6">
+                <Skeleton className="h-64 w-full" />
+              </Card>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -196,11 +279,28 @@ const Analytics = () => {
           </Link>
         </div>
 
-        <div className="mb-8">
-          <h1 className="font-serif text-4xl font-bold mb-2">Pipeline Analytics</h1>
-          <p className="text-muted-foreground">
-            Data-driven insights for your consultancy
-          </p>
+        <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h1 className="font-serif text-4xl font-bold mb-2">Pipeline Analytics</h1>
+            <p className="text-muted-foreground">
+              Data-driven insights for your consultancy
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Calendar className="h-4 w-4 text-muted-foreground" />
+            <Select value={dateRange} onValueChange={(value: any) => setDateRange(value)}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Select period" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="30">Last 30 days</SelectItem>
+                <SelectItem value="90">Last 90 days</SelectItem>
+                <SelectItem value="365">Last year</SelectItem>
+                <SelectItem value="all">All time</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
         {/* Key Metrics */}

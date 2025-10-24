@@ -45,6 +45,25 @@ const CustomTooltip = ({ active, payload }: any) => {
 };
 
 const EngagementScoreCard = ({ tierData, topContacts }: EngagementScoreCardProps) => {
+  const hasData = tierData.some(t => t.count > 0);
+
+  if (!hasData) {
+    return (
+      <Card className="p-6">
+        <h2 className="font-serif text-2xl font-semibold mb-2">Contact Engagement</h2>
+        <p className="text-sm text-muted-foreground mb-6">
+          Engagement tiers and most active relationships
+        </p>
+        <div className="flex flex-col items-center justify-center py-12 text-center">
+          <p className="text-muted-foreground mb-4">No engagement data available</p>
+          <p className="text-sm text-muted-foreground">
+            Log interactions with contacts to see engagement scores
+          </p>
+        </div>
+      </Card>
+    );
+  }
+
   return (
     <Card className="p-6">
       <h2 className="font-serif text-2xl font-semibold mb-2">Contact Engagement</h2>
