@@ -5,6 +5,8 @@ import Navigation from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import { ArrowLeft, TrendingUp, Clock, DollarSign, Users, Calendar } from "lucide-react";
 import {
   Select,
@@ -19,8 +21,12 @@ import WinLossAnalysis from "@/components/crm/WinLossAnalysis";
 import DealVelocityChart from "@/components/crm/DealVelocityChart";
 import EngagementScoreCard from "@/components/crm/EngagementScoreCard";
 import ServiceProfitability from "@/components/crm/ServiceProfitability";
+import { MetricCardWithHelp } from "@/components/crm/MetricCardWithHelp";
+import { ExpandableHelp } from "@/components/crm/ExpandableHelp";
+import { HelpTooltip } from "@/components/crm/HelpTooltip";
 import { formatCurrency } from "@/lib/formatters";
 import { calculateEngagementScore, getEngagementTier, calculateDealVelocity, groupProjectsByServiceType } from "@/lib/analytics";
+import { analyticsHelp } from "@/lib/analyticsHelp";
 
 const Analytics = () => {
   const [loading, setLoading] = useState(true);
@@ -36,6 +42,7 @@ const Analytics = () => {
     engagementHealth: 0,
   });
   const [dateRange, setDateRange] = useState<'30' | '90' | '365' | 'all'>('all');
+  const [showHelp, setShowHelp] = useState(true);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -287,81 +294,180 @@ const Analytics = () => {
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
-            <Calendar className="h-4 w-4 text-muted-foreground" />
-            <Select value={dateRange} onValueChange={(value: any) => setDateRange(value)}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Select period" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="30">Last 30 days</SelectItem>
-                <SelectItem value="90">Last 90 days</SelectItem>
-                <SelectItem value="365">Last year</SelectItem>
-                <SelectItem value="all">All time</SelectItem>
-              </SelectContent>
-            </Select>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <Switch
+                checked={showHelp}
+                onCheckedChange={setShowHelp}
+                id="show-help"
+              />
+              <Label htmlFor="show-help" className="text-sm cursor-pointer">
+                Show explanations
+              </Label>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <Calendar className="h-4 w-4 text-muted-foreground" />
+              <Select value={dateRange} onValueChange={(value: any) => setDateRange(value)}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Select period" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="30">Last 30 days</SelectItem>
+                  <SelectItem value="90">Last 90 days</SelectItem>
+                  <SelectItem value="365">Last year</SelectItem>
+                  <SelectItem value="all">All time</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </div>
 
-        {/* Key Metrics */}
+        <ExpandableHelp title="How to use this dashboard">
+          <p>
+            This dashboard helps you answer key business questions:
+          </p>
+          <ul className="list-disc pl-5 space-y-1 mt-2">
+            <li><strong>Where to focus time?</strong> Check conversion rates and deal velocity</li>
+            <li><strong>Are we pricing correctly?</strong> Review service profitability</li>
+            <li><strong>Pipeline health?</strong> Monitor conversion funnel and pipeline value</li>
+            <li><strong>Which relationships matter?</strong> Use engagement health indicators</li>
+          </ul>
+          <p className="mt-3 text-accent">
+            💡 <strong>Pro tip:</strong> Review this dashboard weekly to spot trends early.
+          </p>
+        </ExpandableHelp>
+
+        {/* Key Metrics with Help */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <Card className="p-6">
-            <div className="flex items-center justify-between mb-2">
-              <TrendingUp className="h-5 w-5 text-muted-foreground" />
-              <span className="text-2xl font-bold">{metrics.overallConversion}%</span>
-            </div>
-            <h3 className="text-sm font-medium text-muted-foreground">Pipeline Conversion Rate</h3>
-            <p className="text-xs text-muted-foreground mt-1">Overall Lead→Client %</p>
-          </Card>
+          <MetricCardWithHelp
+            title="Pipeline Conversion Rate"
+            value={`${metrics.overallConversion}%`}
+            subtitle="Overall Lead→Client %"
+            icon={TrendingUp}
+            helpTitle={analyticsHelp.pipelineConversion.title}
+            helpDescription={analyticsHelp.pipelineConversion.description}
+            helpAction={analyticsHelp.pipelineConversion.actionable}
+            status={metrics.overallConversion >= 20 ? "good" : metrics.overallConversion >= 15 ? "warning" : "critical"}
+            showHelp={showHelp}
+          />
 
-          <Card className="p-6">
-            <div className="flex items-center justify-between mb-2">
-              <Clock className="h-5 w-5 text-muted-foreground" />
-              <span className="text-2xl font-bold">{metrics.avgDealCycle}</span>
-            </div>
-            <h3 className="text-sm font-medium text-muted-foreground">Avg Deal Cycle</h3>
-            <p className="text-xs text-muted-foreground mt-1">Days from Lead to Client</p>
-          </Card>
+          <MetricCardWithHelp
+            title="Avg Deal Cycle"
+            value={`${metrics.avgDealCycle} days`}
+            subtitle="Days from Lead to Client"
+            icon={Clock}
+            helpTitle={analyticsHelp.averageDealCycle.title}
+            helpDescription={analyticsHelp.averageDealCycle.description}
+            helpAction={analyticsHelp.averageDealCycle.actionable}
+            status={metrics.avgDealCycle <= 60 ? "good" : metrics.avgDealCycle <= 90 ? "warning" : "critical"}
+            showHelp={showHelp}
+          />
 
-          <Card className="p-6">
-            <div className="flex items-center justify-between mb-2">
-              <DollarSign className="h-5 w-5 text-muted-foreground" />
-              <span className="text-2xl font-bold">{formatCurrency(metrics.totalPipelineValue)}</span>
-            </div>
-            <h3 className="text-sm font-medium text-muted-foreground">Pipeline Value</h3>
-            <p className="text-xs text-muted-foreground mt-1">Active opportunities</p>
-          </Card>
+          <MetricCardWithHelp
+            title="Pipeline Value"
+            value={formatCurrency(metrics.totalPipelineValue)}
+            subtitle="Active opportunities"
+            icon={DollarSign}
+            helpTitle={analyticsHelp.pipelineValue.title}
+            helpDescription={analyticsHelp.pipelineValue.description}
+            helpAction={analyticsHelp.pipelineValue.actionable}
+            showHelp={showHelp}
+          />
 
-          <Card className="p-6">
-            <div className="flex items-center justify-between mb-2">
-              <Users className="h-5 w-5 text-muted-foreground" />
-              <span className="text-2xl font-bold">{metrics.engagementHealth}%</span>
-            </div>
-            <h3 className="text-sm font-medium text-muted-foreground">Engagement Health</h3>
-            <p className="text-xs text-muted-foreground mt-1">Contacts with score &gt;5</p>
-          </Card>
+          <MetricCardWithHelp
+            title="Engagement Health"
+            value={`${metrics.engagementHealth}%`}
+            subtitle="Contacts with score &gt;5"
+            icon={Users}
+            helpTitle={analyticsHelp.engagementHealth.title}
+            helpDescription={analyticsHelp.engagementHealth.description}
+            helpAction={analyticsHelp.engagementHealth.actionable}
+            status={metrics.engagementHealth >= 60 ? "good" : metrics.engagementHealth >= 40 ? "warning" : "critical"}
+            showHelp={showHelp}
+          />
         </div>
 
         {/* Charts - Phase 1 */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-          <ConversionFunnel data={funnelData} />
-          {winLossData && <WinLossAnalysis data={winLossData} />}
+          <div>
+            {showHelp && (
+              <div className="flex items-center gap-2 mb-4">
+                <h2 className="font-serif text-2xl font-semibold">Conversion Funnel</h2>
+                <HelpTooltip
+                  title={analyticsHelp.conversionFunnel.title}
+                  description={analyticsHelp.conversionFunnel.description}
+                  actionable={analyticsHelp.conversionFunnel.actionable}
+                />
+              </div>
+            )}
+            <ConversionFunnel data={funnelData} />
+          </div>
+          
+          <div>
+            {showHelp && winLossData && (
+              <div className="flex items-center gap-2 mb-4">
+                <h2 className="font-serif text-2xl font-semibold">Win/Loss Analysis</h2>
+                <HelpTooltip
+                  title={analyticsHelp.winLossAnalysis.title}
+                  description={analyticsHelp.winLossAnalysis.description}
+                  actionable={analyticsHelp.winLossAnalysis.actionable}
+                />
+              </div>
+            )}
+            {winLossData && <WinLossAnalysis data={winLossData} />}
+          </div>
         </div>
 
         {/* Charts - Phase 2 */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-          {velocityData.length > 0 && (
-            <DealVelocityChart data={velocityData} overallCycle={metrics.avgDealCycle} />
-          )}
-          {engagementData && (
-            <EngagementScoreCard 
-              tierData={engagementData.tierData} 
-              topContacts={engagementData.topContacts} 
-            />
-          )}
+          <div>
+            {showHelp && velocityData.length > 0 && (
+              <div className="flex items-center gap-2 mb-4">
+                <h2 className="font-serif text-2xl font-semibold">Deal Velocity</h2>
+                <HelpTooltip
+                  title={analyticsHelp.dealVelocity.title}
+                  description={analyticsHelp.dealVelocity.description}
+                  actionable={analyticsHelp.dealVelocity.actionable}
+                />
+              </div>
+            )}
+            {velocityData.length > 0 && (
+              <DealVelocityChart data={velocityData} overallCycle={metrics.avgDealCycle} />
+            )}
+          </div>
+          
+          <div>
+            {showHelp && engagementData && (
+              <div className="flex items-center gap-2 mb-4">
+                <h2 className="font-serif text-2xl font-semibold">Contact Engagement</h2>
+                <HelpTooltip
+                  title={analyticsHelp.contactEngagement.title}
+                  description={analyticsHelp.contactEngagement.description}
+                  actionable={analyticsHelp.contactEngagement.actionable}
+                />
+              </div>
+            )}
+            {engagementData && (
+              <EngagementScoreCard 
+                tierData={engagementData.tierData} 
+                topContacts={engagementData.topContacts} 
+              />
+            )}
+          </div>
         </div>
 
         {/* Phase 3 - Service Profitability */}
+        {showHelp && (
+          <div className="flex items-center gap-2 mb-4">
+            <h2 className="font-serif text-2xl font-semibold">Service Profitability</h2>
+            <HelpTooltip
+              title={analyticsHelp.serviceProfitability.title}
+              description={analyticsHelp.serviceProfitability.description}
+              actionable={analyticsHelp.serviceProfitability.actionable}
+            />
+          </div>
+        )}
         <ServiceProfitability data={profitabilityData} />
       </div>
     </div>
@@ -369,4 +475,5 @@ const Analytics = () => {
 };
 
 export default Analytics;
+
 
