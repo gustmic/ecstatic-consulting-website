@@ -35,8 +35,12 @@ const GlobalSearch = ({ open, setOpen }: GlobalSearchProps) => {
   }, [open, setOpen]);
 
   useEffect(() => {
-    if (open && searchQuery.length > 1) {
-      searchData(searchQuery);
+    if (open && searchQuery.length > 0) {
+      const timeoutId = setTimeout(() => {
+        searchData(searchQuery);
+      }, 300); // Debounce search by 300ms
+
+      return () => clearTimeout(timeoutId);
     } else {
       setContacts([]);
       setProjects([]);
@@ -44,24 +48,36 @@ const GlobalSearch = ({ open, setOpen }: GlobalSearchProps) => {
   }, [searchQuery, open]);
 
   const searchData = async (query: string) => {
-    const searchTerm = `%${query}%`;
+    try {
+      const searchTerm = `%${query}%`;
 
-    // Search contacts
-    const { data: contactData } = await supabase
-      .from('contacts')
-      .select('id, name, company, email, stage')
-      .or(`name.ilike.${searchTerm},company.ilike.${searchTerm},email.ilike.${searchTerm}`)
-      .limit(5);
+      // Search contacts
+      const { data: contactData, error: contactError } = await supabase
+        .from('contacts')
+        .select('id, name, company, email, stage')
+        .or(`name.ilike.${searchTerm},company.ilike.${searchTerm},email.ilike.${searchTerm}`)
+        .limit(5);
 
-    // Search projects
-    const { data: projectData } = await supabase
-      .from('projects')
-      .select('id, name, status, type')
-      .or(`name.ilike.${searchTerm},type.ilike.${searchTerm}`)
-      .limit(5);
+      if (contactError) {
+        console.error('Contact search error:', contactError);
+      }
 
-    setContacts(contactData || []);
-    setProjects(projectData || []);
+      // Search projects
+      const { data: projectData, error: projectError } = await supabase
+        .from('projects')
+        .select('id, name, status, type')
+        .or(`name.ilike.${searchTerm},type.ilike.${searchTerm}`)
+        .limit(5);
+
+      if (projectError) {
+        console.error('Project search error:', projectError);
+      }
+
+      setContacts(contactData || []);
+      setProjects(projectData || []);
+    } catch (error) {
+      console.error('Search error:', error);
+    }
   };
 
   const handleSelect = useCallback((path: string) => {
@@ -73,7 +89,11 @@ const GlobalSearch = ({ open, setOpen }: GlobalSearchProps) => {
   return (
     <CommandDialog open={open} onOpenChange={(isOpen) => {
       setOpen(isOpen);
-      if (!isOpen) setSearchQuery("");
+      if (!isOpen) {
+        setSearchQuery("");
+        setContacts([]);
+        setProjects([]);
+      }
     }}>
       <CommandInput 
         placeholder="Search contacts, projects..." 
@@ -81,11 +101,15 @@ const GlobalSearch = ({ open, setOpen }: GlobalSearchProps) => {
         onValueChange={setSearchQuery}
       />
       <CommandList>
-        <CommandEmpty>
-          {searchQuery.length > 1 
-            ? "No results found." 
-            : "Type to search contacts and projects..."}
-        </CommandEmpty>
+        {searchQuery.length === 0 ? (
+          <CommandEmpty>
+            Type to search contacts and projects...
+          </CommandEmpty>
+        ) : contacts.length === 0 && projects.length === 0 ? (
+          <CommandEmpty>
+            No results found for "{searchQuery}"
+          </CommandEmpty>
+        ) : null}
         
         {contacts.length > 0 && (
           <CommandGroup heading="Contacts">
