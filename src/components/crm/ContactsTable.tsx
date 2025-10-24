@@ -31,9 +31,9 @@ interface ContactsTableProps {
 const ContactsTable = ({ contacts, onEdit, onDelete, onEmail, selectedContacts = [], onSelectionChange }: ContactsTableProps) => {
   const getStageColor = (stage: string) => {
     const colors: Record<string, string> = {
-      "Qualified Prospect": "bg-blue-600",
-      "First Meeting": "bg-cyan-600",
-      "Proposal": "bg-amber-600",
+      "Qualified Prospect": "bg-gray-600",
+      "First Meeting": "bg-blue-600",
+      "Proposal": "bg-teal-600",
       "Client Won": "bg-green-600",
       "Client Lost": "bg-red-600",
     };
