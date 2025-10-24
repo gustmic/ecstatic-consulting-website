@@ -82,10 +82,16 @@ const GlobalSearch = ({ open, setOpen }: GlobalSearchProps) => {
     }
   };
 
-  const handleSelect = useCallback((path: string) => {
+  const handleSelectContact = useCallback((contact: any) => {
     setOpen(false);
     setSearchQuery("");
-    navigate(path);
+    navigate(`/admin/crm/contacts?search=${encodeURIComponent(contact.name)}`);
+  }, [navigate, setOpen]);
+
+  const handleSelectProject = useCallback((project: any) => {
+    setOpen(false);
+    setSearchQuery("");
+    navigate(`/admin/crm/projects?search=${encodeURIComponent(project.name)}`);
   }, [navigate, setOpen]);
 
   return (
@@ -124,7 +130,7 @@ const GlobalSearch = ({ open, setOpen }: GlobalSearchProps) => {
             {contacts.map((contact) => (
               <CommandItem 
                 key={contact.id} 
-                onSelect={() => handleSelect(`/admin/crm/contacts?id=${contact.id}`)}
+                onSelect={() => handleSelectContact(contact)}
               >
                 <Users className="mr-2 h-4 w-4" />
                 <div className="flex flex-col">
@@ -143,7 +149,7 @@ const GlobalSearch = ({ open, setOpen }: GlobalSearchProps) => {
             {projects.map((project) => (
               <CommandItem 
                 key={project.id} 
-                onSelect={() => handleSelect(`/admin/crm/projects?id=${project.id}`)}
+                onSelect={() => handleSelectProject(project)}
               >
                 <Briefcase className="mr-2 h-4 w-4" />
                 <div className="flex flex-col">

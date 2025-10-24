@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,7 @@ import EmailModal from "@/components/crm/EmailModal";
 import { formatDate, formatCurrency } from "@/lib/formatters";
 
 const Contacts = () => {
+  const [searchParams] = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [contacts, setContacts] = useState<any[]>([]);
   const [filteredContacts, setFilteredContacts] = useState<any[]>([]);
@@ -31,6 +32,14 @@ const Contacts = () => {
   const [bulkAction, setBulkAction] = useState<string>("");
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  // Set search query from URL parameter on mount
+  useEffect(() => {
+    const searchParam = searchParams.get('search');
+    if (searchParam) {
+      setSearchQuery(searchParam);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     const checkAuth = async () => {
