@@ -9,7 +9,9 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { Users, Briefcase, LayoutDashboard, BarChart3, Settings } from "lucide-react";
+import { DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { Users, Briefcase } from "lucide-react";
 
 interface GlobalSearchProps {
   open: boolean;
@@ -94,7 +96,13 @@ const GlobalSearch = ({ open, setOpen }: GlobalSearchProps) => {
         setContacts([]);
         setProjects([]);
       }
-    }}>
+    }} shouldFilter={false}>
+      <VisuallyHidden>
+        <DialogTitle>Search Contacts and Projects</DialogTitle>
+        <DialogDescription>
+          Search for contacts by name, company, or email, and projects by name or type
+        </DialogDescription>
+      </VisuallyHidden>
       <CommandInput 
         placeholder="Search contacts, projects..." 
         value={searchQuery}
