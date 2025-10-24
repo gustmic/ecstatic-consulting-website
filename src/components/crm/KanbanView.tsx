@@ -18,18 +18,19 @@ interface KanbanViewProps {
   contacts: Contact[];
   onContactClick: (contact: Contact) => void;
   onStageChange: (contactId: string, newStage: string) => void;
+  stages: string[];
 }
 
-const stages = ["Lead", "Prospect", "Proposal", "Contract", "Client"];
-
-const KanbanView = ({ contacts, onContactClick, onStageChange }: KanbanViewProps) => {
+const KanbanView = ({ contacts, onContactClick, onStageChange, stages }: KanbanViewProps) => {
   const groupedContacts = useMemo(() => {
     const groups: Record<string, Contact[]> = {};
     stages.forEach(stage => {
       groups[stage] = contacts.filter(c => c.stage === stage);
     });
+    // Add contacts with null stage to a separate group
+    groups['No Stage'] = contacts.filter(c => !c.stage);
     return groups;
-  }, [contacts]);
+  }, [contacts, stages]);
 
   const getOverdueCount = (stage: string) => {
     return groupedContacts[stage].filter(c => c.has_overdue_followup).length;
@@ -51,18 +52,19 @@ const KanbanView = ({ contacts, onContactClick, onStageChange }: KanbanViewProps
 
   const getStageColor = (stage: string) => {
     const colors: Record<string, string> = {
-      Lead: "border-gray-300",
-      Prospect: "border-blue-300",
-      Proposal: "border-yellow-300",
-      Contract: "border-green-300",
-      Client: "border-purple-300",
+      "Qualified Prospect": "border-gray-300",
+      "First Meeting": "border-blue-300",
+      "Proposal": "border-teal-300",
+      "Client Won": "border-green-300",
+      "Client Lost": "border-red-300",
+      "No Stage": "border-gray-200",
     };
     return colors[stage] || "border-gray-300";
   };
 
   return (
-    <div className="grid grid-cols-5 gap-4">
-      {stages.map(stage => (
+    <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${stages.length + 1}, minmax(0, 1fr))` }}>
+      {[...stages, 'No Stage'].map(stage => (
         <div 
           key={stage}
           className="flex flex-col"

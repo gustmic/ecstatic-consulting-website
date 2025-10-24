@@ -31,6 +31,7 @@ const Contacts = () => {
   const [selectedContacts, setSelectedContacts] = useState<string[]>([]);
   const [bulkAction, setBulkAction] = useState<string>("");
   const [stages, setStages] = useState<string[]>([]);
+  const [preferencesLoaded, setPreferencesLoaded] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -50,6 +51,18 @@ const Contacts = () => {
         navigate("/admin");
         return;
       }
+
+      // Fetch user preferences first
+      const { data: prefsData } = await supabase
+        .from('user_preferences')
+        .select('*')
+        .eq('user_id', session.user.id)
+        .maybeSingle();
+
+      if (prefsData?.default_contacts_view) {
+        setViewMode(prefsData.default_contacts_view as "table" | "kanban");
+      }
+      setPreferencesLoaded(true);
 
       await fetchContacts();
       await fetchStages();
@@ -427,6 +440,7 @@ const Contacts = () => {
             contacts={filteredContacts}
             onContactClick={handleViewContact}
             onStageChange={handleStageChange}
+            stages={stages}
           />
         )}
 
