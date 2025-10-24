@@ -103,9 +103,15 @@ const ContactsTable = ({ contacts, onEdit, onDelete, onEmail, selectedContacts =
               <TableCell>{contact.company || "-"}</TableCell>
               <TableCell>{contact.email}</TableCell>
               <TableCell>
-                <Badge className={getStageColor(contact.stage)}>
-                  {contact.stage}
-                </Badge>
+                {contact.stage ? (
+                  <Badge className={getStageColor(contact.stage)}>
+                    {contact.stage}
+                  </Badge>
+                ) : (
+                  <Badge variant="outline" className="text-muted-foreground">
+                    No Stage
+                  </Badge>
+                )}
               </TableCell>
               <TableCell>
                 {contact.tags && contact.tags.length > 0 ? (
