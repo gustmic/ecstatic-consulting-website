@@ -7,15 +7,15 @@ const Progress = () => {
   const sections = [
     {
       title: "Phase 1: Foundation & Core Pipeline Insights",
-      status: "not-started",
+      status: "complete",
       items: [
-        { done: false, text: "Create Analytics page at /admin/crm/analytics" },
-        { done: false, text: "Add routing configuration in App.tsx" },
-        { done: false, text: "Add database fields (actual_hours, hourly_rate, lead_source, engagement_score)" },
-        { done: false, text: "Create ConversionFunnel component with stage visualization" },
-        { done: false, text: "Build Win/Loss Analysis component with metrics" },
-        { done: false, text: "Add navigation link from CRM Dashboard" },
-        { done: false, text: "Implement 4 key metric cards at top of page" },
+        { done: true, text: "Create Analytics page at /admin/crm/analytics" },
+        { done: true, text: "Add routing configuration in App.tsx" },
+        { done: true, text: "Add database fields (actual_hours, hourly_rate, lead_source, engagement_score)" },
+        { done: true, text: "Create ConversionFunnel component with stage visualization" },
+        { done: true, text: "Build Win/Loss Analysis component with metrics" },
+        { done: true, text: "Add navigation link from CRM Dashboard" },
+        { done: true, text: "Implement 4 key metric cards at top of page" },
       ]
     },
     {

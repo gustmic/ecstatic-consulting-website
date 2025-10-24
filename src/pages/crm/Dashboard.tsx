@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Search, Settings } from "lucide-react";
+import { ArrowLeft, Search, Settings, BarChart3 } from "lucide-react";
 import SummaryCards from "@/components/crm/SummaryCards";
 import UpcomingFollowUps from "@/components/crm/UpcomingFollowUps";
 import RecentActivity from "@/components/crm/RecentActivity";
@@ -246,6 +246,12 @@ const CRMDashboard = () => {
           </div>
           
           <div className="flex gap-2">
+            <Link to="/admin/crm/analytics">
+              <Button variant="outline" size="sm">
+                <BarChart3 className="mr-2 h-4 w-4" />
+                Analytics
+              </Button>
+            </Link>
             <Link to="/admin/crm/preferences">
               <Button variant="outline" size="sm">
                 <Settings className="mr-2 h-4 w-4" />

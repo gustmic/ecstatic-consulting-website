@@ -53,9 +53,11 @@ export type Database = {
           created_at: string | null
           created_by: string | null
           email: string
+          engagement_score: number | null
           has_overdue_followup: boolean | null
           id: string
           last_contacted: string | null
+          lead_source: string | null
           linkedin: string | null
           name: string
           next_followup: string | null
@@ -70,9 +72,11 @@ export type Database = {
           created_at?: string | null
           created_by?: string | null
           email: string
+          engagement_score?: number | null
           has_overdue_followup?: boolean | null
           id?: string
           last_contacted?: string | null
+          lead_source?: string | null
           linkedin?: string | null
           name: string
           next_followup?: string | null
@@ -87,9 +91,11 @@ export type Database = {
           created_at?: string | null
           created_by?: string | null
           email?: string
+          engagement_score?: number | null
           has_overdue_followup?: boolean | null
           id?: string
           last_contacted?: string | null
+          lead_source?: string | null
           linkedin?: string | null
           name?: string
           next_followup?: string | null
@@ -168,11 +174,14 @@ export type Database = {
       }
       projects: {
         Row: {
+          actual_hours: number | null
           client_id: string
           created_at: string | null
           created_by: string | null
           end_date: string
+          hourly_rate: number | null
           id: string
+          lead_source: string | null
           name: string
           notes: string | null
           project_value_kr: number
@@ -181,11 +190,14 @@ export type Database = {
           type: string
         }
         Insert: {
+          actual_hours?: number | null
           client_id: string
           created_at?: string | null
           created_by?: string | null
           end_date: string
+          hourly_rate?: number | null
           id?: string
+          lead_source?: string | null
           name: string
           notes?: string | null
           project_value_kr: number
@@ -194,11 +206,14 @@ export type Database = {
           type: string
         }
         Update: {
+          actual_hours?: number | null
           client_id?: string
           created_at?: string | null
           created_by?: string | null
           end_date?: string
+          hourly_rate?: number | null
           id?: string
+          lead_source?: string | null
           name?: string
           notes?: string | null
           project_value_kr?: number
