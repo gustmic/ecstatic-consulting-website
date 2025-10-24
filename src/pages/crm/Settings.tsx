@@ -149,8 +149,27 @@ const Settings = () => {
     await saveSettings('stages', updatedStages);
     await saveSettings('stage_probabilities', updatedProbs);
 
+    // Update all contacts that have this stage to null
+    const { error: updateError } = await supabase
+      .from('contacts')
+      .update({ stage: null })
+      .eq('stage', stage);
+    
+    if (updateError) {
+      toast({
+        variant: "destructive",
+        title: "Error updating contacts",
+        description: updateError.message,
+      });
+      return;
+    }
+
     setStages(updatedStages);
     setStageProbabilities(updatedProbs);
+    toast({ 
+      title: "Pipeline stage removed",
+      description: "All contacts with this stage have been updated"
+    });
   };
 
   const handleAddServiceType = async () => {

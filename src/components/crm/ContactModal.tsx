@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ContactModalProps {
   isOpen: boolean;
@@ -14,6 +15,7 @@ interface ContactModalProps {
 }
 
 const ContactModal = ({ isOpen, onClose, onSave, contact }: ContactModalProps) => {
+  const [stages, setStages] = useState<string[]>([]);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -28,6 +30,38 @@ const ContactModal = ({ isOpen, onClose, onSave, contact }: ContactModalProps) =
   });
 
   useEffect(() => {
+    const fetchStages = async () => {
+      const { data } = await supabase
+        .from('settings')
+        .select('value')
+        .eq('key', 'stages')
+        .single();
+      
+      if (data) {
+        setStages(data.value as string[]);
+      }
+    };
+
+    fetchStages();
+
+    // Set up realtime subscription for settings changes
+    const channel = supabase
+      .channel('contact-modal-settings')
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'settings'
+      }, () => {
+        fetchStages();
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  useEffect(() => {
     if (contact) {
       setFormData({
         name: contact.name || "",
@@ -36,7 +70,7 @@ const ContactModal = ({ isOpen, onClose, onSave, contact }: ContactModalProps) =
         title: contact.title || "",
         phone: contact.phone || "",
         linkedin: contact.linkedin || "",
-        stage: contact.stage || "Lead",
+        stage: contact.stage || (stages[0] || "Lead"),
         tags: contact.tags ? contact.tags.join(", ") : "",
         notes: contact.notes || "",
         next_followup: contact.next_followup || "",
@@ -49,13 +83,13 @@ const ContactModal = ({ isOpen, onClose, onSave, contact }: ContactModalProps) =
         title: "",
         phone: "",
         linkedin: "",
-        stage: "Lead",
+        stage: stages[0] || "Lead",
         tags: "",
         notes: "",
         next_followup: "",
       });
     }
-  }, [contact, isOpen]);
+  }, [contact, isOpen, stages]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -143,11 +177,9 @@ const ContactModal = ({ isOpen, onClose, onSave, contact }: ContactModalProps) =
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Lead">Lead</SelectItem>
-                  <SelectItem value="Prospect">Prospect</SelectItem>
-                  <SelectItem value="Proposal">Proposal</SelectItem>
-                  <SelectItem value="Contract">Contract</SelectItem>
-                  <SelectItem value="Client">Client</SelectItem>
+                  {stages.map(stage => (
+                    <SelectItem key={stage} value={stage}>{stage}</SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
