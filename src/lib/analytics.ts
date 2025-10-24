@@ -130,3 +130,71 @@ export const calculateDealVelocity = (contacts: Contact[]) => {
 
   return velocityData;
 };
+
+/**
+ * Group projects by service type and calculate profitability metrics
+ */
+interface Project {
+  id: string;
+  name: string;
+  type: string;
+  project_value_kr: number;
+  actual_hours?: number;
+  hourly_rate?: number;
+  status: string;
+}
+
+export const groupProjectsByServiceType = (projects: Project[]) => {
+  const serviceTypes: Record<string, {
+    projectCount: number;
+    totalRevenue: number;
+    estimatedHours: number;
+    actualHours: number;
+    totalCosts: number;
+  }> = {};
+
+  projects.forEach(project => {
+    const serviceType = project.type || 'Unspecified';
+    const hourlyRate = project.hourly_rate || 1500;
+    const revenue = project.project_value_kr || 0;
+    const estimatedHours = revenue / hourlyRate;
+    const actualHours = project.actual_hours || 0;
+    const costs = actualHours * hourlyRate * 0.7; // Assuming 70% cost ratio
+
+    if (!serviceTypes[serviceType]) {
+      serviceTypes[serviceType] = {
+        projectCount: 0,
+        totalRevenue: 0,
+        estimatedHours: 0,
+        actualHours: 0,
+        totalCosts: 0,
+      };
+    }
+
+    serviceTypes[serviceType].projectCount++;
+    serviceTypes[serviceType].totalRevenue += revenue;
+    serviceTypes[serviceType].estimatedHours += estimatedHours;
+    serviceTypes[serviceType].actualHours += actualHours;
+    serviceTypes[serviceType].totalCosts += costs;
+  });
+
+  return Object.entries(serviceTypes).map(([serviceType, data]) => {
+    const profitMargin = data.totalRevenue > 0 
+      ? Math.round(((data.totalRevenue - data.totalCosts) / data.totalRevenue) * 100)
+      : 0;
+    
+    const utilization = data.estimatedHours > 0 && data.actualHours > 0
+      ? Math.round((data.actualHours / data.estimatedHours) * 100)
+      : 0;
+
+    return {
+      serviceType,
+      projectCount: data.projectCount,
+      totalRevenue: data.totalRevenue,
+      estimatedHours: Math.round(data.estimatedHours),
+      actualHours: Math.round(data.actualHours),
+      profitMargin,
+      utilization,
+    };
+  });
+};

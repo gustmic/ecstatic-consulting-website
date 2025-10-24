@@ -9,8 +9,9 @@ import ConversionFunnel from "@/components/crm/ConversionFunnel";
 import WinLossAnalysis from "@/components/crm/WinLossAnalysis";
 import DealVelocityChart from "@/components/crm/DealVelocityChart";
 import EngagementScoreCard from "@/components/crm/EngagementScoreCard";
+import ServiceProfitability from "@/components/crm/ServiceProfitability";
 import { formatCurrency } from "@/lib/formatters";
-import { calculateEngagementScore, getEngagementTier, calculateDealVelocity } from "@/lib/analytics";
+import { calculateEngagementScore, getEngagementTier, calculateDealVelocity, groupProjectsByServiceType } from "@/lib/analytics";
 
 const Analytics = () => {
   const [loading, setLoading] = useState(true);
@@ -18,6 +19,7 @@ const Analytics = () => {
   const [winLossData, setWinLossData] = useState<any>(null);
   const [velocityData, setVelocityData] = useState<any[]>([]);
   const [engagementData, setEngagementData] = useState<any>(null);
+  const [profitabilityData, setProfitabilityData] = useState<any[]>([]);
   const [metrics, setMetrics] = useState({
     overallConversion: 0,
     avgDealCycle: 0,
@@ -110,10 +112,10 @@ const Analytics = () => {
       avgDealCycle = Math.round(totalDays / clientContactsWithDates.length);
     }
 
-    // Total pipeline value
+    // Total pipeline value and fetch projects for profitability
     const { data: projects } = await supabase
       .from('projects')
-      .select('project_value_kr, status');
+      .select('id, name, type, project_value_kr, actual_hours, hourly_rate, status');
     
     const totalPipelineValue = projects
       ?.filter(p => p.status !== 'Client' && p.status !== 'Completed')
@@ -168,6 +170,12 @@ const Analytics = () => {
       }));
 
     setEngagementData({ tierData, topContacts });
+
+    // Calculate service profitability
+    if (projects && projects.length > 0) {
+      const profitability = groupProjectsByServiceType(projects as any);
+      setProfitabilityData(profitability);
+    }
   };
 
   if (loading) {
@@ -241,7 +249,7 @@ const Analytics = () => {
         </div>
 
         {/* Charts - Phase 2 */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           {velocityData.length > 0 && (
             <DealVelocityChart data={velocityData} overallCycle={metrics.avgDealCycle} />
           )}
@@ -252,6 +260,9 @@ const Analytics = () => {
             />
           )}
         </div>
+
+        {/* Phase 3 - Service Profitability */}
+        <ServiceProfitability data={profitabilityData} />
       </div>
     </div>
   );

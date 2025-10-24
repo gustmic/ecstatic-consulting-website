@@ -32,13 +32,13 @@ const Progress = () => {
     },
     {
       title: "Phase 3: Pricing & Profitability Insights",
-      status: "not-started",
+      status: "complete",
       items: [
-        { done: false, text: "Create ServiceProfitability component" },
-        { done: false, text: "Group projects by service type" },
-        { done: false, text: "Calculate revenue, hours, and profit margins" },
-        { done: false, text: "Add sorting and filtering to profitability table" },
-        { done: false, text: "Display utilization percentages" },
+        { done: true, text: "Create ServiceProfitability component" },
+        { done: true, text: "Group projects by service type" },
+        { done: true, text: "Calculate revenue, hours, and profit margins" },
+        { done: true, text: "Add sorting and filtering to profitability table" },
+        { done: true, text: "Display utilization percentages" },
       ]
     },
     {
