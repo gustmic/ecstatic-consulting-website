@@ -27,8 +27,6 @@ const KanbanView = ({ contacts, onContactClick, onStageChange, stages }: KanbanV
     stages.forEach(stage => {
       groups[stage] = contacts.filter(c => c.stage === stage);
     });
-    // Add contacts with null stage to a separate group
-    groups['No Stage'] = contacts.filter(c => !c.stage);
     return groups;
   }, [contacts, stages]);
 
@@ -63,8 +61,8 @@ const KanbanView = ({ contacts, onContactClick, onStageChange, stages }: KanbanV
   };
 
   return (
-    <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${stages.length + 1}, minmax(0, 1fr))` }}>
-      {[...stages, 'No Stage'].map(stage => (
+    <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${stages.length}, minmax(0, 1fr))` }}>
+      {stages.map(stage => (
         <div 
           key={stage}
           className="flex flex-col"
