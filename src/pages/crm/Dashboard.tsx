@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Search, Settings, BarChart3 } from "lucide-react";
+import { ArrowLeft, Search, Settings, BarChart3, Users, Briefcase } from "lucide-react";
 import SummaryCards from "@/components/crm/SummaryCards";
 import UpcomingFollowUps from "@/components/crm/UpcomingFollowUps";
 import RecentActivity from "@/components/crm/RecentActivity";
@@ -246,16 +246,22 @@ const CRMDashboard = () => {
           </div>
           
           <div className="flex gap-2">
+            <Link to="/admin/crm/contacts">
+              <Button variant="outline" size="sm">
+                <Users className="mr-2 h-4 w-4" />
+                Contacts
+              </Button>
+            </Link>
+            <Link to="/admin/crm/projects">
+              <Button variant="outline" size="sm">
+                <Briefcase className="mr-2 h-4 w-4" />
+                Projects
+              </Button>
+            </Link>
             <Link to="/admin/crm/analytics">
               <Button variant="outline" size="sm">
                 <BarChart3 className="mr-2 h-4 w-4" />
                 Analytics
-              </Button>
-            </Link>
-            <Link to="/admin/crm/preferences">
-              <Button variant="outline" size="sm">
-                <Settings className="mr-2 h-4 w-4" />
-                Preferences
               </Button>
             </Link>
             <Link to="/admin/crm/settings">
@@ -264,7 +270,7 @@ const CRMDashboard = () => {
                 Settings
               </Button>
             </Link>
-            <Button variant="outline" onClick={() => setSearchOpen(true)}>
+            <Button variant="outline" size="sm" onClick={() => setSearchOpen(true)}>
               <Search className="mr-2 h-4 w-4" />
               Search
               <kbd className="ml-2 pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">

@@ -6,9 +6,21 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, Save } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+
+interface UserPreferences {
+  id?: string;
+  user_id: string;
+  default_contacts_view: string;
+  items_per_page: number;
+  email_notifications: boolean;
+  date_format: string;
+  theme: string;
+}
 
 const Settings = () => {
   const [loading, setLoading] = useState(true);
@@ -19,6 +31,14 @@ const Settings = () => {
   const [newType, setNewType] = useState("");
   const [tags, setTags] = useState<string[]>([]);
   const [newTag, setNewTag] = useState("");
+  const [preferences, setPreferences] = useState<UserPreferences>({
+    user_id: "",
+    default_contacts_view: "table",
+    items_per_page: 25,
+    email_notifications: true,
+    date_format: "MM/dd/yyyy",
+    theme: "system",
+  });
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -39,6 +59,11 @@ const Settings = () => {
   }, [navigate]);
 
   const fetchSettings = async () => {
+    // Get current user
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) return;
+
+    // Fetch pipeline settings
     const { data: stagesData } = await supabase
       .from('settings')
       .select('value')
@@ -71,6 +96,19 @@ const Settings = () => {
       contact.tags?.forEach((tag: string) => allTags.add(tag));
     });
     setTags(Array.from(allTags));
+
+    // Fetch user preferences
+    const { data: prefsData } = await supabase
+      .from('user_preferences')
+      .select('*')
+      .eq('user_id', session.user.id)
+      .maybeSingle();
+
+    if (prefsData) {
+      setPreferences(prefsData);
+    } else {
+      setPreferences(prev => ({ ...prev, user_id: session.user.id }));
+    }
   };
 
   const handleAddStage = async () => {
@@ -151,6 +189,24 @@ const Settings = () => {
     toast({ title: "Tag removed" });
   };
 
+  const handleSavePreferences = async () => {
+    try {
+      const { error } = await supabase
+        .from('user_preferences')
+        .upsert(preferences, { onConflict: 'user_id' });
+
+      if (error) throw error;
+
+      toast({ title: "Preferences saved successfully" });
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Error saving preferences",
+        description: error.message,
+      });
+    }
+  };
+
   if (loading) {
     return null;
   }
@@ -172,10 +228,113 @@ const Settings = () => {
         <div className="max-w-4xl">
           <h1 className="font-serif text-4xl font-bold mb-2">Settings</h1>
           <p className="text-muted-foreground mb-8">
-            Configure your CRM settings
+            Configure your CRM preferences and system settings
           </p>
 
           <div className="space-y-6">
+            {/* User Preferences */}
+            <Card className="p-6">
+              <h2 className="font-serif text-2xl font-semibold mb-4">Display Preferences</h2>
+              
+              <div className="space-y-6">
+                <div className="space-y-2">
+                  <Label>Default Contacts View</Label>
+                  <Select
+                    value={preferences.default_contacts_view}
+                    onValueChange={(value) =>
+                      setPreferences({ ...preferences, default_contacts_view: value })
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="table">Table View</SelectItem>
+                      <SelectItem value="kanban">Kanban View</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Items Per Page</Label>
+                  <Select
+                    value={preferences.items_per_page.toString()}
+                    onValueChange={(value) =>
+                      setPreferences({ ...preferences, items_per_page: parseInt(value) })
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="10">10</SelectItem>
+                      <SelectItem value="25">25</SelectItem>
+                      <SelectItem value="50">50</SelectItem>
+                      <SelectItem value="100">100</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Date Format</Label>
+                  <Select
+                    value={preferences.date_format}
+                    onValueChange={(value) =>
+                      setPreferences({ ...preferences, date_format: value })
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="MM/dd/yyyy">MM/DD/YYYY</SelectItem>
+                      <SelectItem value="dd/MM/yyyy">DD/MM/YYYY</SelectItem>
+                      <SelectItem value="yyyy-MM-dd">YYYY-MM-DD</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Theme</Label>
+                  <Select
+                    value={preferences.theme}
+                    onValueChange={(value) =>
+                      setPreferences({ ...preferences, theme: value })
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="light">Light</SelectItem>
+                      <SelectItem value="dark">Dark</SelectItem>
+                      <SelectItem value="system">System</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="flex items-center justify-between pt-4 border-t">
+                  <div className="space-y-0.5">
+                    <Label>Email Notifications</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Receive email notifications for follow-ups and updates
+                    </p>
+                  </div>
+                  <Switch
+                    checked={preferences.email_notifications}
+                    onCheckedChange={(checked) =>
+                      setPreferences({ ...preferences, email_notifications: checked })
+                    }
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-end mt-6">
+                <Button onClick={handleSavePreferences}>
+                  Save Preferences
+                </Button>
+              </div>
+            </Card>
             <Card className="p-6">
               <h2 className="font-serif text-2xl font-semibold mb-4">Pipeline Stages</h2>
               <p className="text-sm text-muted-foreground mb-4">
