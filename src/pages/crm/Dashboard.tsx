@@ -132,11 +132,11 @@ const CRMDashboard = () => {
 
     console.log('Projects for revenue calculation:', projects);
 
-    // Get next 6 months
+    // Get next 12 months
     const months: { month: string; confirmed: number; potential: number }[] = [];
     const today = new Date();
     
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 12; i++) {
       const date = new Date(today.getFullYear(), today.getMonth() + i, 1);
       months.push({
         month: `${getMonthName(date.getMonth())} ${date.getFullYear()}`,
