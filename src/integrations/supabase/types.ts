@@ -63,7 +63,7 @@ export type Database = {
           next_followup: string | null
           notes: string | null
           phone: string | null
-          stage: string
+          stage: string | null
           tags: string[] | null
           title: string | null
         }
@@ -82,7 +82,7 @@ export type Database = {
           next_followup?: string | null
           notes?: string | null
           phone?: string | null
-          stage?: string
+          stage?: string | null
           tags?: string[] | null
           title?: string | null
         }
@@ -101,7 +101,7 @@ export type Database = {
           next_followup?: string | null
           notes?: string | null
           phone?: string | null
-          stage?: string
+          stage?: string | null
           tags?: string[] | null
           title?: string | null
         }
