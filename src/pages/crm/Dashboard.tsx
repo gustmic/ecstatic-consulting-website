@@ -39,6 +39,46 @@ const CRMDashboard = () => {
     };
 
     checkAuth();
+
+    // Set up realtime subscriptions for all relevant tables
+    const contactsChannel = supabase
+      .channel('dashboard-contacts')
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'contacts'
+      }, () => {
+        fetchDashboardData();
+      })
+      .subscribe();
+
+    const projectsChannel = supabase
+      .channel('dashboard-projects')
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'projects'
+      }, () => {
+        fetchDashboardData();
+      })
+      .subscribe();
+
+    const interactionsChannel = supabase
+      .channel('dashboard-interactions')
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'interactions'
+      }, () => {
+        fetchDashboardData();
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(contactsChannel);
+      supabase.removeChannel(projectsChannel);
+      supabase.removeChannel(interactionsChannel);
+    };
   }, [navigate]);
 
   const fetchDashboardData = async () => {

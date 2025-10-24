@@ -55,6 +55,22 @@ const Contacts = () => {
     };
 
     checkAuth();
+
+    // Set up realtime subscription
+    const channel = supabase
+      .channel('contacts-changes')
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'contacts'
+      }, () => {
+        fetchContacts();
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [navigate]);
 
   useEffect(() => {

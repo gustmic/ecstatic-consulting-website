@@ -59,6 +59,46 @@ const Analytics = () => {
     };
 
     checkAuth();
+
+    // Set up realtime subscriptions
+    const contactsChannel = supabase
+      .channel('analytics-contacts')
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'contacts'
+      }, () => {
+        fetchAnalyticsData();
+      })
+      .subscribe();
+
+    const projectsChannel = supabase
+      .channel('analytics-projects')
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'projects'
+      }, () => {
+        fetchAnalyticsData();
+      })
+      .subscribe();
+
+    const interactionsChannel = supabase
+      .channel('analytics-interactions')
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'interactions'
+      }, () => {
+        fetchAnalyticsData();
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(contactsChannel);
+      supabase.removeChannel(projectsChannel);
+      supabase.removeChannel(interactionsChannel);
+    };
   }, [navigate, dateRange]);
 
   const fetchAnalyticsData = async () => {

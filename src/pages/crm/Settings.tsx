@@ -56,6 +56,22 @@ const Settings = () => {
     };
 
     checkAuth();
+
+    // Set up realtime subscription for settings
+    const channel = supabase
+      .channel('settings-changes')
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'settings'
+      }, () => {
+        fetchSettings();
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [navigate]);
 
   const fetchSettings = async () => {
