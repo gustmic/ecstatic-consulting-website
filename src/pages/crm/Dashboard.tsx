@@ -246,6 +246,12 @@ const CRMDashboard = () => {
           </div>
           
           <div className="flex gap-2">
+            <Link to="/admin/crm/analytics">
+              <Button variant="outline" size="sm">
+                <BarChart3 className="mr-2 h-4 w-4" />
+                Analytics
+              </Button>
+            </Link>
             <Link to="/admin/crm/contacts">
               <Button variant="outline" size="sm">
                 <Users className="mr-2 h-4 w-4" />
@@ -256,12 +262,6 @@ const CRMDashboard = () => {
               <Button variant="outline" size="sm">
                 <Briefcase className="mr-2 h-4 w-4" />
                 Projects
-              </Button>
-            </Link>
-            <Link to="/admin/crm/analytics">
-              <Button variant="outline" size="sm">
-                <BarChart3 className="mr-2 h-4 w-4" />
-                Analytics
               </Button>
             </Link>
             <Link to="/admin/crm/settings">
