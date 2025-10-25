@@ -19,12 +19,11 @@ import { useToast } from "@/hooks/use-toast";
 import ConversionFunnel from "@/components/crm/ConversionFunnel";
 import WinLossAnalysis from "@/components/crm/WinLossAnalysis";
 import DealVelocityChart from "@/components/crm/DealVelocityChart";
-import ServiceProfitability from "@/components/crm/ServiceProfitability";
 import { ExpandableHelp } from "@/components/crm/ExpandableHelp";
 import { HelpTooltip } from "@/components/crm/HelpTooltip";
 import { StickyMetricsSummary } from "@/components/crm/StickyMetricsSummary";
 import { AnalyticsSection } from "@/components/crm/AnalyticsSection";
-import { calculateDealVelocity, groupProjectsByServiceType } from "@/lib/analytics";
+import { calculateDealVelocity } from "@/lib/analytics";
 import { analyticsHelp } from "@/lib/analyticsHelp";
 
 const Analytics = () => {
@@ -32,7 +31,6 @@ const Analytics = () => {
   const [funnelData, setFunnelData] = useState<any[]>([]);
   const [winLossData, setWinLossData] = useState<any>(null);
   const [velocityData, setVelocityData] = useState<any[]>([]);
-  const [profitabilityData, setProfitabilityData] = useState<any[]>([]);
   const [metrics, setMetrics] = useState({
     overallConversion: 0,
     avgDealCycle: 0,
@@ -196,16 +194,10 @@ const Analytics = () => {
       avgDealCycle = Math.round(totalDays / clientContactsWithDates.length);
     }
 
-    // Total pipeline value and fetch projects for profitability
-    let projectsQuery = supabase
+    // Total pipeline value
+    const { data: projects } = await supabase
       .from('projects')
-      .select('id, name, type, project_value_kr, actual_hours, hourly_rate, status, created_at');
-    
-    if (dateFilter) {
-      projectsQuery = projectsQuery.gte('created_at', dateFilter.toISOString());
-    }
-
-    const { data: projects } = await projectsQuery;
+      .select('project_value_kr, status, created_at');
     
     const totalPipelineValue = projects
       ?.filter(p => p.status !== wonStage && p.status !== 'Completed')
@@ -220,14 +212,6 @@ const Analytics = () => {
     // Calculate deal velocity (exclude last stage as it's "won")
     const velocity = calculateDealVelocity(contacts as any, stages.slice(0, -1));
     setVelocityData(velocity);
-
-    // Calculate service profitability
-    if (projects && projects.length > 0) {
-      const profitability = groupProjectsByServiceType(projects as any);
-      setProfitabilityData(profitability);
-    } else {
-      setProfitabilityData([]);
-    }
     } catch (error: any) {
       toast({
         title: "Error loading analytics",
@@ -398,20 +382,6 @@ const Analytics = () => {
               {winLossData && <WinLossAnalysis data={winLossData} />}
             </div>
           </div>
-        </AnalyticsSection>
-
-        {/* Revenue & Profitability Section */}
-        <AnalyticsSection title="Revenue & Profitability" icon="💰">
-          {showHelp && (
-            <div className="mb-4">
-              <HelpTooltip
-                title={analyticsHelp.serviceProfitability.title}
-                description={analyticsHelp.serviceProfitability.description}
-                actionable={analyticsHelp.serviceProfitability.actionable}
-              />
-            </div>
-          )}
-          <ServiceProfitability data={profitabilityData} />
         </AnalyticsSection>
       </div>
     </div>
