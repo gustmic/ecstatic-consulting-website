@@ -230,8 +230,8 @@ const Analytics = () => {
       engagementHealth,
     });
 
-    // Calculate deal velocity
-    const velocity = calculateDealVelocity(contacts as any);
+    // Calculate deal velocity (exclude last stage as it's "won")
+    const velocity = calculateDealVelocity(contacts as any, stages.slice(0, -1));
     setVelocityData(velocity);
 
     // Calculate engagement scores and tiers

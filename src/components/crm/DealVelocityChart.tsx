@@ -59,7 +59,7 @@ const DealVelocityChart = ({ data, overallCycle }: DealVelocityChartProps) => {
           </div>
         </div>
         <p className="text-xs text-muted-foreground mt-2">
-          Average time from Lead to Client
+          Average time from first to last stage
         </p>
       </div>
       

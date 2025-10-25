@@ -106,11 +106,12 @@ export const calculateConversionRates = (contacts: Contact[]) => {
 /**
  * Calculate average deal velocity (time in each stage)
  */
-export const calculateDealVelocity = (contacts: Contact[]) => {
-  const stages = ['Lead', 'Prospect', 'Proposal', 'Contract'];
+export const calculateDealVelocity = (contacts: Contact[], stages?: string[]) => {
+  const defaultStages = ['Lead', 'Prospect', 'Proposal', 'Contract'];
+  const velocityStages = stages || defaultStages;
   
   // Simplified calculation based on current stage and creation date
-  const velocityData = stages.map(stage => {
+  const velocityData = velocityStages.map(stage => {
     const stageContacts = contacts.filter(c => c.stage === stage);
     
     if (stageContacts.length === 0) {
