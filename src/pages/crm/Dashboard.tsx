@@ -21,6 +21,7 @@ const CRMDashboard = () => {
   const [followUps, setFollowUps] = useState<any[]>([]);
   const [recentActivities, setRecentActivities] = useState<any[]>([]);
   const [revenueData, setRevenueData] = useState<any[]>([]);
+  const [revenueTimeRange, setRevenueTimeRange] = useState<3 | 6 | 12>(6);
   const [searchOpen, setSearchOpen] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -332,7 +333,11 @@ const CRMDashboard = () => {
             onEmail={handleEmailFollowUp}
           />
 
-          <RevenueChart data={revenueData} />
+          <RevenueChart 
+            data={revenueData} 
+            timeRange={revenueTimeRange}
+            onTimeRangeChange={setRevenueTimeRange}
+          />
 
           <RecentActivity activities={recentActivities} />
         </div>

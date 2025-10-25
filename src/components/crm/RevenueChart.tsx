@@ -1,4 +1,5 @@
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { formatCurrency, getMonthName } from "@/lib/formatters";
 
@@ -10,6 +11,8 @@ interface MonthlyRevenue {
 
 interface RevenueChartProps {
   data: MonthlyRevenue[];
+  timeRange: 3 | 6 | 12;
+  onTimeRangeChange: (range: 3 | 6 | 12) => void;
 }
 
 const CustomTooltip = ({ active, payload }: any) => {
@@ -48,13 +51,40 @@ const formatYAxis = (value: number) => {
   return formatCurrency(value);
 };
 
-const RevenueChart = ({ data }: RevenueChartProps) => {
+const RevenueChart = ({ data, timeRange, onTimeRangeChange }: RevenueChartProps) => {
+  const displayData = data.slice(0, timeRange);
+  
   return (
     <Card className="p-6">
-      <h2 className="font-serif text-2xl font-semibold mb-6">Revenue Projection</h2>
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="font-serif text-2xl font-semibold">Revenue Projection</h2>
+        <div className="flex gap-2">
+          <Button
+            variant={timeRange === 3 ? "default" : "outline"}
+            size="sm"
+            onClick={() => onTimeRangeChange(3)}
+          >
+            3 mo
+          </Button>
+          <Button
+            variant={timeRange === 6 ? "default" : "outline"}
+            size="sm"
+            onClick={() => onTimeRangeChange(6)}
+          >
+            6 mo
+          </Button>
+          <Button
+            variant={timeRange === 12 ? "default" : "outline"}
+            size="sm"
+            onClick={() => onTimeRangeChange(12)}
+          >
+            12 mo
+          </Button>
+        </div>
+      </div>
       
       <ResponsiveContainer width="100%" height={300}>
-        <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+        <BarChart data={displayData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
           <XAxis 
             dataKey="month" 
