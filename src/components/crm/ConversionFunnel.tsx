@@ -71,7 +71,7 @@ const ConversionFunnel = ({ data }: ConversionFunnelProps) => {
       <ResponsiveContainer width="100%" height={350}>
         <BarChart data={data} layout="vertical" margin={{ top: 5, right: 30, left: 100, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-          <XAxis type="number" tick={{ fill: 'hsl(var(--muted-foreground))' }} />
+          <XAxis type="number" allowDecimals={false} tick={{ fill: 'hsl(var(--muted-foreground))' }} />
           <YAxis 
             dataKey="stage" 
             type="category" 
