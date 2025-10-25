@@ -14,7 +14,6 @@ interface Contact {
   company?: string;
   email: string;
   stage: string;
-  tags?: string[];
   last_contacted?: string;
   next_followup?: string;
   phone?: string;
@@ -86,7 +85,6 @@ const ContactsTable = ({ contacts, onEdit, onDelete, onEmail, selectedContacts =
             <TableHead>Company</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>Stage</TableHead>
-            <TableHead>Tags</TableHead>
             <TableHead>Last Contact</TableHead>
             <TableHead>Next Follow-Up</TableHead>
             <TableHead>Days Since Follow-up</TableHead>
@@ -116,19 +114,6 @@ const ContactsTable = ({ contacts, onEdit, onDelete, onEmail, selectedContacts =
                   <Badge variant="outline" className="text-muted-foreground">
                     No Stage
                   </Badge>
-                )}
-              </TableCell>
-              <TableCell>
-                {contact.tags && contact.tags.length > 0 ? (
-                  <div className="flex gap-1 flex-wrap">
-                    {contact.tags.map((tag, idx) => (
-                      <Badge key={idx} variant="outline" className="text-xs">
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-                ) : (
-                  "-"
                 )}
               </TableCell>
               <TableCell>

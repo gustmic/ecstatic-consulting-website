@@ -113,18 +113,6 @@ const ContactDetail = ({ isOpen, onClose, contactId, onEdit }: ContactDetailProp
                   <p className="text-sm text-muted-foreground mb-1">Stage</p>
                   <Badge>{contact.stage}</Badge>
                 </div>
-                {contact.tags && contact.tags.length > 0 && (
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-2 flex items-center gap-2">
-                      <Tag className="h-4 w-4" /> Tags
-                    </p>
-                    <div className="flex gap-2 flex-wrap">
-                      {contact.tags.map((tag: string, idx: number) => (
-                        <Badge key={idx} variant="outline">{tag}</Badge>
-                      ))}
-                    </div>
-                  </div>
-                )}
                 {contact.next_followup && (
                   <div className="flex items-center gap-3">
                     <Calendar className="h-4 w-4 text-muted-foreground" />

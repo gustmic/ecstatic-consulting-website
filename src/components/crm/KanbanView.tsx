@@ -9,7 +9,6 @@ interface Contact {
   company?: string;
   email: string;
   stage: string;
-  tags?: string[];
   next_followup?: string;
   has_overdue_followup?: boolean;
 }
@@ -95,21 +94,6 @@ const KanbanView = ({ contacts, onContactClick, onStageChange, stages }: KanbanV
                   <p className="text-sm text-muted-foreground mb-2">{contact.company}</p>
                 )}
                 <p className="text-xs text-muted-foreground mb-2">{contact.email}</p>
-                
-                {contact.tags && contact.tags.length > 0 && (
-                  <div className="flex gap-1 flex-wrap mb-2">
-                    {contact.tags.slice(0, 2).map((tag, idx) => (
-                      <Badge key={idx} variant="outline" className="text-xs">
-                        {tag}
-                      </Badge>
-                    ))}
-                    {contact.tags.length > 2 && (
-                      <Badge variant="outline" className="text-xs">
-                        +{contact.tags.length - 2}
-                      </Badge>
-                    )}
-                  </div>
-                )}
 
                 {contact.next_followup && (
                   <p className={`text-xs ${contact.has_overdue_followup ? 'text-destructive font-medium' : 'text-muted-foreground'}`}>

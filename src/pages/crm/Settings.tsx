@@ -29,8 +29,6 @@ const Settings = () => {
   const [stageProbabilities, setStageProbabilities] = useState<Record<string, number>>({});
   const [newStage, setNewStage] = useState("");
   const [newType, setNewType] = useState("");
-  const [tags, setTags] = useState<string[]>([]);
-  const [newTag, setNewTag] = useState("");
   const [preferences, setPreferences] = useState<UserPreferences>({
     user_id: "",
     default_contacts_view: "table",
@@ -102,16 +100,6 @@ const Settings = () => {
     if (typesData) setServiceTypes(typesData.value as string[]);
     if (probData) setStageProbabilities(probData.value as Record<string, number>);
 
-    // Fetch existing tags from contacts
-    const { data: contactsData } = await supabase
-      .from('contacts')
-      .select('tags');
-    
-    const allTags = new Set<string>();
-    contactsData?.forEach(contact => {
-      contact.tags?.forEach((tag: string) => allTags.add(tag));
-    });
-    setTags(Array.from(allTags));
 
     // Fetch user preferences
     const { data: prefsData } = await supabase
@@ -230,19 +218,6 @@ const Settings = () => {
     }
   };
 
-  const handleAddTag = () => {
-    if (!newTag.trim() || tags.includes(newTag.trim())) return;
-    const updatedTags = [...tags, newTag.trim()];
-    setTags(updatedTags);
-    setNewTag("");
-    toast({ title: "Tag added to available tags" });
-  };
-
-  const handleRemoveTag = (tag: string) => {
-    const updatedTags = tags.filter(t => t !== tag);
-    setTags(updatedTags);
-    toast({ title: "Tag removed" });
-  };
 
   const handleSavePreferences = async () => {
     try {
@@ -459,36 +434,6 @@ const Settings = () => {
                   onChange={(e) => setNewType(e.target.value)}
                 />
                 <Button onClick={handleAddServiceType}>Add Type</Button>
-              </div>
-            </Card>
-
-            <Card className="p-6">
-              <h2 className="font-serif text-2xl font-semibold mb-4">Tags</h2>
-              <p className="text-sm text-muted-foreground mb-4">
-                Manage available tags for contacts
-              </p>
-
-              <div className="flex gap-2 flex-wrap mb-4">
-                {tags.map(tag => (
-                  <Badge key={tag} variant="outline" className="gap-2">
-                    {tag}
-                    <button
-                      onClick={() => handleRemoveTag(tag)}
-                      className="hover:text-destructive"
-                    >
-                      ×
-                    </button>
-                  </Badge>
-                ))}
-              </div>
-
-              <div className="flex gap-2">
-                <Input
-                  placeholder="New tag"
-                  value={newTag}
-                  onChange={(e) => setNewTag(e.target.value)}
-                />
-                <Button onClick={handleAddTag}>Add Tag</Button>
               </div>
             </Card>
           </div>

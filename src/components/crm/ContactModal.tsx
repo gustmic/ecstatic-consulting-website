@@ -24,7 +24,6 @@ const ContactModal = ({ isOpen, onClose, onSave, contact }: ContactModalProps) =
     phone: "",
     linkedin: "",
     stage: "Lead",
-    tags: "",
     notes: "",
     next_followup: "",
   });
@@ -71,7 +70,6 @@ const ContactModal = ({ isOpen, onClose, onSave, contact }: ContactModalProps) =
         phone: contact.phone || "",
         linkedin: contact.linkedin || "",
         stage: contact.stage || (stages[0] || "Lead"),
-        tags: contact.tags ? contact.tags.join(", ") : "",
         notes: contact.notes || "",
         next_followup: contact.next_followup || "",
       });
@@ -84,7 +82,6 @@ const ContactModal = ({ isOpen, onClose, onSave, contact }: ContactModalProps) =
         phone: "",
         linkedin: "",
         stage: stages[0] || "Lead",
-        tags: "",
         notes: "",
         next_followup: "",
       });
@@ -96,7 +93,6 @@ const ContactModal = ({ isOpen, onClose, onSave, contact }: ContactModalProps) =
     
     const contactData = {
       ...formData,
-      tags: formData.tags ? formData.tags.split(",").map(t => t.trim()).filter(Boolean) : [],
       next_followup: formData.next_followup || null,
     };
 
@@ -193,16 +189,6 @@ const ContactModal = ({ isOpen, onClose, onSave, contact }: ContactModalProps) =
                 onChange={(e) => setFormData({ ...formData, next_followup: e.target.value })}
               />
             </div>
-          </div>
-
-          <div>
-            <Label htmlFor="tags">Tags (comma-separated)</Label>
-            <Input
-              id="tags"
-              value={formData.tags}
-              onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
-              placeholder="vip, warm-lead, etc."
-            />
           </div>
 
           <div>
