@@ -51,7 +51,7 @@ const DealVelocityChart = ({ data, overallCycle }: DealVelocityChartProps) => {
         Average time spent in each pipeline stage
       </p>
 
-      <div className="mb-6 p-6 bg-blue-500/5 rounded-lg border border-blue-500/20">
+      <div className="mb-6 p-6 bg-green-500/5 rounded-lg border border-green-500/20">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm text-muted-foreground mb-1">Overall Deal Cycle</p>
@@ -77,7 +77,7 @@ const DealVelocityChart = ({ data, overallCycle }: DealVelocityChartProps) => {
           <Tooltip content={<CustomTooltip />} />
           <Bar 
             dataKey="avgDays" 
-            fill="#3B82F6" 
+            fill="#22c55e" 
             radius={[4, 4, 0, 0]}
           />
         </BarChart>

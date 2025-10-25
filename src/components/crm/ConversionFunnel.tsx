@@ -11,11 +11,16 @@ interface ConversionFunnelProps {
   data: FunnelData[];
 }
 
-const getConversionColor = (rate?: number) => {
+const getConversionColor = (rate?: number, stage?: string) => {
+  // Check for specific stage names
+  if (stage === 'Client Lost') return '#ef4444'; // red-500
+  if (stage?.includes('Won') || stage?.includes('Client')) return '#22c55e'; // green-500
+  
+  // Default gradient based on conversion rate
   if (!rate) return '#94a3b8'; // slate-400
   if (rate >= 50) return '#22c55e'; // green-500
-  if (rate >= 30) return '#eab308'; // yellow-500
-  return '#ef4444'; // red-500
+  if (rate >= 30) return '#3b82f6'; // blue-500
+  return '#94a3b8'; // slate-400
 };
 
 const CustomTooltip = ({ active, payload }: any) => {
@@ -27,7 +32,7 @@ const CustomTooltip = ({ active, payload }: any) => {
         <div className="space-y-1 text-sm">
           <p>Contacts: {data.count}</p>
           {data.conversionRate !== undefined && (
-            <p className="font-semibold" style={{ color: getConversionColor(data.conversionRate) }}>
+            <p className="font-semibold" style={{ color: getConversionColor(data.conversionRate, data.stage) }}>
               Conversion: {data.conversionRate}%
             </p>
           )}
@@ -76,7 +81,7 @@ const ConversionFunnel = ({ data }: ConversionFunnelProps) => {
           <Tooltip content={<CustomTooltip />} />
           <Bar dataKey="count" radius={[0, 4, 4, 0]}>
             {data.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={getConversionColor(entry.conversionRate)} />
+              <Cell key={`cell-${index}`} fill={getConversionColor(entry.conversionRate, entry.stage)} />
             ))}
           </Bar>
         </BarChart>
@@ -90,7 +95,7 @@ const ConversionFunnel = ({ data }: ConversionFunnelProps) => {
             {item.conversionRate !== undefined && (
               <p 
                 className="text-xs font-semibold mt-1"
-                style={{ color: getConversionColor(item.conversionRate) }}
+                style={{ color: getConversionColor(item.conversionRate, item.stage) }}
               >
                 {item.conversionRate}%
               </p>
