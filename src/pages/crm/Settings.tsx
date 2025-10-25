@@ -397,10 +397,10 @@ const Settings = () => {
 
               <div className="space-y-4 mb-4">
                 {stages.map(stage => (
-                  <div key={stage} className="flex items-center gap-4">
-                    <Badge className="min-w-[120px]">{stage}</Badge>
-                    <div className="flex-1 flex items-center gap-3">
-                      <Label className="min-w-[100px]">Probability: {stageProbabilities[stage]}%</Label>
+                  <div key={stage} className="grid grid-cols-[200px_1fr_auto] items-center gap-4">
+                    <Badge className="justify-center">{stage}</Badge>
+                    <div className="flex items-center gap-3">
+                      <Label className="min-w-[120px] text-right">Probability: {stageProbabilities[stage]}%</Label>
                       <Input
                         type="range"
                         min="0"
