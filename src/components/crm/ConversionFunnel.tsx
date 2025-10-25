@@ -14,12 +14,12 @@ interface ConversionFunnelProps {
 const getConversionColor = (rate?: number, stage?: string) => {
   // Check for specific stage names
   if (stage === 'Client Lost') return '#ef4444'; // red-500
-  if (stage?.includes('Won') || stage?.includes('Client')) return '#22c55e'; // green-500
+  if (stage?.includes('Won') || stage === 'Client') return '#22c55e'; // green-500
+  if (stage === 'Qualified Prospect') return '#d3d5d9'; // light grey
+  if (stage === 'First Meeting') return '#9dc5ed'; // light blue
+  if (stage === 'Proposal') return '#71e5cf'; // turquoise
   
-  // Default gradient based on conversion rate
-  if (!rate) return '#94a3b8'; // slate-400
-  if (rate >= 50) return '#22c55e'; // green-500
-  if (rate >= 30) return '#3b82f6'; // blue-500
+  // Default grey for other stages
   return '#94a3b8'; // slate-400
 };
 
