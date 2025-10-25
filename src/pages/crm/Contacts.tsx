@@ -297,21 +297,25 @@ const Contacts = () => {
   const handleBulkAction = async () => {
     if (selectedContacts.length === 0 || !bulkAction) return;
 
-    if (bulkAction === "delete") {
-      if (!confirm(`Delete ${selectedContacts.length} contacts?`)) return;
-      
-      const { error } = await supabase
-        .from('contacts')
-        .delete()
-        .in('id', selectedContacts);
-
-      if (!error) {
-        toast({ title: `${selectedContacts.length} contacts deleted` });
-        setSelectedContacts([]);
-        fetchContacts();
-      }
-    } else if (bulkAction.startsWith("stage:")) {
+    if (bulkAction.startsWith("stage:")) {
       const newStage = bulkAction.split(":")[1];
+      
+      // Get names of selected contacts for confirmation
+      const selectedContactNames = contacts
+        .filter(c => selectedContacts.includes(c.id))
+        .map(c => c.name);
+      
+      const namesList = selectedContactNames.slice(0, 5).join(', ') + 
+        (selectedContactNames.length > 5 ? ` and ${selectedContactNames.length - 5} more` : '');
+      
+      const confirmed = confirm(
+        `Change stage to "${newStage}" for ${selectedContacts.length} contact${selectedContacts.length > 1 ? 's' : ''}?\n\n${namesList}`
+      );
+      
+      if (!confirmed) {
+        setBulkAction("");
+        return;
+      }
       
       const { error } = await supabase
         .from('contacts')
@@ -319,9 +323,28 @@ const Contacts = () => {
         .in('id', selectedContacts);
 
       if (!error) {
+        // Log interactions for stage changes
+        const { data: { session } } = await supabase.auth.getSession();
+        const interactions = selectedContacts.map(contactId => ({
+          contact_id: contactId,
+          type: 'Follow-up',
+          subject: `Bulk stage change to ${newStage}`,
+          notes: `Stage changed to ${newStage} via bulk action`,
+          logged_by: session?.user.id,
+          date: new Date().toISOString().split('T')[0],
+        }));
+        
+        await supabase.from('interactions').insert(interactions);
+        
         toast({ title: `Stage updated for ${selectedContacts.length} contacts` });
         setSelectedContacts([]);
         fetchContacts();
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Error updating stages",
+          description: error.message,
+        });
       }
     }
     
@@ -393,13 +416,12 @@ const Contacts = () => {
             <>
               <Select value={bulkAction} onValueChange={setBulkAction}>
                 <SelectTrigger className="w-[200px]">
-                  <SelectValue placeholder="Bulk actions" />
+                  <SelectValue placeholder="Change stage for selected" />
                 </SelectTrigger>
                 <SelectContent>
                   {stages.map(stage => (
                     <SelectItem key={stage} value={`stage:${stage}`}>Change to {stage}</SelectItem>
                   ))}
-                  <SelectItem value="delete">Delete Selected</SelectItem>
                 </SelectContent>
               </Select>
               <Button onClick={handleBulkAction} disabled={!bulkAction}>
