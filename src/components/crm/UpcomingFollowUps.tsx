@@ -22,12 +22,7 @@ interface UpcomingFollowUpsProps {
 
 const UpcomingFollowUps = ({ followUps, onComplete, onSnooze, onEmail }: UpcomingFollowUpsProps) => {
   if (followUps.length === 0) {
-    return (
-      <Card className="p-12 text-center">
-        <p className="text-2xl mb-2">🎉</p>
-        <p className="text-muted-foreground">All caught up!</p>
-      </Card>
-    );
+    return null;
   }
 
   return (

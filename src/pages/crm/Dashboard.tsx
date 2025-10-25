@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Search, Settings, BarChart3, Users, Briefcase } from "lucide-react";
 import SummaryCards from "@/components/crm/SummaryCards";
 import UpcomingFollowUps from "@/components/crm/UpcomingFollowUps";
-import RecentActivity from "@/components/crm/RecentActivity";
 import RevenueChart from "@/components/crm/RevenueChart";
 import GlobalSearch from "@/components/GlobalSearch";
 import { useToast } from "@/hooks/use-toast";
@@ -19,7 +18,6 @@ const CRMDashboard = () => {
   const [pipelineValue, setPipelineValue] = useState(0);
   const [nextFollowUp, setNextFollowUp] = useState<{ date: string; contactName: string } | null>(null);
   const [followUps, setFollowUps] = useState<any[]>([]);
-  const [recentActivities, setRecentActivities] = useState<any[]>([]);
   const [revenueData, setRevenueData] = useState<any[]>([]);
   const [revenueTimeRange, setRevenueTimeRange] = useState<3 | 6 | 12>(6);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -137,27 +135,6 @@ const CRMDashboard = () => {
       stage: f.stage,
       next_followup: f.next_followup,
       is_overdue: f.has_overdue_followup
-    })) || []);
-
-    // Fetch recent activity
-    const { data: interactions } = await supabase
-      .from('interactions')
-      .select(`
-        id,
-        type,
-        date,
-        subject,
-        contacts (name)
-      `)
-      .order('created_at', { ascending: false })
-      .limit(10);
-    
-    setRecentActivities(interactions?.map(i => ({
-      id: i.id,
-      contact_name: (i.contacts as any)?.name || 'Unknown',
-      type: i.type,
-      date: i.date,
-      subject: i.subject
     })) || []);
 
     // Calculate revenue projection for next 6 months
@@ -338,8 +315,6 @@ const CRMDashboard = () => {
             timeRange={revenueTimeRange}
             onTimeRangeChange={setRevenueTimeRange}
           />
-
-          <RecentActivity activities={recentActivities} />
         </div>
         
         <GlobalSearch open={searchOpen} setOpen={setSearchOpen} />
