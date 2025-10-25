@@ -1,24 +1,21 @@
 import { useEffect } from "react";
-import { ThemeProvider as NextThemesProvider } from "next-themes";
+import { ThemeProvider as NextThemesProvider, useTheme } from "next-themes";
 import { useUserPreferences } from "@/hooks/useUserPreferences";
 
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
+function ThemeSync() {
+  const { setTheme } = useTheme();
   const { preferences, loading } = useUserPreferences();
 
   useEffect(() => {
     if (!loading && preferences?.theme) {
-      const root = window.document.documentElement;
-      root.classList.remove("light", "dark");
-      
-      if (preferences.theme === "system") {
-        const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-        root.classList.add(systemTheme);
-      } else {
-        root.classList.add(preferences.theme);
-      }
+      setTheme(preferences.theme);
     }
-  }, [preferences?.theme, loading]);
+  }, [preferences?.theme, loading, setTheme]);
 
+  return null;
+}
+
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
   return (
     <NextThemesProvider
       attribute="class"
@@ -26,6 +23,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       enableSystem
       disableTransitionOnChange
     >
+      <ThemeSync />
       {children}
     </NextThemesProvider>
   );
