@@ -397,10 +397,10 @@ const Settings = () => {
 
               <div className="space-y-4 mb-4">
                 {stages.map(stage => (
-                  <div key={stage} className="grid grid-cols-[200px_1fr_auto] items-center gap-4">
-                    <Badge className="justify-center">{stage}</Badge>
+                  <div key={stage} className="grid grid-cols-[160px_1fr_auto] items-center gap-4">
+                    <Badge className="w-full justify-center text-center px-2 py-1 h-auto min-h-[32px] break-words">{stage}</Badge>
                     <div className="flex items-center gap-3">
-                      <Label className="min-w-[120px] text-right">Probability: {stageProbabilities[stage]}%</Label>
+                      <Label className="min-w-[120px] text-right shrink-0">Probability: {stageProbabilities[stage]}%</Label>
                       <Input
                         type="range"
                         min="0"
@@ -414,6 +414,7 @@ const Settings = () => {
                       size="sm"
                       variant="destructive"
                       onClick={() => handleRemoveStage(stage)}
+                      className="shrink-0"
                     >
                       Remove
                     </Button>
