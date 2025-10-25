@@ -18,19 +18,16 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import ConversionFunnel from "@/components/crm/ConversionFunnel";
 import WinLossAnalysis from "@/components/crm/WinLossAnalysis";
-import DealVelocityChart from "@/components/crm/DealVelocityChart";
 import { ExpandableHelp } from "@/components/crm/ExpandableHelp";
 import { HelpTooltip } from "@/components/crm/HelpTooltip";
 import { StickyMetricsSummary } from "@/components/crm/StickyMetricsSummary";
 import { AnalyticsSection } from "@/components/crm/AnalyticsSection";
-import { calculateDealVelocity } from "@/lib/analytics";
 import { analyticsHelp } from "@/lib/analyticsHelp";
 
 const Analytics = () => {
   const [loading, setLoading] = useState(true);
   const [funnelData, setFunnelData] = useState<any[]>([]);
   const [winLossData, setWinLossData] = useState<any>(null);
-  const [velocityData, setVelocityData] = useState<any[]>([]);
   const [metrics, setMetrics] = useState({
     overallConversion: 0,
     avgDealCycle: 0,
@@ -209,9 +206,6 @@ const Analytics = () => {
       totalPipelineValue,
     });
 
-    // Calculate deal velocity (exclude last stage as it's "won")
-    const velocity = calculateDealVelocity(contacts as any, stages.slice(0, -1));
-    setVelocityData(velocity);
     } catch (error: any) {
       toast({
         title: "Error loading analytics",
@@ -350,38 +344,18 @@ const Analytics = () => {
           <ConversionFunnel data={funnelData} />
         </AnalyticsSection>
 
-        {/* Deal Velocity & Bottlenecks Section */}
-        <AnalyticsSection title="Deal Velocity & Bottlenecks" icon="⏱️">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div>
-              {showHelp && velocityData.length > 0 && (
-                <div className="mb-4">
-                  <HelpTooltip
-                    title={analyticsHelp.dealVelocity.title}
-                    description={analyticsHelp.dealVelocity.description}
-                    actionable={analyticsHelp.dealVelocity.actionable}
-                  />
-                </div>
-              )}
-              {velocityData.length > 0 && (
-                <DealVelocityChart data={velocityData} overallCycle={metrics.avgDealCycle} />
-              )}
+        {/* Win/Loss Analysis Section */}
+        <AnalyticsSection title="Win/Loss Analysis" icon="📈">
+          {showHelp && winLossData && (
+            <div className="mb-4">
+              <HelpTooltip
+                title={analyticsHelp.winLossAnalysis.title}
+                description={analyticsHelp.winLossAnalysis.description}
+                actionable={analyticsHelp.winLossAnalysis.actionable}
+              />
             </div>
-            
-            <div>
-              {showHelp && winLossData && (
-                <div className="mb-4">
-                  <h3 className="font-semibold mb-2">Win/Loss Analysis</h3>
-                  <HelpTooltip
-                    title={analyticsHelp.winLossAnalysis.title}
-                    description={analyticsHelp.winLossAnalysis.description}
-                    actionable={analyticsHelp.winLossAnalysis.actionable}
-                  />
-                </div>
-              )}
-              {winLossData && <WinLossAnalysis data={winLossData} />}
-            </div>
-          </div>
+          )}
+          {winLossData && <WinLossAnalysis data={winLossData} />}
         </AnalyticsSection>
       </div>
     </div>
