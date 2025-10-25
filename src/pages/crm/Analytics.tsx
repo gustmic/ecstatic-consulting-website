@@ -112,6 +112,15 @@ const Analytics = () => {
         dateFilter = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
       }
 
+      // Fetch stages from settings
+      const { data: stagesData } = await supabase
+        .from('settings')
+        .select('value')
+        .eq('key', 'stages')
+        .single();
+
+      const stages = stagesData?.value as string[] || ['Lead', 'Prospect', 'Proposal', 'Contract', 'Client'];
+
       // Fetch all contacts with their stages and engagement data
       let contactsQuery = supabase
         .from('contacts')
@@ -140,7 +149,6 @@ const Analytics = () => {
       .select('id, contact_id, type, date, created_at');
 
     // Calculate funnel data
-    const stages = ['Lead', 'Prospect', 'Proposal', 'Contract', 'Client'];
     const stageCounts: Record<string, number> = {};
     
     stages.forEach(stage => {
@@ -161,14 +169,15 @@ const Analytics = () => {
 
     setFunnelData(funnelWithConversion);
 
-    // Calculate win/loss data
+    // Calculate win/loss data (using last stage as "won")
     const totalContacts = contacts.length;
-    const clientContacts = contacts.filter(c => c.stage === 'Client').length;
+    const wonStage = stages[stages.length - 1]; // Last stage is considered "won"
+    const clientContacts = contacts.filter(c => c.stage === wonStage).length;
     const overallWinRate = totalContacts > 0 ? Math.round((clientContacts / totalContacts) * 100) : 0;
 
     const stageBreakdown = stages.map(stage => {
       const total = stageCounts[stage];
-      const won = stage === 'Client' ? total : Math.round(total * (clientContacts / totalContacts));
+      const won = stage === wonStage ? total : Math.round(total * (clientContacts / totalContacts));
       const winRate = total > 0 ? Math.round((won / total) * 100) : 0;
       
       return { stage, total, won, winRate };
@@ -177,12 +186,13 @@ const Analytics = () => {
     setWinLossData({ overallWinRate, stageBreakdown });
 
     // Calculate key metrics
-    // Overall conversion (Lead to Client)
-    const leadCount = stageCounts['Lead'] || 0;
+    // Overall conversion (Lead to Won)
+    const firstStage = stages[0] || 'Lead';
+    const leadCount = stageCounts[firstStage] || 0;
     const overallConversion = leadCount > 0 ? Math.round((clientContacts / (leadCount + clientContacts)) * 100) : 0;
 
     // Average deal cycle (simplified - based on days since creation)
-    const clientContactsWithDates = contacts.filter(c => c.stage === 'Client');
+    const clientContactsWithDates = contacts.filter(c => c.stage === wonStage);
     let avgDealCycle = 0;
     if (clientContactsWithDates.length > 0) {
       const totalDays = clientContactsWithDates.reduce((sum, c) => {
@@ -206,7 +216,7 @@ const Analytics = () => {
     const { data: projects } = await projectsQuery;
     
     const totalPipelineValue = projects
-      ?.filter(p => p.status !== 'Client' && p.status !== 'Completed')
+      ?.filter(p => p.status !== wonStage && p.status !== 'Completed')
       .reduce((sum, p) => sum + (p.project_value_kr || 0), 0) || 0;
 
     // Engagement health
