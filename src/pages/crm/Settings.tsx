@@ -400,7 +400,7 @@ const Settings = () => {
                   <div key={stage} className="grid grid-cols-[180px_1fr_auto] items-center gap-4">
                     <Badge className="w-full justify-center text-center px-3 py-2">{stage}</Badge>
                     <div className="flex items-center gap-3">
-                      <Label className="w-[130px] text-right shrink-0">Probability: {stageProbabilities[stage]}%</Label>
+                      <Label className="shrink-0">Probability: <span className="inline-block w-[3ch] text-left">{stageProbabilities[stage]}%</span></Label>
                       <Input
                         type="range"
                         min="0"
