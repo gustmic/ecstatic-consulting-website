@@ -89,6 +89,7 @@ const ContactsTable = ({ contacts, onEdit, onDelete, onEmail, selectedContacts =
             <TableHead>Tags</TableHead>
             <TableHead>Last Contact</TableHead>
             <TableHead>Next Follow-Up</TableHead>
+            <TableHead>Days Since Follow-up</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -141,6 +142,22 @@ const ContactsTable = ({ contacts, onEdit, onDelete, onEmail, selectedContacts =
                 ) : (
                   "-"
                 )}
+              </TableCell>
+              <TableCell>
+                {contact.next_followup ? (() => {
+                  const followupDate = new Date(contact.next_followup);
+                  const today = new Date();
+                  const diffTime = today.getTime() - followupDate.getTime();
+                  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                  
+                  if (diffDays > 0) {
+                    return <span className="text-destructive font-medium">{diffDays} days overdue</span>;
+                  } else if (diffDays === 0) {
+                    return <span className="text-yellow-600 font-medium">Today</span>;
+                  } else {
+                    return <span className="text-muted-foreground">In {Math.abs(diffDays)} days</span>;
+                  }
+                })() : "-"}
               </TableCell>
               <TableCell className="text-right">
                 <div className="flex gap-2 justify-end">

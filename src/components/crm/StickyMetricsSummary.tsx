@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { TrendingUp, Clock, DollarSign, Users } from "lucide-react";
+import { TrendingUp, Clock, DollarSign } from "lucide-react";
 import { formatCurrency } from "@/lib/formatters";
 import { cn } from "@/lib/utils";
 
@@ -7,14 +7,12 @@ interface StickyMetricsSummaryProps {
   overallConversion: number;
   avgDealCycle: number;
   totalPipelineValue: number;
-  engagementHealth: number;
 }
 
 export function StickyMetricsSummary({
   overallConversion,
   avgDealCycle,
   totalPipelineValue,
-  engagementHealth,
 }: StickyMetricsSummaryProps) {
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -32,7 +30,6 @@ export function StickyMetricsSummary({
     const scores = [
       overallConversion >= 20 ? 2 : overallConversion >= 15 ? 1 : 0,
       avgDealCycle <= 60 ? 2 : avgDealCycle <= 90 ? 1 : 0,
-      engagementHealth >= 60 ? 2 : engagementHealth >= 40 ? 1 : 0,
     ];
     const avgScore = scores.reduce((a, b) => a + b, 0) / scores.length;
     
@@ -69,11 +66,6 @@ export function StickyMetricsSummary({
                 <DollarSign className="h-4 w-4 text-muted-foreground" />
                 <span className="font-semibold">{formatCurrency(totalPipelineValue)}</span>
               </div>
-              <div className="h-4 w-px bg-border" />
-              <div className="flex items-center gap-2">
-                <Users className="h-4 w-4 text-muted-foreground" />
-                <span className="font-semibold">{engagementHealth}%</span>
-              </div>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-xs text-muted-foreground">Status:</span>
@@ -94,7 +86,7 @@ export function StickyMetricsSummary({
                 </span>
               </div>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               <div className="bg-card border rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <TrendingUp className="h-4 w-4 text-muted-foreground" />
@@ -120,15 +112,6 @@ export function StickyMetricsSummary({
                 </div>
                 <p className="text-2xl font-bold">{formatCurrency(totalPipelineValue)}</p>
                 <p className="text-xs text-muted-foreground mt-1">Active opportunities</p>
-              </div>
-              
-              <div className="bg-card border rounded-lg p-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <Users className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-xs text-muted-foreground">Engagement</span>
-                </div>
-                <p className="text-2xl font-bold">{engagementHealth}%</p>
-                <p className="text-xs text-muted-foreground mt-1">High engagement</p>
               </div>
             </div>
           </div>
