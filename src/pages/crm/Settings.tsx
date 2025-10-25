@@ -36,7 +36,7 @@ const Settings = () => {
     default_contacts_view: "table",
     items_per_page: 25,
     email_notifications: true,
-    date_format: "MM/dd/yyyy",
+    date_format: "dd MMM yyyy",
     theme: "system",
   });
   const navigate = useNavigate();
@@ -342,9 +342,8 @@ const Settings = () => {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="MM/dd/yyyy">MM/DD/YYYY</SelectItem>
-                      <SelectItem value="dd/MM/yyyy">DD/MM/YYYY</SelectItem>
-                      <SelectItem value="yyyy-MM-dd">YYYY-MM-DD</SelectItem>
+                      <SelectItem value="dd MMM yyyy">DD MMM YYYY (12 jun 2025)</SelectItem>
+                      <SelectItem value="yyyy-MM-dd">YYYY-MM-DD (2025-06-12)</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

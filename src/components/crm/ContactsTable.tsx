@@ -6,6 +6,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Card } from "@/components/ui/card";
 import { Pencil, Trash2, Mail } from "lucide-react";
 import { formatDate } from "@/lib/formatters";
+import { useUserPreferences } from "@/hooks/useUserPreferences";
 
 interface Contact {
   id: string;
@@ -29,6 +30,9 @@ interface ContactsTableProps {
 }
 
 const ContactsTable = ({ contacts, onEdit, onDelete, onEmail, selectedContacts = [], onSelectionChange }: ContactsTableProps) => {
+  const { preferences } = useUserPreferences();
+  const dateFormat = preferences?.date_format || "dd MMM yyyy";
+
   const getStageColor = (stage: string) => {
     const colors: Record<string, string> = {
       "Qualified Prospect": "bg-gray-600",
@@ -127,12 +131,12 @@ const ContactsTable = ({ contacts, onEdit, onDelete, onEmail, selectedContacts =
                 )}
               </TableCell>
               <TableCell>
-                {contact.last_contacted ? formatDate(contact.last_contacted) : "-"}
+                {contact.last_contacted ? formatDate(contact.last_contacted, dateFormat) : "-"}
               </TableCell>
               <TableCell>
                 {contact.next_followup ? (
                   <span className={new Date(contact.next_followup) < new Date() ? "text-destructive font-medium" : ""}>
-                    {formatDate(contact.next_followup)}
+                    {formatDate(contact.next_followup, dateFormat)}
                   </span>
                 ) : (
                   "-"
