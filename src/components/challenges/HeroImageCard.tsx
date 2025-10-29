@@ -24,18 +24,18 @@ export default function HeroImageCard({
   
   const categoryColors = {
     profitability: {
-      gradient: "from-[#2D7A4F]/80 to-[#1e5234]/60",
-      hoverGradient: "group-hover:from-[#2D7A4F]/90 group-hover:to-[#1e5234]/70",
+      gradient: "from-[#2D7A4F]/90 to-[#1e5234]/60",
+      hoverGradient: "group-hover:from-[#2D7A4F]/95 group-hover:to-[#1e5234]/70",
       text: "text-[#2D7A4F]"
     },
     growth: {
-      gradient: "from-[#2B4C7E]/80 to-[#1a2f4d]/60",
-      hoverGradient: "group-hover:from-[#2B4C7E]/90 group-hover:to-[#1a2f4d]/70",
+      gradient: "from-[#2B4C7E]/90 to-[#1a2f4d]/60",
+      hoverGradient: "group-hover:from-[#2B4C7E]/95 group-hover:to-[#1a2f4d]/70",
       text: "text-[#2B4C7E]"
     },
     efficiency: {
-      gradient: "from-[#E67E50]/80 to-[#c25a35]/60",
-      hoverGradient: "group-hover:from-[#E67E50]/90 group-hover:to-[#c25a35]/70",
+      gradient: "from-[#E67E50]/90 to-[#c25a35]/60",
+      hoverGradient: "group-hover:from-[#E67E50]/95 group-hover:to-[#c25a35]/70",
       text: "text-[#E67E50]"
     }
   };
