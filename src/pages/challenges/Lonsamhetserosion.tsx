@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import PainPointNav from "@/components/PainPointNav";
 import PainPointFooter from "@/components/PainPointFooter";
 import RecognitionChecklist from "@/components/challenges/RecognitionChecklist";
@@ -72,12 +73,19 @@ const relatedChallenges = [
 export default function Lonsamhetserosion() {
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>Lönsamhetserosion | Ecstatic Consulting</title>
+        <meta 
+          name="description" 
+          content="Omsättningen ökar men marginalerna krymper. Lär dig hur nordiska tillverkare (200-800 MSEK) löser lönsamhetserosion med konkreta resultat." 
+        />
+      </Helmet>
       <PainPointNav />
 
       {/* Hero Section */}
-      <section className="relative pt-24 pb-16">
+      <section className="relative pt-24 pb-16 min-h-[30vh]">
         <div
-          className="absolute inset-0 z-0 opacity-20"
+          className="absolute inset-0 z-0 opacity-30 bg-blend-overlay"
           style={{
             backgroundImage: `url(${strategyImage})`,
             backgroundSize: "cover",

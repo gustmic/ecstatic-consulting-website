@@ -30,7 +30,7 @@ export default function StatCard({ stat, description }: StatCardProps) {
   return (
     <Card
       ref={cardRef}
-      className={`p-6 text-center transition-all duration-500 ${
+      className={`p-6 text-center flex flex-col justify-center transition-all duration-500 ${
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
       }`}
     >

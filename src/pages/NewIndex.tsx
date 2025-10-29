@@ -110,7 +110,7 @@ export default function NewIndex() {
             backgroundPosition: "center",
           }}
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/85 via-primary/75 to-secondary/70" />
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/75 via-primary/65 to-secondary/60" />
         </div>
 
         <div className="container mx-auto px-6 z-10 text-center py-20">
@@ -134,9 +134,11 @@ export default function NewIndex() {
       {/* Introduction */}
       <section className="py-16 bg-background">
         <div className="container mx-auto px-6 max-w-4xl text-center">
-          <p className="text-lg text-muted-foreground leading-relaxed observe">
+          <p className="text-lg text-muted-foreground leading-relaxed observe mb-4">
             Många tillverkande företag upplever just nu att gamla framgångsrecept inte längre räcker.
             På Ecstatic Consulting börjar vi inte med vad vi kan – utan med vad ni kämpar med.
+          </p>
+          <p className="text-lg text-muted-foreground leading-relaxed observe">
             Här nedan hittar ni nio vanliga utmaningar där vi hjälper nordiska bolag att skapa verklig effekt.
           </p>
         </div>
@@ -147,6 +149,7 @@ export default function NewIndex() {
         <div className="container mx-auto px-6" style={{ maxWidth: "1400px" }}>
           {/* Strategi */}
           <div className="mb-12 observe">
+            <p className="text-sm uppercase tracking-wider text-muted-foreground mb-2">Strategiska utmaningar</p>
             <h2 className="font-serif text-3xl font-semibold mb-6" style={{ color: "#2B4C7E" }}>
               Strategi
             </h2>
@@ -159,6 +162,7 @@ export default function NewIndex() {
 
           {/* Teknik */}
           <div className="mb-12 observe">
+            <p className="text-sm uppercase tracking-wider text-muted-foreground mb-2">Tekniska utmaningar</p>
             <h2 className="font-serif text-3xl font-semibold mb-6" style={{ color: "#E67E50" }}>
               Teknik
             </h2>
@@ -171,6 +175,7 @@ export default function NewIndex() {
 
           {/* Data */}
           <div className="observe">
+            <p className="text-sm uppercase tracking-wider text-muted-foreground mb-2">Dataanalysutmaningar</p>
             <h2 className="font-serif text-3xl font-semibold mb-6" style={{ color: "#4A9B8E" }}>
               Data
             </h2>
@@ -204,6 +209,9 @@ export default function NewIndex() {
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-primary-foreground mb-4">
             Osäker på vilken utmaning som passar er bäst?
           </h2>
+          <p className="text-primary-foreground/90 mb-6">
+            Vi hjälper er gärna att identifiera var ni står idag.
+          </p>
           <Button asChild size="lg" variant="secondary" className="text-lg px-8 py-6">
             <Link to="/about#contact">Boka ett samtal</Link>
           </Button>
