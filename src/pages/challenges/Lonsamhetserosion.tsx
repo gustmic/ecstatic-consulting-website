@@ -124,7 +124,7 @@ export default function Lonsamhetserosion() {
       {/* Hero Section */}
       <section className="relative pt-24 pb-16 min-h-[30vh]">
         <div className="absolute inset-0 z-0 bg-gradient-to-br from-[#2D7A4F]/90 to-[#1e5234]/60">
-          <div className="absolute inset-0 opacity-15">
+          <div className="absolute inset-0 opacity-30">
             <ProfitabilityPattern />
           </div>
         </div>

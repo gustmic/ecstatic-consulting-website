@@ -50,7 +50,7 @@ export default function HeroImageCard({
         <div className="absolute inset-0 bg-gradient-to-br transition-all duration-300" style={{
           background: `linear-gradient(to bottom right, ${category === 'profitability' ? 'rgba(45, 122, 79, 0.9)' : category === 'growth' ? 'rgba(43, 76, 126, 0.9)' : 'rgba(230, 126, 80, 0.9)'} 0%, ${category === 'profitability' ? 'rgba(30, 82, 52, 0.6)' : category === 'growth' ? 'rgba(26, 47, 77, 0.6)' : 'rgba(194, 90, 53, 0.6)'} 100%)`
         }}>
-          <div className="absolute inset-0 opacity-15 transition-transform duration-500 group-hover:scale-105">
+          <div className="absolute inset-0 opacity-30 transition-transform duration-500 group-hover:scale-105">
             {category === 'profitability' && <ProfitabilityPattern />}
             {category === 'growth' && <GrowthPattern />}
             {category === 'efficiency' && <EfficiencyPattern />}
