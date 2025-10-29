@@ -123,23 +123,25 @@ export default function Lonsamhetserosion() {
 
       {/* Hero Section */}
       <section className="relative pt-24 pb-16 min-h-[30vh]">
-        <div className="absolute inset-0 z-0 opacity-20">
-          <ProfitabilityPattern />
+        <div className="absolute inset-0 z-0 bg-gradient-to-br from-[#2D7A4F]/90 to-[#1e5234]/60">
+          <div className="absolute inset-0 opacity-15">
+            <ProfitabilityPattern />
+          </div>
         </div>
         <div className="container mx-auto px-6 relative z-10" style={{ maxWidth: "1200px" }}>
           {/* Breadcrumb */}
-          <nav className="text-sm text-muted-foreground mb-6">
-            <Link to="/" className="hover:text-primary transition-colors">Hem</Link>
+          <nav className="text-sm text-white/70 mb-6">
+            <Link to="/" className="hover:text-white transition-colors">Hem</Link>
             {" > "}
             <span>Utmaningar</span>
             {" > "}
-            <span className="text-foreground">Lönsamhetserosion</span>
+            <span className="text-white">Lönsamhetserosion</span>
           </nav>
 
-          <h1 className="font-serif text-4xl md:text-5xl font-bold text-foreground mb-4">
+          <h1 className="font-serif text-4xl md:text-5xl font-bold text-white mb-4">
             Lönsamhetserosion
           </h1>
-          <p className="text-xl text-muted-foreground mb-4">
+          <p className="text-xl text-white/90 mb-4">
             Omsättningen ökar – men marginalerna krymper.
           </p>
           <div className="inline-block px-4 py-2 bg-primary/10 rounded-full text-sm font-medium" style={{ color: "#2B4C7E" }}>
