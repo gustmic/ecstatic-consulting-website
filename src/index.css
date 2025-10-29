@@ -44,6 +44,22 @@ All colors MUST be HSL.
     --shadow-card: 0 4px 20px hsl(20 20% 20% / 0.08);
     --shadow-elevated: 0 10px 40px hsl(20 20% 20% / 0.12);
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Outcome Category Colors */
+    --profitability: 152 48% 32%;
+    --profitability-foreground: 0 0% 100%;
+    --profitability-secondary: 152 48% 22%;
+    --profitability-accent: 152 48% 42%;
+    
+    --growth: 210 50% 33%;
+    --growth-foreground: 0 0% 100%;
+    --growth-secondary: 210 50% 23%;
+    --growth-accent: 210 50% 43%;
+    
+    --efficiency: 22 76% 60%;
+    --efficiency-foreground: 0 0% 100%;
+    --efficiency-secondary: 22 76% 48%;
+    --efficiency-accent: 22 76% 68%;
 
     --sidebar-background: 0 0% 98%;
 
