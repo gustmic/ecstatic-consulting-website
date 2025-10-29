@@ -7,6 +7,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "./components/ThemeProvider";
 import ScrollToTop from "./components/ScrollToTop";
 import Index from "./pages/Index";
+import NewIndex from "./pages/NewIndex";
+import Lonsamhetserosion from "./pages/challenges/Lonsamhetserosion";
 import NotFound from "./pages/NotFound";
 import Strategy from "./pages/Strategy";
 import DataAnalytics from "./pages/DataAnalytics";
@@ -42,7 +44,9 @@ const App = () => (
           <BrowserRouter>
             <ScrollToTop />
           <Routes>
-            <Route path="/" element={<Index />} />
+            <Route path="/" element={<NewIndex />} />
+            <Route path="/old" element={<Index />} />
+            <Route path="/utmaningar/lonsamhetserosion" element={<Lonsamhetserosion />} />
             <Route path="/strategy" element={<Strategy />} />
             <Route path="/data-analytics" element={<DataAnalytics />} />
             <Route path="/technology" element={<Technology />} />
