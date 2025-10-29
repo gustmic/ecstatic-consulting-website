@@ -5,6 +5,7 @@ interface Step {
   title: string;
   description: string;
   duration: string;
+  deliverable: string;
 }
 
 interface MethodologyRoadmapProps {
@@ -30,7 +31,12 @@ export default function MethodologyRoadmap({ steps }: MethodologyRoadmapProps) {
                   <h4 className="font-semibold text-lg text-foreground">{step.title}</h4>
                 </div>
                 <p className="text-sm text-muted-foreground mb-3 leading-relaxed">{step.description}</p>
-                <div className="text-xs font-medium text-primary">{step.duration}</div>
+                <div className="text-xs font-medium text-primary mb-3">{step.duration}</div>
+                <div className="bg-primary/5 border-l-2 border-primary rounded px-3 py-2">
+                  <p className="text-xs font-medium text-foreground">
+                    <span className="text-primary">→</span> {step.deliverable}
+                  </p>
+                </div>
               </div>
             </Card>
           </div>
