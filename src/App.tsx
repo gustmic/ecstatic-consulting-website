@@ -24,6 +24,7 @@ import BlogPost from "./pages/BlogPost";
 import About from "./pages/About";
 import Cases from "./pages/Cases";
 import SetupAdmin from "./pages/SetupAdmin";
+import ImageTest from "./pages/ImageTest";
 import Progress from "./pages/Progress";
 import CRMDashboard from "./pages/crm/Dashboard";
 import Contacts from "./pages/crm/Contacts";
@@ -68,6 +69,7 @@ const App = () => (
             <Route path="/:category/blog" element={<BlogList />} />
             <Route path="/:category/blog/:id" element={<BlogPost />} />
             <Route path="/:category/cases" element={<Cases />} />
+            <Route path="/image-test" element={<ImageTest />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
