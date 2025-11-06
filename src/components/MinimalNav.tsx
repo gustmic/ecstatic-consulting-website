@@ -46,27 +46,9 @@ const MinimalNav = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
-            <button
-              onClick={() => scrollToSection("utmaningar")}
-              className="text-sm font-medium text-foreground hover:text-linkedin transition-colors"
-            >
-              Utmaningar
-            </button>
-            <button
-              onClick={() => scrollToSection("om-oss")}
-              className="text-sm font-medium text-foreground hover:text-linkedin transition-colors"
-            >
-              Om oss
-            </button>
-            <button
-              onClick={() => scrollToSection("newsletter")}
-              className="text-sm font-medium text-foreground hover:text-linkedin transition-colors"
-            >
-              Newsletter
-            </button>
             <Button
               onClick={() => scrollToSection("contact")}
-              className="bg-linkedin hover:bg-linkedin/90 text-linkedin-foreground"
+              className="bg-[#2D7A4F] hover:bg-[#246841] text-white"
             >
               Boka samtal
             </Button>
@@ -104,7 +86,7 @@ const MinimalNav = () => {
             </button>
             <Button
               onClick={() => scrollToSection("contact")}
-              className="w-full bg-linkedin hover:bg-linkedin/90 text-linkedin-foreground"
+              className="w-full bg-[#2D7A4F] hover:bg-[#246841] text-white"
             >
               Boka samtal
             </Button>
