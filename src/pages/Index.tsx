@@ -152,7 +152,7 @@ const Index = () => {
           <div className="grid md:grid-cols-2 gap-6 mb-12 observe">
             <div className="bg-card rounded-lg p-6 shadow-sm">
               <p className="text-sm text-foreground">
-                Vi samarbetar med <span className="font-semibold">RISE, AMEXCI, och Prototal Group</span> kring svensk advanced manufacturing
+                Vi samarbetar med <a href="https://www.ri.se/" target="_blank" rel="noopener noreferrer" className="font-semibold text-linkedin hover:underline">RISE</a>, <a href="https://amexci.se/" target="_blank" rel="noopener noreferrer" className="font-semibold text-linkedin hover:underline">AMEXCI</a>, och <a href="https://prototal.se/" target="_blank" rel="noopener noreferrer" className="font-semibold text-linkedin hover:underline">Prototal Group</a> kring svensk advanced manufacturing.
               </p>
             </div>
             <div className="bg-card rounded-lg p-6 shadow-sm">
