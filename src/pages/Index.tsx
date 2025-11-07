@@ -294,7 +294,8 @@ const Index = () => {
             </p>
 
             <p className="text-sm text-muted-foreground mb-8">
-              Nästa steg: Ett fysiskt möte (Stockholmsregionen) eller Teams. Vi delar tankar, kollar fit, och ser vad som är vettigt härnäst.
+              Nästa steg: Ett fysiskt möte (Stockholmsregionen) eller Teams.<br />
+              Vi delar tankar, kollar fit, och ser vad som är vettigt härnäst.
             </p>
 
             {/* CTA Buttons */}
