@@ -62,7 +62,7 @@ const Index = () => {
             </h1>
             
             <p className="text-lg md:text-xl text-muted-foreground mb-10 leading-relaxed max-w-3xl mx-auto">
-              Vi hjälper nordiska tillverkare (150-1000 MSEK) att växa smartare, inte bara större — genom strategi, Advanced Manufacturing, och data som faktiskt används.
+              Vi hjälper nordiska tillverkare (150-1000 MSEK) att växa smartare, inte bara större — genom strategi, advanced manufacturing, och data som faktiskt används.
             </p>
           </div>
         </div>
