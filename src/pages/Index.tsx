@@ -234,7 +234,7 @@ const Index = () => {
             <div className="flex gap-4 items-start">
               <div className="w-2 h-2 bg-linkedin rounded-full mt-2 flex-shrink-0" />
               <p className="text-foreground">
-                Vi börjar alltid med att lyssna. Om vi inte kan hjälpa er, säger vi det direkt.
+                Vi börjar alltid med att lyssna. Kan vi inte skapa värde, säger vi det direkt.
               </p>
             </div>
           </div>
