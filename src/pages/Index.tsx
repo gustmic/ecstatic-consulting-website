@@ -30,6 +30,13 @@ const Index = () => {
   }, []);
 
   useEffect(() => {
+    // Load Calendly CSS
+    const link = document.createElement('link');
+    link.href = 'https://assets.calendly.com/assets/external/widget.css';
+    link.rel = 'stylesheet';
+    document.head.appendChild(link);
+
+    // Load Calendly JS
     const script = document.createElement('script');
     script.src = 'https://assets.calendly.com/assets/external/widget.js';
     script.async = true;
@@ -38,6 +45,9 @@ const Index = () => {
     return () => {
       if (document.body.contains(script)) {
         document.body.removeChild(script);
+      }
+      if (document.head.contains(link)) {
+        document.head.removeChild(link);
       }
     };
   }, []);
