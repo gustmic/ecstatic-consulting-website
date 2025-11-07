@@ -168,7 +168,7 @@ const Index = () => {
               <img
                 src={micaelImage}
                 alt="Micael Gustavsson"
-                className="w-20 h-20 rounded-lg object-cover flex-shrink-0"
+                className="w-24 h-24 rounded-lg object-cover flex-shrink-0"
               />
               <div>
                 <h3 className="font-semibold text-foreground mb-1">
@@ -187,7 +187,7 @@ const Index = () => {
               <img
                 src={reinholdImage}
                 alt="Reinhold Rutks"
-                className="w-20 h-20 rounded-lg object-cover flex-shrink-0"
+                className="w-24 h-24 rounded-lg object-cover flex-shrink-0"
               />
               <div>
                 <h3 className="font-semibold text-foreground mb-1">
