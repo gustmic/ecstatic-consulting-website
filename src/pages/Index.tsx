@@ -55,31 +55,15 @@ const Index = () => {
         <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-slate-300 transform -rotate-6 -translate-x-1/4 translate-y-1/4 opacity-5" />
 
         <div className="container mx-auto px-6 py-32 relative z-10">
-          <div className="max-w-4xl">
+          <div className="max-w-4xl mx-auto text-center">
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6 leading-tight">
               Ni växer —<br />
               <span className="text-[#0A66C2]">men vinsterna krymper.</span>
             </h1>
             
-            <p className="text-lg md:text-xl text-muted-foreground mb-10 leading-relaxed max-w-3xl">
+            <p className="text-lg md:text-xl text-muted-foreground mb-10 leading-relaxed max-w-3xl mx-auto">
               Vi hjälper nordiska tillverkare (150-1000 MSEK) att växa smartare, inte bara större — genom strategi, Advanced Manufacturing, och data som faktiskt används.
             </p>
-
-            {/* CTA Button */}
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-[#2D7A4F] text-[#2D7A4F] hover:bg-[#2D7A4F]/5"
-              onClick={() => {
-                if (window.Calendly) {
-                  window.Calendly.initPopupWidget({
-                    url: 'https://calendly.com/micael-gustavsson-ecstatic/utforskande-mote'
-                  });
-                }
-              }}
-            >
-              Boka 30-minuters samtal
-            </Button>
           </div>
         </div>
       </section>
@@ -93,8 +77,8 @@ const Index = () => {
 
           <div className="grid md:grid-cols-2 gap-8">
             {/* Challenge 1: Lönsamhetserosion */}
-            <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#0A66C2] observe">
-              <Target className="h-10 w-10 text-[#0A66C2] mb-4" />
+            <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#E67E50] observe">
+              <Target className="h-10 w-10 text-[#E67E50] mb-4" />
               <h3 className="font-serif text-2xl font-bold mb-3 text-foreground">
                 Lönsamhetserosion
               </h3>
@@ -107,8 +91,8 @@ const Index = () => {
             </div>
 
             {/* Challenge 2: Advanced Manufacturing */}
-            <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#0A66C2] observe">
-              <TrendingUp className="h-10 w-10 text-[#0A66C2] mb-4" />
+            <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#2D7A4F] observe">
+              <TrendingUp className="h-10 w-10 text-[#2D7A4F] mb-4" />
               <h3 className="font-serif text-2xl font-bold mb-3 text-foreground">
                 Advanced Manufacturing & Additiv Tillverkning
               </h3>
@@ -121,8 +105,8 @@ const Index = () => {
             </div>
 
             {/* Challenge 3: Hållbarhet */}
-            <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#0A66C2] observe">
-              <Leaf className="h-10 w-10 text-[#0A66C2] mb-4" />
+            <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#4CAF50] observe">
+              <Leaf className="h-10 w-10 text-[#4CAF50] mb-4" />
               <h3 className="font-serif text-2xl font-bold mb-3 text-foreground">
                 Hållbarhet som möjliggörare, inte bara krav
               </h3>
@@ -135,8 +119,8 @@ const Index = () => {
             </div>
 
             {/* Challenge 4: System Integration */}
-            <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#0A66C2] observe">
-              <Network className="h-10 w-10 text-[#0A66C2] mb-4" />
+            <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#2B4C7E] observe">
+              <Network className="h-10 w-10 text-[#2B4C7E] mb-4" />
               <h3 className="font-serif text-2xl font-bold mb-3 text-foreground">
                 System som faktiskt pratar med varandra
               </h3>
@@ -232,25 +216,25 @@ const Index = () => {
             <div className="flex gap-4 items-start">
               <div className="w-2 h-2 bg-linkedin rounded-full mt-2 flex-shrink-0" />
               <p className="text-foreground">
-                Vi startade sommaren 2025. Inga case studies än - men 30+ år av att lösa exakt dessa problem.
+                Nystartade - sommaren 2025. Inga case studies än, men 30+ års erfarenhet av att lösa exakt dessa typer av utmaningar.
               </p>
             </div>
             <div className="flex gap-4 items-start">
               <div className="w-2 h-2 bg-linkedin rounded-full mt-2 flex-shrink-0" />
               <p className="text-foreground">
-                Ni får oss två - ingen överlämning till juniora team. Varje projekt får senior uppmärksamhet från ax till limpa.
+                Varje projekt får full senior uppmärksamhet - från ax till limpa. Ingen överlämning till juniora team.
               </p>
             </div>
             <div className="flex gap-4 items-start">
               <div className="w-2 h-2 bg-linkedin rounded-full mt-2 flex-shrink-0" />
               <p className="text-foreground">
-                Vi säljer inte. Vi lyssnar först, sen ser vi om vi passar för varandra. Om inte, säger vi det direkt.
+                LinkedIn är där vi delar våra tankar. Nu vill vi lyssna på <em className="italic">era</em>.
               </p>
             </div>
             <div className="flex gap-4 items-start">
               <div className="w-2 h-2 bg-linkedin rounded-full mt-2 flex-shrink-0" />
               <p className="text-foreground">
-                LinkedIn är där vi delar våra insikter. Hemsidan är nästa steg i samtalet.
+                Vi börjar alltid med att lyssna. Om vi inte kan hjälpa er, säger vi det direkt.
               </p>
             </div>
           </div>
