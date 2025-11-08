@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "./components/ThemeProvider";
 import ScrollToTop from "./components/ScrollToTop";
 import Index from "./pages/Index";
+import IndexOptimized from "./pages/IndexOptimized";
 import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -34,6 +35,7 @@ const App = () => (
             <ScrollToTop />
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/optimized" element={<IndexOptimized />} />
             <Route path="/admin" element={<Auth />} />
             <Route path="/admin/setup" element={<SetupAdmin />} />
             <Route path="/admin/landing" element={<AdminLanding />} />
