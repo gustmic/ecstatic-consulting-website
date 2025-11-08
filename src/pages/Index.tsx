@@ -34,12 +34,19 @@ const Index = () => {
     const link = document.createElement('link');
     link.href = 'https://assets.calendly.com/assets/external/widget.css';
     link.rel = 'stylesheet';
+    link.as = 'style';
     document.head.appendChild(link);
 
-    // Load Calendly JS
+    // Load Calendly JS with preload
+    const preload = document.createElement('link');
+    preload.href = 'https://assets.calendly.com/assets/external/widget.js';
+    preload.rel = 'preload';
+    preload.as = 'script';
+    document.head.appendChild(preload);
+
     const script = document.createElement('script');
     script.src = 'https://assets.calendly.com/assets/external/widget.js';
-    script.async = true;
+    script.async = false; // Load synchronously for faster availability
     document.body.appendChild(script);
     
     return () => {
@@ -48,6 +55,9 @@ const Index = () => {
       }
       if (document.head.contains(link)) {
         document.head.removeChild(link);
+      }
+      if (document.head.contains(preload)) {
+        document.head.removeChild(preload);
       }
     };
   }, []);
