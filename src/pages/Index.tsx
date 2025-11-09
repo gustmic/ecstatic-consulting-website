@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import MinimalNav from "@/components/MinimalNav";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ExternalLink, Target, TrendingUp, Leaf, Network, CheckCircle2 } from "lucide-react";
+import { Target, TrendingUp, Leaf, Network, Factory, CheckCircle2 } from "lucide-react";
 import micaelImage from "@/assets/micael-gustavsson.webp";
 import reinholdImage from "@/assets/reinhold-rutks.webp";
 import logo from "@/assets/logo.webp";
@@ -55,38 +55,17 @@ const Index = () => {
       {/* Hero Section */}
       <section className="relative pt-32 pb-24 px-6">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-16 observe">
+          <div className="text-center observe">
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6 leading-tight">
-              Strategisk analys möter teknisk problemlösning —<br />
-              <span className="text-[#0A66C2]">för nordiska tillverkare som växer men ser marginaler falla.</span>
+              Svensk tillverkningsindustri står inför ett vägskäl.<br />
+              <span className="text-[#0A66C2]">Ny teknologi förändrar allt – men vad är värt att satsa på för er?</span>
             </h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              Vi identifierar var lönsamheten läcker och om nya teknologier som AM faktiskt är värda att satsa på. Från styrelserum till fabriksgolv.
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mb-4">
+              Vi hjälper nordiska tillverkare (150-1000 MSEK) att utvärdera, testa och implementera Advanced Manufacturing – från additiv tillverkning till robotik och smart factory.
             </p>
-          </div>
-
-          <div className="flex flex-wrap justify-center gap-4 observe">
-            <Button
-              size="lg"
-              onClick={openCalendly}
-              className="bg-linkedin hover:bg-linkedin/90 text-white px-8 py-6 text-lg"
-            >
-              Boka 30-minuters samtal
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              asChild
-              className="px-8 py-6 text-lg"
-            >
-              <a
-                href="https://www.linkedin.com/in/micael-gustavsson/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Följ oss på LinkedIn
-              </a>
-            </Button>
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              Strategisk analys möter teknisk problemlösning.
+            </p>
           </div>
         </div>
       </section>
@@ -94,76 +73,87 @@ const Index = () => {
       {/* Four Core Challenges */}
       <section className="py-24 px-6 bg-muted/30">
         <div className="container mx-auto max-w-6xl">
-          <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-16 observe">
-            Fyra områden där vi hjälper till
+          <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-6 observe">
+            Exempel på områden där vi hjälper till
           </h2>
+          
+          <p className="text-lg text-center text-muted-foreground mb-12 max-w-3xl mx-auto observe">
+            Vi är er partner genom hela resan –{" "}
+            <span className="hidden md:inline"><br /></span>
+            från att identifiera var lönsamheten läcker till att implementera teknologi som faktiskt ger betalt.
+          </p>
 
           <div className="grid md:grid-cols-2 gap-8">
             {/* Challenge 1: Lönsamhetserosion */}
             <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#E67E50] observe">
-              <Target className="h-10 w-10 text-[#E67E50] mb-4" />
-              <h3 className="font-serif text-2xl font-bold mb-3 text-foreground">
-                Lönsamhetserosion
-              </h3>
-              <p className="text-muted-foreground mb-4 font-medium">
-                Omsättning +40% på fem år, men EBIT från 11% till 4,5%. Ingen vet var pengarna försvinner.
-              </p>
-              <p className="text-sm text-muted-foreground mb-3">
-                Vi kartlägger hela värdekedjan och hittar var lönsamheten läcker - ofta i integration, processer, eller att datadrivet beslutsfattande saknas.
-              </p>
-              <p className="text-xs text-muted-foreground italic">
-                Micael kartlägger värdekedjan, Reinhold validerar om tekniska problem är orsak eller symptom.
-              </p>
+              <div className="min-h-[80px]">
+                <Target className="h-10 w-10 text-[#E67E50] mb-4" />
+                <h3 className="font-serif text-2xl font-bold mb-3 text-foreground">
+                  Lönsamhetserosion
+                </h3>
+              </div>
+              <div>
+                <p className="text-muted-foreground">
+                  Ni växer i omsättning, men marginalerna faller. Ofta beror det på att produktionen inte hänger med, tekniken är gammal, eller konkurrenter redan moderniserat.
+                </p>
+                <p className="text-muted-foreground mt-3">
+                  Vi kartlägger hela värdekedjan och identifierar var pengarna läcker – och vilken modernisering som faktiskt löser problemet, inte bara är teknik för teknikens skull.
+                </p>
+              </div>
             </div>
 
-            {/* Challenge 2: Advanced Manufacturing */}
+            {/* Challenge 2: Additiv Tillverkning */}
             <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#2D7A4F] observe">
-              <TrendingUp className="h-10 w-10 text-[#2D7A4F] mb-4" />
-              <h3 className="font-serif text-2xl font-bold mb-3 text-foreground">
-                Advanced Manufacturing & Additiv Tillverkning
-              </h3>
-              <p className="text-muted-foreground mb-4 font-medium">
-                Ni har AM i labb-skala eller vill enkelt förstå potentialen. Men hur skalas det upp? Vad är business casen?
-              </p>
-              <p className="text-sm text-muted-foreground mb-3">
-                Vi hjälper företag navigera från AM-experiment till strategisk produktionskapacitet - design, integration, supply chain transformation och ROI.
-              </p>
-              <p className="text-xs text-muted-foreground italic">
-                Micael bygger business case, Reinhold bedömer teknisk feasibility och integration.
-              </p>
+              <div className="min-h-[80px]">
+                <TrendingUp className="h-10 w-10 text-[#2D7A4F] mb-4" />
+                <h3 className="font-serif text-2xl font-bold mb-3 text-foreground">
+                  Additiv Tillverkning (AM)
+                </h3>
+              </div>
+              <div>
+                <p className="text-muted-foreground">
+                  Är AM relevant för er? Vilka komponenter passar? Hur integrerar ni det i befintlig produktion? Vad är business casen?
+                </p>
+                <p className="text-muted-foreground mt-3">
+                  Vi hjälper er navigera från nyfikenhet till strategisk beslut – design för AM, materialval, leverantörsutvärdering, pilotprojekt och ROI-analys.
+                </p>
+              </div>
             </div>
 
-            {/* Challenge 3: Hållbarhet */}
-            <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#4CAF50] observe">
-              <Leaf className="h-10 w-10 text-[#4CAF50] mb-4" />
-              <h3 className="font-serif text-2xl font-bold mb-3 text-foreground">
-                Hållbarhet som möjliggörare, inte bara krav
-              </h3>
-              <p className="text-muted-foreground mb-4 font-medium">
-                Era kunder kräver klimatdata per produkt. EU-krav ökar. Men mätningen och integrationen saknas.
-              </p>
-              <p className="text-sm text-muted-foreground mb-3">
-                Vi bygger hållbarhetsstrategi som driver affär - inte bara compliance. Från datainsamling till produktdesign och cirkulär ekonomi.
-              </p>
-              <p className="text-xs text-muted-foreground italic">
-                Vi hjälper er förstå affärsvärdet - inte bara compliance. Samarbetar med externa partners för mätning och rapportering.
-              </p>
-            </div>
-
-            {/* Challenge 4: System Integration */}
+            {/* Challenge 3: Smart Factory */}
             <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#2B4C7E] observe">
-              <Network className="h-10 w-10 text-[#2B4C7E] mb-4" />
-              <h3 className="font-serif text-2xl font-bold mb-3 text-foreground">
-                System som faktiskt pratar med varandra
-              </h3>
-              <p className="text-muted-foreground mb-4 font-medium">
-                47 olika system.<br />
-                Excel håller ihop verksamheten.<br />
-                Integrationen är i kaos.
-              </p>
-              <p className="text-sm text-muted-foreground">
-                Vi löser inte IT-arkitektur - vi löser varför era system inte levererar värde.
-              </p>
+              <div className="min-h-[80px]">
+                <Factory className="h-10 w-10 text-[#2B4C7E] mb-4" />
+                <h3 className="font-serif text-2xl font-bold mb-3 text-foreground">
+                  Smart Factory & Digitalisering
+                </h3>
+              </div>
+              <div>
+                <p className="text-muted-foreground">
+                  Robotik, IoT, data analytics, predictive maintenance – alla pratar om Industry 4.0, men var ska ni börja?
+                </p>
+                <p className="text-muted-foreground mt-3">
+                  Vi identifierar vilka investeringar i automation och data som faktiskt driver lönsamhet för er. Från systemintegration till att bygga analytics som används – inte bara samlas in.
+                </p>
+              </div>
+            </div>
+
+            {/* Challenge 4: Hållbarhet */}
+            <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#4CAF50] observe">
+              <div className="min-h-[80px]">
+                <Leaf className="h-10 w-10 text-[#4CAF50] mb-4" />
+                <h3 className="font-serif text-2xl font-bold mb-3 text-foreground">
+                  Hållbarhet & Cirkulär Produktion
+                </h3>
+              </div>
+              <div>
+                <p className="text-muted-foreground">
+                  Era kunder kräver klimatdata. EU-krav ökar. Men är hållbarhet bara compliance eller kan det skapa affärsvärde?
+                </p>
+                <p className="text-muted-foreground mt-3">
+                  Vi hjälper er förstå var hållbarhet driver lönsamhet – från klimatavtryck och materialval till cirkulär ekonomi och produktdesign som faktiskt skiljer er från konkurrenterna.
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -173,11 +163,13 @@ const Index = () => {
       <section id="om-oss" className="py-24 px-6 bg-muted/30">
         <div className="container mx-auto max-w-5xl">
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-8 observe">
-            Beprövad expertis - från fabriksgolv till styrelserum
+            Beprövad expertis – strategiskt och tekniskt
           </h2>
           
           <p className="text-lg text-muted-foreground text-center mb-12 max-w-3xl mx-auto observe">
-            Vi är två partners med komplementära styrkor som täcker hela spannet - från strategisk analys till teknisk implementation.
+            Vi är två partners med komplementära styrkor som täcker hela spannet –{" "}
+            <span className="hidden md:inline"><br /></span>
+            från strategisk analys till teknisk implementation.
           </p>
 
           {/* Founder Cards */}
@@ -196,7 +188,7 @@ const Index = () => {
                   Managing Partner - Strategy & Analytics
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  Strategisk analys och business cases. 15+ år från management consulting och industri (Telenor, Nokia, Unibet). Skriver branschanalyser på LinkedIn som läses av VD:ar och produktionschefer. Identifierar var pengarna läcker i värdekedjan.
+                  Strategisk analys och business cases. 15+ år från management consulting och industri (Telenor, Nokia, Unibet). Skriver branschanalyser på LinkedIn som läses av VD:ar och produktionschefer. Identifierar var pengarna läcker och bygger business case för nya teknologier.
                 </p>
               </div>
             </div>
@@ -215,29 +207,66 @@ const Index = () => {
                   Managing Partner - Technology & Innovation
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  40 år elektrostatik, R&D och industriell problemlösning. Har löst produktionsproblem som räddat 10+ MSEK för nordiska tillverkare. Validerar teknisk feasibility och driver implementation på fabriksgolvet.
+                  40 år elektrostatik, R&D och industriell problemlösning. Har löst produktionsproblem som räddat 10+ MSEK för nordiska tillverkare. Skriver på LinkedIn om tekniska framsteg och lösningar. Validerar teknisk feasibility, utvärderar leverantörer och driver implementation på fabriksgolvet.
                 </p>
               </div>
             </div>
           </div>
 
           <p className="text-center text-muted-foreground mb-12 observe italic">
-            Tillsammans täcker vi hela spannet - Micael identifierar vart pengarna läcker, Reinhold löser de tekniska problemen som faktiskt driver lönsamhet.
+            Tillsammans täcker vi hela resan –{" "}
+            <span className="hidden md:inline"><br /></span>
+            från att identifiera var lönsamheten läcker till att implementera teknologi som faktiskt ger betalt.
           </p>
 
           {/* Credibility Points */}
           <div className="grid md:grid-cols-2 gap-6 observe">
             <div className="bg-card rounded-lg p-6 shadow-sm">
               <p className="text-sm text-foreground">
-                Vi samarbetar med RISE, AMEXCI och Prototal Group kring svensk advanced manufacturing.
+                <strong>7 av 10 strategier misslyckas.</strong> Vi har sett varför – och vet hur vi undviker det.
               </p>
             </div>
             <div className="bg-card rounded-lg p-6 shadow-sm">
               <p className="text-sm text-foreground">
-                <span className="font-semibold">PwC rapporterar</span> att 70-80% av företags strategier misslyckas. Vi har sett varför - och vet hur vi undviker det.
+                Vi förstår både affärslogiken och de tekniska utmaningarna som nordiska tillverkare möter.
               </p>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Ecosystem Section */}
+      <section className="py-24 px-6 bg-gradient-to-br from-muted/20 to-muted/40">
+        <div className="container mx-auto max-w-5xl">
+          <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-6 observe">
+            Del av Sveriges Advanced Manufacturing-ekosystem
+          </h2>
+          
+          <p className="text-lg text-center text-muted-foreground mb-12 max-w-3xl mx-auto observe">
+            Vi samarbetar med ledande aktörer inom svensk advanced manufacturing –{" "}
+            <span className="hidden md:inline"><br /></span>
+            vilket ger er tillgång till expertis, testmiljöer och nätverk.
+          </p>
+
+          {/* Partner Logos */}
+          <div className="flex flex-wrap justify-center gap-8 mb-12 observe">
+            {["RISE", "AMEXCI", "Prototal Group", "GKN Aerospace", "Swerim"].map((partner) => (
+              <div
+                key={partner}
+                className="bg-card rounded-lg shadow-sm hover:shadow-md transition-all px-8 py-6 min-w-[140px] max-w-[160px] flex items-center justify-center hover:scale-105"
+              >
+                <span className="font-bold text-sm text-foreground text-center">
+                  {partner}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <p className="text-center text-muted-foreground observe">
+            Detta nätverk gör att vi kan koppla er till rätt partner vid rätt tidpunkt –{" "}
+            <span className="hidden md:inline"><br /></span>
+            utan att binda er till en enda leverantör.
+          </p>
         </div>
       </section>
 
@@ -274,7 +303,7 @@ const Index = () => {
                   On-site djupdykning (1-2 dagar)
                 </h3>
                 <p className="text-muted-foreground">
-                  Båda på plats. Micael träffar ledningsgrupp, Reinhold pratar med produktionschefer och tekniska direktörer. Vi täcker hela spannet.
+                  Båda på plats. Micael träffar ledningsgrupp och CFO, Reinhold pratar med produktionschefer och tekniska direktörer. Vi kartlägger strategiskt och operativt.
                 </p>
               </div>
             </div>
@@ -316,42 +345,16 @@ const Index = () => {
       <section id="newsletter" className="py-24 px-6 bg-muted/30">
         <div className="container mx-auto max-w-3xl text-center observe">
           <h2 className="font-serif text-3xl md:text-4xl font-bold mb-6">
-            Följer du redan vårt tänkande?
+            Följ vårt tänkande
           </h2>
           
-          <p className="text-muted-foreground mb-8">
-            Micael publicerar branschanalyser varje vecka på LinkedIn - lästa av VD:ar och produktionschefer i nordiska tillverkare.
+          <p className="text-muted-foreground mb-6">
+            Micael publicerar branschanalyser varje vecka på LinkedIn – lästa av VD:ar och produktionschefer i nordiska tillverkare.
           </p>
 
-          <div className="space-y-6">
-            <Button
-              asChild
-              size="lg"
-              className="bg-linkedin hover:bg-linkedin/90 text-linkedin-foreground"
-            >
-              <a
-                href="https://www.linkedin.com/newsletters/the-industrial-strategist-7373044871030362112"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2"
-              >
-                Prenumerera på The Industrial Strategist
-                <ExternalLink className="h-4 w-4" />
-              </a>
-            </Button>
-
-            <p className="text-sm text-muted-foreground">
-              Läs senaste artikel:{" "}
-              <a
-                href="https://www.linkedin.com/pulse/additive-manufacturing-sweden-strategic-crossroads-micael-gustavsson-spybf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-linkedin hover:underline"
-              >
-                Additive Manufacturing in Sweden: Strategic Crossroads
-              </a>
-            </p>
-          </div>
+          <p className="text-sm text-muted-foreground">
+            Läs mer om additiv tillverkning, smart factories och industriell transformation i nyhetsbrevet <strong>The Industrial Strategist</strong> på LinkedIn.
+          </p>
         </div>
       </section>
 
@@ -399,7 +402,7 @@ const Index = () => {
             <div>
               <img src={logo} alt="Ecstatic Consulting" className="h-10 mb-4" />
               <p className="text-sm text-muted-foreground">
-                Hjälper nordiska tillverkare att lösa kritiska utmaningar inom strategi, teknik och data.
+                Din partner inom Advanced Manufacturing. Hjälper nordiska tillverkare att utvärdera och implementera teknologi som faktiskt ger betalt.
               </p>
             </div>
 
