@@ -61,10 +61,10 @@ const Index = () => {
             </h1>
             <div className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed space-y-4">
               <p>
-                Ni känner till additiv tillverkning (AM), avancerad robotik och Industry 4.0. 
+                Ni känner till additiv tillverkning (AM), avancerad robotik och Industry 4.0.<br />
                 Era konkurrenter undersöker just nu dessa möjligheter.
               </p>
-              <p className="font-semibold text-foreground">Men ni vet inte:</p>
+              <p className="font-semibold text-foreground">Men ni känner <em>inte</em> till:</p>
               <ul className="text-left max-w-2xl mx-auto space-y-2">
                 <li>• Vilka av era tillverkningsprocesser som faktiskt passar AM?</li>
                 <li>• Vad riktig ROI är (inte vad leverantören påstår)?</li>
@@ -90,7 +90,8 @@ const Index = () => {
           </h2>
           
           <p className="text-lg text-center text-muted-foreground mb-12 max-w-3xl mx-auto observe">
-            Vi erbjuder en strukturerad process från nyfikenhet till strategiskt beslut. Fast pris, tydliga leverabler, konkreta tidsramar.
+            Vi erbjuder en strukturerad process från nyfikenhet till strategiskt beslut.<br />
+            Fast pris, tydliga leverabler, konkreta tidsramar.
           </p>
 
           <div className="grid md:grid-cols-3 gap-8 mb-8">
@@ -107,7 +108,8 @@ const Index = () => {
               </div>
               <div>
                 <p className="text-muted-foreground">
-                  Vi diskuterar era utmaningar inom AM, robotik eller Industry 4.0. Ingen pitch – vi delar perspektiv på branschen och ser om det är vettigt att gå vidare.
+                  Vi diskuterar era utmaningar inom AM, robotik eller Industry 4.0.<br />
+                  Ingen pitch – vi delar perspektiv på branschen och undersöker om det är vettigt att gå vidare.
                 </p>
               </div>
             </div>
@@ -120,19 +122,20 @@ const Index = () => {
                   AM Readiness Assessment
                 </h3>
                 <p className="text-sm font-semibold text-muted-foreground mb-3">
-                  4 veckor, 250 000 SEK
+                  Fast Pris
                 </p>
               </div>
               <div>
                 <p className="text-muted-foreground mb-3 font-semibold">Leverabler:</p>
                 <ul className="text-sm text-muted-foreground space-y-2 mb-3">
-                  <li>• 3-5 delar i er produktportfölj där AM faktiskt fungerar</li>
-                  <li>• Förväntad ROI per del (med riktiga kostnadsmodeller)</li>
-                  <li>• Rekommenderade leverantörer (AMEXCI, Prototal, maskintillverkare)</li>
+                  <li>• Urval av 3-5 komponenter eller maskindelar för AM tillverkning</li>
+                  <li>• Riktiga ROI per utvald komponent</li>
+                  <li>• Rekommenderade leverantörer (för pilot och fullskalig integration)</li>
                   <li>• 6-månaders implementeringsplan</li>
                 </ul>
                 <p className="text-muted-foreground font-semibold">
-                  Ni får svar på: Ska vi satsa på AM – eller vänta?
+                  Ni får svar på:<br />
+                  Ska vi satsa på AM – eller vänta?
                 </p>
               </div>
             </div>
@@ -242,22 +245,8 @@ const Index = () => {
           </h2>
           
           <p className="text-lg text-center text-muted-foreground mb-12 max-w-3xl mx-auto observe">
-            Vi samarbetar med ledande aktörer inom svensk additiv tillverkning – RISE, AMEXCI, Prototal, Swerim, maskintillverkare – för att ge er tillgång till rätt kompetens vid rätt tidpunkt.
+            Vi samarbetar med ledande aktörer inom svensk additiv tillverkning – RISE, AMEXCI, Prototal, maskintillverkare – för att ge er tillgång till rätt kompetens vid rätt tidpunkt.
           </p>
-
-          {/* Partner Logos */}
-          <div className="flex flex-wrap justify-center gap-8 mb-12 observe">
-            {["RISE", "AMEXCI", "Prototal Group", "GKN Aerospace", "Swerim"].map((partner) => (
-              <div
-                key={partner}
-                className="bg-card rounded-lg shadow-sm hover:shadow-md transition-all px-8 py-6 min-w-[140px] max-w-[160px] flex items-center justify-center hover:scale-105"
-              >
-                <span className="font-bold text-sm text-foreground text-center">
-                  {partner}
-                </span>
-              </div>
-            ))}
-          </div>
 
           <p className="text-center text-muted-foreground observe">
             Vi är kanalen som kopplar ihop er med rätt partner för pilot och produktion, utan att binda er till en specifik leverantör.
@@ -270,15 +259,11 @@ const Index = () => {
       <section id="newsletter" className="py-24 px-6 bg-muted/30">
         <div className="container mx-auto max-w-3xl text-center observe">
           <h2 className="font-serif text-3xl md:text-4xl font-bold mb-6">
-            Följ vårt tänkande om AM och svensk tillverkningsindustri
+            Följ vårt tänk om AM och svensk tillverkningsindustri
           </h2>
           
           <p className="text-muted-foreground mb-4">
-            Micael publicerar djupa branschanalyser varje vecka på LinkedIn – lästa av VD:ar, produktionschefer och CFO:s i nordiska tillverkare.
-          </p>
-
-          <p className="text-muted-foreground mb-4">
-            Senaste artikel: "Additive Manufacturing in Sweden: The Strategic Crossroads" (2000+ läsare).
+            Vi publicerar djupa branschanalyser varje vecka på LinkedIn – lästa av VD:ar, produktionschefer och CFO:s.
           </p>
 
           <p className="text-sm text-muted-foreground">
@@ -286,7 +271,7 @@ const Index = () => {
           </p>
 
           <p className="text-sm font-semibold text-foreground mt-6">
-            Läs The Industrial Strategist på LinkedIn
+            Läs nyhetsbrevet 'The Industrial Strategist' på LinkedIn
           </p>
         </div>
       </section>
@@ -295,15 +280,15 @@ const Index = () => {
       <section className="py-24 px-6 bg-linkedin/5">
         <div className="container mx-auto max-w-4xl text-center">
           <h2 className="font-serif text-3xl md:text-4xl font-bold mb-6 observe">
-            Är AM relevant för er – eller ska ni vänta?
+            Inled samtal med oss - låt oss utforska er situation tillsammans
           </h2>
           
           <div className="space-y-4 text-lg text-foreground mb-8 observe">
             <p>
-              Vi söker 1-2 tillverkare (150-1000 MSEK) som vill vara först med att bygga verklig AM-kompetens under 2026.
+              Under 2026 söker vi 1-2 tillverkare (omsättning: 150 - 1000 MSEK) som vill vara först med att bygga verklig AM-kompetens.
             </p>
             <p>
-              För rätt företag erbjuder vi det första assessmentet till rabatterat pris – för att bygga track record tillsammans.
+              För rätt företag erbjuder vi 'AM Assessment' till rabatterat pris – för att bygga track record tillsammans.
             </p>
             <p>
               30 minuter där vi diskuterar era utmaningar inom additiv tillverkning. Vi delar perspektiv på var svensk tillverkningsindustri är på väg, och ser om ett samarbete är vettigt.
