@@ -57,109 +57,118 @@ const Index = () => {
         <div className="container mx-auto max-w-6xl">
           <div className="text-center observe">
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6 leading-tight">
-              Svensk tillverkningsindustri står inför ett vägskäl.<br />
-              <span className="text-[#0A66C2]">Ny teknologi förändrar allt – men vad är värt att satsa på för er?</span>
+              Sveriges oberoende AM-rådgivare
             </h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mb-4">
-              Vi hjälper nordiska tillverkare (150-1000 MSEK) att utvärdera, testa och implementera Advanced Manufacturing – från additiv tillverkning till robotik och smart factory.
-            </p>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Strategisk analys möter teknisk problemlösning.
-            </p>
+            <div className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed space-y-4">
+              <p>
+                Ni känner till additiv tillverkning (AM), avancerad robotik och Industry 4.0. 
+                Era konkurrenter undersöker just nu dessa möjligheter.
+              </p>
+              <p className="font-semibold text-foreground">Men ni vet inte:</p>
+              <ul className="text-left max-w-2xl mx-auto space-y-2">
+                <li>• Vilka av era tillverkningsprocesser som faktiskt passar AM?</li>
+                <li>• Vad riktig ROI är (inte vad leverantören påstår)?</li>
+                <li>• Hur ni integrerar detta i er existerande produktion?</li>
+                <li>• Vilka leverantörer ni kan lita på i detta nya området?</li>
+              </ul>
+              <p className="pt-4">
+                Vi bygger business case som faktiskt håller, rekommenderar leverantörer utan kickback, och projektleder från assessment till pilot.
+              </p>
+              <p className="font-semibold text-foreground">
+                Vi säljer inget – vi hjälper er hitta vad som är rätt för just er.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Four Core Challenges */}
+      {/* Vad vi gör */}
       <section className="py-24 px-6 bg-muted/30">
         <div className="container mx-auto max-w-6xl">
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-6 observe">
-            Exempel på områden där vi hjälper till
+            Vad vi gör
           </h2>
           
           <p className="text-lg text-center text-muted-foreground mb-12 max-w-3xl mx-auto observe">
-            Vi är er partner genom hela resan –{" "}
-            <span className="hidden md:inline"><br /></span>
-            från att identifiera var lönsamheten läcker till att implementera teknologi som faktiskt ger betalt.
+            Vi erbjuder en strukturerad process från nyfikenhet till strategiskt beslut. Fast pris, tydliga leverabler, konkreta tidsramar.
           </p>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* Challenge 1: Lönsamhetserosion */}
-            <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#E67E50] observe">
+          <div className="grid md:grid-cols-3 gap-8 mb-8">
+            {/* Step 1: Utforskande samtal */}
+            <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#0A66C2] observe">
               <div className="min-h-[80px]">
-                <Target className="h-10 w-10 text-[#E67E50] mb-4" />
-                <h3 className="font-serif text-2xl font-bold mb-3 text-foreground">
-                  Lönsamhetserosion
+                <Target className="h-10 w-10 text-[#0A66C2] mb-4" />
+                <h3 className="font-serif text-2xl font-bold mb-1 text-foreground">
+                  Utforskande samtal
                 </h3>
+                <p className="text-sm font-semibold text-muted-foreground mb-3">
+                  30 minuter, gratis
+                </p>
               </div>
               <div>
                 <p className="text-muted-foreground">
-                  Ni växer i omsättning, men marginalerna faller. Ofta beror det på att produktionen inte hänger med, tekniken är gammal, eller konkurrenter redan moderniserat.
-                </p>
-                <p className="text-muted-foreground mt-3">
-                  Vi kartlägger hela värdekedjan och identifierar var pengarna läcker – och vilken modernisering som faktiskt löser problemet, inte bara är teknik för teknikens skull.
+                  Vi diskuterar era utmaningar inom AM, robotik eller Industry 4.0. Ingen pitch – vi delar perspektiv på branschen och ser om det är vettigt att gå vidare.
                 </p>
               </div>
             </div>
 
-            {/* Challenge 2: Additiv Tillverkning */}
+            {/* Step 2: AM Readiness Assessment */}
             <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#2D7A4F] observe">
               <div className="min-h-[80px]">
                 <TrendingUp className="h-10 w-10 text-[#2D7A4F] mb-4" />
-                <h3 className="font-serif text-2xl font-bold mb-3 text-foreground">
-                  Additiv Tillverkning (AM)
+                <h3 className="font-serif text-2xl font-bold mb-1 text-foreground">
+                  AM Readiness Assessment
                 </h3>
+                <p className="text-sm font-semibold text-muted-foreground mb-3">
+                  4 veckor, 250 000 SEK
+                </p>
               </div>
               <div>
-                <p className="text-muted-foreground">
-                  Är AM relevant för er? Vilka komponenter passar? Hur integrerar ni det i befintlig produktion? Vad är business casen?
-                </p>
-                <p className="text-muted-foreground mt-3">
-                  Vi hjälper er navigera från nyfikenhet till strategisk beslut – design för AM, materialval, leverantörsutvärdering, pilotprojekt och ROI-analys.
+                <p className="text-muted-foreground mb-3 font-semibold">Leverabler:</p>
+                <ul className="text-sm text-muted-foreground space-y-2 mb-3">
+                  <li>• 3-5 delar i er produktportfölj där AM faktiskt fungerar</li>
+                  <li>• Förväntad ROI per del (med riktiga kostnadsmodeller)</li>
+                  <li>• Rekommenderade leverantörer (AMEXCI, Prototal, maskintillverkare)</li>
+                  <li>• 6-månaders implementeringsplan</li>
+                </ul>
+                <p className="text-muted-foreground font-semibold">
+                  Ni får svar på: Ska vi satsa på AM – eller vänta?
                 </p>
               </div>
             </div>
 
-            {/* Challenge 3: Smart Factory */}
+            {/* Step 3: Pilot & Implementation */}
             <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#2B4C7E] observe">
               <div className="min-h-[80px]">
                 <Factory className="h-10 w-10 text-[#2B4C7E] mb-4" />
-                <h3 className="font-serif text-2xl font-bold mb-3 text-foreground">
-                  Smart Factory & Digitalisering
+                <h3 className="font-serif text-2xl font-bold mb-1 text-foreground">
+                  Pilot & Implementation
                 </h3>
+                <p className="text-sm font-semibold text-muted-foreground mb-3">
+                  Om ni går vidare
+                </p>
               </div>
               <div>
                 <p className="text-muted-foreground">
-                  Robotik, IoT, data analytics, predictive maintenance – alla pratar om Industry 4.0, men var ska ni börja?
+                  Vi projektleder från design till produktion. Kopplar ihop er med rätt leverantörer, överser integration, training och optimering.
                 </p>
                 <p className="text-muted-foreground mt-3">
-                  Vi identifierar vilka investeringar i automation och data som faktiskt driver lönsamhet för er. Från systemintegration till att bygga analytics som används – inte bara samlas in.
-                </p>
-              </div>
-            </div>
-
-            {/* Challenge 4: Hållbarhet */}
-            <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#4CAF50] observe">
-              <div className="min-h-[80px]">
-                <Leaf className="h-10 w-10 text-[#4CAF50] mb-4" />
-                <h3 className="font-serif text-2xl font-bold mb-3 text-foreground">
-                  Hållbarhet & Cirkulär Produktion
-                </h3>
-              </div>
-              <div>
-                <p className="text-muted-foreground">
-                  Era kunder kräver klimatdata. EU-krav ökar. Men är hållbarhet bara compliance eller kan det skapa affärsvärde?
-                </p>
-                <p className="text-muted-foreground mt-3">
-                  Vi hjälper er förstå var hållbarhet driver lönsamhet – från klimatavtryck och materialval till cirkulär ekonomi och produktdesign som faktiskt skiljer er från konkurrenterna.
+                  Vi finns kvar tills det faktiskt fungerar – inga överlämningar till juniorteam.
                 </p>
               </div>
             </div>
           </div>
+
+          {/* Note box */}
+          <div className="bg-muted/50 border border-border rounded-lg p-6 max-w-3xl mx-auto observe">
+            <p className="text-sm text-muted-foreground text-center">
+              I framtiden även full integration och skalning – men vi börjar alltid med att bevisa värdet i små steg.
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* Credibility Section - Team Approach */}
+      {/* Om oss Section */}
       <section id="om-oss" className="py-24 px-6 bg-muted/30">
         <div className="container mx-auto max-w-5xl">
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-8 observe">
@@ -167,7 +176,7 @@ const Index = () => {
           </h2>
           
           <p className="text-lg text-muted-foreground text-center mb-12 max-w-3xl mx-auto observe">
-            Vi är två partners med komplementära styrkor som täcker hela spannet –{" "}
+            Vi är två partners med kompletterande styrkor som täcker hela spannet –{" "}
             <span className="hidden md:inline"><br /></span>
             från strategisk analys till teknisk implementation.
           </p>
@@ -188,7 +197,10 @@ const Index = () => {
                   Managing Partner - Strategy & Analytics
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  Strategisk analys och business cases. 15+ år från management consulting och industri (Telenor, Nokia, Unibet). Skriver branschanalyser på LinkedIn som läses av VD:ar och produktionschefer. Identifierar var pengarna läcker och bygger business case för nya teknologier.
+                  Skriver branschanalyser om AM som läses av VD:ar i nordiska tillverkare (ex: "Additive Manufacturing in Sweden: The Strategic Crossroads", 2000+ läsare på LinkedIn).
+                </p>
+                <p className="text-xs text-muted-foreground mt-2">
+                  15+ år från management consulting och industri (Telenor, Nokia, Unibet). Bygger ROI-modeller som CFO:s faktiskt tror på, och presentationer som kan tas till styrelsen.
                 </p>
               </div>
             </div>
@@ -207,31 +219,18 @@ const Index = () => {
                   Managing Partner - Technology & Innovation
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  40 år elektrostatik, R&D och industriell problemlösning. Har löst produktionsproblem som räddat 10+ MSEK för nordiska tillverkare. Skriver på LinkedIn om tekniska framsteg och lösningar. Validerar teknisk feasibility, utvärderar leverantörer och driver implementation på fabriksgolvet.
+                  40 år av industriell problemlösning inom elektrostatik, ytbehandling och processutveckling. Har löst produktionsproblem som räddat 10+ MSEK för nordiska tillverkare.
+                </p>
+                <p className="text-xs text-muted-foreground mt-2">
+                  Vet vilka teknologier som faktiskt fungerar på fabriksgolvet – inte bara i PowerPoints. Läser fabriksgolv och validerar om AM passar eller inte.
                 </p>
               </div>
             </div>
           </div>
 
-          <p className="text-center text-muted-foreground mb-12 observe italic">
-            Tillsammans täcker vi hela resan –{" "}
-            <span className="hidden md:inline"><br /></span>
-            från att identifiera var lönsamheten läcker till att implementera teknologi som faktiskt ger betalt.
+          <p className="text-center text-muted-foreground observe">
+            Vi kombinerar strategisk analys med teknisk problemlösning – och eftersom vi inte säljer maskiner eller tjänster kan vi rekommendera det som faktiskt är bäst för er produktion.
           </p>
-
-          {/* Credibility Points */}
-          <div className="grid md:grid-cols-2 gap-6 observe">
-            <div className="bg-card rounded-lg p-6 shadow-sm">
-              <p className="text-sm text-foreground">
-                <strong>7 av 10 strategier misslyckas.</strong> Vi har sett varför – och vet hur vi undviker det.
-              </p>
-            </div>
-            <div className="bg-card rounded-lg p-6 shadow-sm">
-              <p className="text-sm text-foreground">
-                Vi förstår både affärslogiken och de tekniska utmaningarna som nordiska tillverkare möter.
-              </p>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -239,13 +238,11 @@ const Index = () => {
       <section className="py-24 px-6 bg-gradient-to-br from-muted/20 to-muted/40">
         <div className="container mx-auto max-w-5xl">
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-6 observe">
-            Del av Sveriges Advanced Manufacturing-ekosystem
+            Del av Sveriges AM-ekosystem
           </h2>
           
           <p className="text-lg text-center text-muted-foreground mb-12 max-w-3xl mx-auto observe">
-            Vi samarbetar med ledande aktörer inom svensk advanced manufacturing –{" "}
-            <span className="hidden md:inline"><br /></span>
-            vilket ger er tillgång till expertis, testmiljöer och nätverk.
+            Vi samarbetar med ledande aktörer inom svensk additiv tillverkning – RISE, AMEXCI, Prototal, Swerim, maskintillverkare – för att ge er tillgång till rätt kompetens vid rätt tidpunkt.
           </p>
 
           {/* Partner Logos */}
@@ -263,97 +260,33 @@ const Index = () => {
           </div>
 
           <p className="text-center text-muted-foreground observe">
-            Detta nätverk gör att vi kan koppla er till rätt partner vid rätt tidpunkt –{" "}
-            <span className="hidden md:inline"><br /></span>
-            utan att binda er till en enda leverantör.
+            Vi är kanalen som kopplar ihop er med rätt partner för pilot och produktion, utan att binda er till en specifik leverantör.
           </p>
         </div>
       </section>
 
-      {/* How We Work Section */}
-      <section className="py-24 px-6 bg-muted/30">
-        <div className="container mx-auto max-w-4xl">
-          <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-12 observe">
-            Så jobbar vi
-          </h2>
-
-          <div className="space-y-8 observe">
-            {/* Step 1 */}
-            <div className="flex gap-6 items-start">
-              <div className="flex-shrink-0 w-12 h-12 bg-linkedin text-white rounded-full flex items-center justify-center font-bold text-lg">
-                1
-              </div>
-              <div>
-                <h3 className="font-semibold text-lg text-foreground mb-2">
-                  Utforskande samtal (30 min)
-                </h3>
-                <p className="text-muted-foreground">
-                  Vi diskuterar era utmaningar inom lönsamhet, AM eller nya teknologier. Inget säljsnack.
-                </p>
-              </div>
-            </div>
-
-            {/* Step 2 */}
-            <div className="flex gap-6 items-start">
-              <div className="flex-shrink-0 w-12 h-12 bg-linkedin text-white rounded-full flex items-center justify-center font-bold text-lg">
-                2
-              </div>
-              <div>
-                <h3 className="font-semibold text-lg text-foreground mb-2">
-                  On-site djupdykning (1-2 dagar)
-                </h3>
-                <p className="text-muted-foreground">
-                  Båda på plats. Micael träffar ledningsgrupp och CFO, Reinhold pratar med produktionschefer och tekniska direktörer. Vi kartlägger strategiskt och operativt.
-                </p>
-              </div>
-            </div>
-
-            {/* Step 3 */}
-            <div className="flex gap-6 items-start">
-              <div className="flex-shrink-0 w-12 h-12 bg-linkedin text-white rounded-full flex items-center justify-center font-bold text-lg">
-                3
-              </div>
-              <div>
-                <h3 className="font-semibold text-lg text-foreground mb-2">
-                  Analys + rekommendationer
-                </h3>
-                <p className="text-muted-foreground">
-                  Strategisk roadmap (Micael) + teknisk feasibility och implementation plan (Reinhold).
-                </p>
-              </div>
-            </div>
-
-            {/* Step 4 */}
-            <div className="flex gap-6 items-start">
-              <div className="flex-shrink-0 w-12 h-12 bg-linkedin text-white rounded-full flex items-center justify-center font-bold text-lg">
-                4
-              </div>
-              <div>
-                <h3 className="font-semibold text-lg text-foreground mb-2">
-                  Implementation support
-                </h3>
-                <p className="text-muted-foreground">
-                  Vi följer med tills det faktiskt fungerar. Inga överlämningar till juniorteam.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Newsletter Section */}
       <section id="newsletter" className="py-24 px-6 bg-muted/30">
         <div className="container mx-auto max-w-3xl text-center observe">
           <h2 className="font-serif text-3xl md:text-4xl font-bold mb-6">
-            Följ vårt tänkande
+            Följ vårt tänkande om AM och svensk tillverkningsindustri
           </h2>
           
-          <p className="text-muted-foreground mb-6">
-            Micael publicerar branschanalyser varje vecka på LinkedIn – lästa av VD:ar och produktionschefer i nordiska tillverkare.
+          <p className="text-muted-foreground mb-4">
+            Micael publicerar djupa branschanalyser varje vecka på LinkedIn – lästa av VD:ar, produktionschefer och CFO:s i nordiska tillverkare.
+          </p>
+
+          <p className="text-muted-foreground mb-4">
+            Senaste artikel: "Additive Manufacturing in Sweden: The Strategic Crossroads" (2000+ läsare).
           </p>
 
           <p className="text-sm text-muted-foreground">
-            Läs mer om additiv tillverkning, smart factories och industriell transformation i nyhetsbrevet <strong>The Industrial Strategist</strong> på LinkedIn.
+            Vi skriver inte fluff – vi skriver datadrivna analyser som faktiskt hjälper er förstå var marknaden är på väg.
+          </p>
+
+          <p className="text-sm font-semibold text-foreground mt-6">
+            Läs The Industrial Strategist på LinkedIn
           </p>
         </div>
       </section>
@@ -362,14 +295,24 @@ const Index = () => {
       <section className="py-24 px-6 bg-linkedin/5">
         <div className="container mx-auto max-w-4xl text-center">
           <h2 className="font-serif text-3xl md:text-4xl font-bold mb-6 observe">
-            Låt oss utforska om vi kan hjälpa
+            Är AM relevant för er – eller ska ni vänta?
           </h2>
-          <p className="text-lg text-foreground mb-6 observe">
-            30 minuter där vi diskuterar era utmaningar inom lönsamhet, AM eller nya teknologier. Vi delar perspektiv på branschen och ser om ett samarbete är vettigt.
-          </p>
-          <p className="text-sm text-muted-foreground mb-8 observe">
-            Inget säljsnack - vi börjar alltid med att lyssna.
-          </p>
+          
+          <div className="space-y-4 text-lg text-foreground mb-8 observe">
+            <p>
+              Vi söker 1-2 tillverkare (150-1000 MSEK) som vill vara först med att bygga verklig AM-kompetens under 2026.
+            </p>
+            <p>
+              För rätt företag erbjuder vi det första assessmentet till rabatterat pris – för att bygga track record tillsammans.
+            </p>
+            <p>
+              30 minuter där vi diskuterar era utmaningar inom additiv tillverkning. Vi delar perspektiv på var svensk tillverkningsindustri är på väg, och ser om ett samarbete är vettigt.
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Ingen pitch. Ingen PowerPoint. Bara ärligt samtal om era verkliga utmaningar.
+            </p>
+          </div>
+
           <div className="flex flex-col sm:flex-row gap-4 justify-center observe">
             <Button
               size="lg"
@@ -402,7 +345,7 @@ const Index = () => {
             <div>
               <img src={logo} alt="Ecstatic Consulting" className="h-10 mb-4" />
               <p className="text-sm text-muted-foreground">
-                Din partner inom Advanced Manufacturing. Hjälper nordiska tillverkare att utvärdera och implementera teknologi som faktiskt ger betalt.
+                Sveriges oberoende AM-rådgivare. Hjälper nordiska tillverkare att utvärdera och implementera additiv tillverkning som faktiskt ger betalt.
               </p>
             </div>
 
