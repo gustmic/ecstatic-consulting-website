@@ -61,7 +61,9 @@ const Index = () => {
             </h1>
             <div className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed space-y-4">
               <p>
-                Ni känner till additiv tillverkning (AM), avancerad robotik och Industry 4.0.<br />
+                Ni känner till additiv tillverkning (AM), avancerad robotik och Industry 4.0.
+              </p>
+              <p>
                 Era konkurrenter undersöker just nu dessa möjligheter.
               </p>
               <p className="font-semibold text-foreground">Men ni känner <em>inte</em> till:</p>
@@ -108,7 +110,9 @@ const Index = () => {
               </div>
               <div>
                 <p className="text-muted-foreground">
-                  Vi diskuterar era utmaningar inom AM, robotik eller Industry 4.0.<br />
+                  Vi diskuterar era utmaningar inom AM, robotik eller Industry 4.0.
+                </p>
+                <p className="text-muted-foreground">
                   Ingen pitch – vi delar perspektiv på branschen och undersöker om det är vettigt att gå vidare.
                 </p>
               </div>
@@ -200,10 +204,10 @@ const Index = () => {
                   Managing Partner - Strategy & Analytics
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  Skriver branschanalyser om AM som läses av VD:ar i nordiska tillverkare (ex: "Additive Manufacturing in Sweden: The Strategic Crossroads", 2000+ läsare på LinkedIn).
+                  15+ år från management consulting och industri (Telenor, Nokia, Unibet). Bygger business case som CFO:s faktiskt tror på, och strategier som kan tas till styrelsen.
                 </p>
                 <p className="text-xs text-muted-foreground mt-2">
-                  15+ år från management consulting och industri (Telenor, Nokia, Unibet). Bygger ROI-modeller som CFO:s faktiskt tror på, och presentationer som kan tas till styrelsen.
+                  Skriver branschanalyser om advanced manufacturing som läses av nordiska tillverkande företags VD:ar.
                 </p>
               </div>
             </div>
@@ -222,7 +226,7 @@ const Index = () => {
                   Managing Partner - Technology & Innovation
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  40 år av industriell problemlösning inom elektrostatik, ytbehandling och processutveckling. Har löst produktionsproblem som räddat 10+ MSEK för nordiska tillverkare.
+                  40 år av industriell problemlösning inom elektrostatik, ytbehandling och processutveckling. Har löst produktionsproblem som räddat 10+ MSEK för nordiska tillverkande företag.
                 </p>
                 <p className="text-xs text-muted-foreground mt-2">
                   Vet vilka teknologier som faktiskt fungerar på fabriksgolvet – inte bara i PowerPoints. Läser fabriksgolv och validerar om AM passar eller inte.
@@ -280,44 +284,31 @@ const Index = () => {
       <section className="py-24 px-6 bg-linkedin/5">
         <div className="container mx-auto max-w-4xl text-center">
           <h2 className="font-serif text-3xl md:text-4xl font-bold mb-6 observe">
-            Inled samtal med oss - låt oss utforska er situation tillsammans
+            Inled samtal med oss -<br />låt oss utforska er situation tillsammans
           </h2>
           
           <div className="space-y-4 text-lg text-foreground mb-8 observe">
             <p>
-              Under 2026 söker vi 1-2 tillverkare (omsättning: 150 - 1000 MSEK) som vill vara först med att bygga verklig AM-kompetens.
+              Under 2026 söker vi 1-2 tillverkande företag (omsättning: 150 - 1000 MSEK) som vill vara först med att bygga verklig AM-kompetens.
             </p>
             <p>
-              För rätt företag erbjuder vi 'AM Assessment' till rabatterat pris – för att bygga track record tillsammans.
+              För rätt företag erbjuder vi 'AM Assessment' till rabatterat pris – för att bygga "track record" tillsammans.
             </p>
             <p>
-              30 minuter där vi diskuterar era utmaningar inom additiv tillverkning. Vi delar perspektiv på var svensk tillverkningsindustri är på väg, och ser om ett samarbete är vettigt.
+              Ett samtal på 30 minuter där vi diskuterar era utmaningar inom additiv tillverkning. Vi delar med oss om perspektiv på var svensk tillverkningsindustri är på väg, och ser om ett samarbete kan passa oss båda.
             </p>
             <p className="text-sm text-muted-foreground">
-              Ingen pitch. Ingen PowerPoint. Bara ärligt samtal om era verkliga utmaningar.
+              Ingen pitch. Ingen PowerPoint. Bara ett ärligt samtal om era verkliga utmaningar.
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center observe">
+          <div className="flex justify-center observe">
             <Button
               size="lg"
               onClick={openCalendly}
-              className="bg-linkedin hover:bg-linkedin/90 text-white"
+              className="bg-[#2D7A4F] hover:bg-[#246841] text-white"
             >
-              Boka 30-minuters samtal
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              asChild
-            >
-              <a
-                href="https://www.linkedin.com/in/micael-gustavsson/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Kontakta via LinkedIn
-              </a>
+              Boka samtal
             </Button>
           </div>
         </div>
@@ -330,7 +321,8 @@ const Index = () => {
             <div>
               <img src={logo} alt="Ecstatic Consulting" className="h-10 mb-4" />
               <p className="text-sm text-muted-foreground">
-                Sveriges oberoende AM-rådgivare. Hjälper nordiska tillverkare att utvärdera och implementera additiv tillverkning som faktiskt ger betalt.
+                Sveriges oberoende AM-rådgivare.<br />
+                Hjälper nordiska tillverkande företag att utvärdera och implementera additiv tillverkning som faktiskt är lönsamt.
               </p>
             </div>
 
@@ -347,17 +339,41 @@ const Index = () => {
 
             <div>
               <h3 className="font-semibold mb-3 text-foreground">Följ oss</h3>
-              <a
-                href="https://www.linkedin.com/company/ecstaticconsulting"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-sm text-[#0A66C2] hover:underline"
-              >
-                <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-                </svg>
-                LinkedIn
-              </a>
+              <div className="flex flex-col gap-2">
+                <a
+                  href="https://www.linkedin.com/company/ecstaticconsulting"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-sm text-[#0A66C2] hover:underline"
+                >
+                  <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                  </svg>
+                  Ecstatic Consulting
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/micael-gustavsson/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-sm text-[#0A66C2] hover:underline"
+                >
+                  <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                  </svg>
+                  Micael
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/reinhold-rutks/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-sm text-[#0A66C2] hover:underline"
+                >
+                  <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                  </svg>
+                  Reinhold
+                </a>
+              </div>
             </div>
           </div>
 
