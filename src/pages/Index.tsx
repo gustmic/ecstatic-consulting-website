@@ -61,23 +61,10 @@ const Index = () => {
             </h1>
             <div className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed space-y-4">
               <p>
-                Ni känner till additiv tillverkning (AM), avancerad robotik och Industry 4.0.
-              </p>
-              <p>
-                Era konkurrenter undersöker just nu dessa möjligheter.
-              </p>
-              <p className="font-semibold text-foreground">Men ni känner <em>inte</em> till:</p>
-              <ul className="text-left max-w-2xl mx-auto space-y-2">
-                <li>• Vilka av era tillverkningsprocesser som faktiskt passar AM?</li>
-                <li>• Vad riktig ROI är (inte vad leverantören påstår)?</li>
-                <li>• Hur ni integrerar detta i er existerande produktion?</li>
-                <li>• Vilka leverantörer ni kan lita på i detta nya området?</li>
-              </ul>
-              <p className="pt-4">
-                Vi bygger business case som faktiskt håller, rekommenderar leverantörer utan kickback, och projektleder från assessment till pilot.
+                Vi hjälper nordiska tillverkande företag (150-1000 MSEK) navigera från nyfikenhet till strategiskt beslut inom Additiv Tillverkning.
               </p>
               <p className="font-semibold text-foreground">
-                Vi säljer inget – vi hjälper er hitta vad som är rätt för just er.
+                Oberoende. Datadriven. Ingen kickback.
               </p>
             </div>
           </div>
@@ -91,34 +78,21 @@ const Index = () => {
             Vad vi gör
           </h2>
           
-          <p className="text-lg text-center text-muted-foreground mb-12 max-w-3xl mx-auto observe">
-            Vi erbjuder en strukturerad process från nyfikenhet till strategiskt beslut.<br />
-            Fast pris, tydliga leverabler, konkreta tidsramar.
-          </p>
+          <div className="text-lg text-muted-foreground mb-8 max-w-3xl mx-auto observe">
+            <p className="mb-3">Ni känner till additiv tillverkning, men vet inte:</p>
+            <ul className="space-y-2 mb-6">
+              <li>• Vilka av era processer som faktiskt passar AM?</li>
+              <li>• Vad riktig ROI är (inte vad leverantören påstår)?</li>
+              <li>• Hur ni integrerar detta i existerande produktion?</li>
+              <li>• Vilka leverantörer ni kan lita på?</li>
+            </ul>
+            <p>
+              Vi erbjuder en strukturerad process från utvärdering till implementation. Fast pris, tydliga leverabler, konkreta tidsramar.
+            </p>
+          </div>
 
-          <div className="grid md:grid-cols-3 gap-8 mb-8">
-            {/* Step 1: Utforskande samtal */}
-            <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#0A66C2] observe">
-              <div className="min-h-[80px]">
-                <Target className="h-10 w-10 text-[#0A66C2] mb-4" />
-                <h3 className="font-serif text-2xl font-bold mb-1 text-foreground">
-                  Utforskande samtal
-                </h3>
-                <p className="text-sm font-semibold text-muted-foreground mb-3">
-                  30 minuter, gratis
-                </p>
-              </div>
-              <div>
-                <p className="text-muted-foreground">
-                  Vi diskuterar era utmaningar inom AM, robotik eller Industry 4.0.
-                </p>
-                <p className="text-muted-foreground">
-                  Ingen pitch – vi delar perspektiv på branschen och undersöker om det är vettigt att gå vidare.
-                </p>
-              </div>
-            </div>
-
-            {/* Step 2: AM Readiness Assessment */}
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Card 1: AM Readiness Assessment */}
             <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#2D7A4F] observe">
               <div className="min-h-[80px]">
                 <TrendingUp className="h-10 w-10 text-[#2D7A4F] mb-4" />
@@ -126,25 +100,24 @@ const Index = () => {
                   AM Readiness Assessment
                 </h3>
                 <p className="text-sm font-semibold text-muted-foreground mb-3">
-                  Fast Pris
+                  4 veckor, fast pris
                 </p>
               </div>
               <div>
                 <p className="text-muted-foreground mb-3 font-semibold">Leverabler:</p>
                 <ul className="text-sm text-muted-foreground space-y-2 mb-3">
-                  <li>• Urval av 3-5 komponenter eller maskindelar för AM tillverkning</li>
-                  <li>• Riktiga ROI per utvald komponent</li>
+                  <li>• 3-5 komponenter eller delar för AM-tillverkning</li>
+                  <li>• Riktig ROI per utvald komponent</li>
                   <li>• Rekommenderade leverantörer (för pilot och fullskalig integration)</li>
                   <li>• 6-månaders implementeringsplan</li>
                 </ul>
                 <p className="text-muted-foreground font-semibold">
-                  Ni får svar på:<br />
-                  Ska vi satsa på AM – eller vänta?
+                  Ni får svar på: Ska vi satsa på AM – eller vänta?
                 </p>
               </div>
             </div>
 
-            {/* Step 3: Pilot & Implementation */}
+            {/* Card 2: Pilot & Implementation */}
             <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#2B4C7E] observe">
               <div className="min-h-[80px]">
                 <Factory className="h-10 w-10 text-[#2B4C7E] mb-4" />
@@ -152,7 +125,7 @@ const Index = () => {
                   Pilot & Implementation
                 </h3>
                 <p className="text-sm font-semibold text-muted-foreground mb-3">
-                  Om ni går vidare
+                  När ni går vidare
                 </p>
               </div>
               <div>
@@ -164,14 +137,50 @@ const Index = () => {
                 </p>
               </div>
             </div>
-          </div>
 
-          {/* Note box */}
-          <div className="bg-muted/50 border border-border rounded-lg p-6 max-w-3xl mx-auto observe">
-            <p className="text-sm text-muted-foreground text-center">
-              I framtiden även full integration och skalning – men vi börjar alltid med att bevisa värdet i små steg.
-            </p>
+            {/* Card 3: Full Integration & Skalning (GREYED OUT) */}
+            <div className="relative bg-card rounded-2xl p-8 shadow-sm transition-all border-t-4 border-muted opacity-60 observe">
+              {/* "Lanseras 2026" ribbon */}
+              <div className="absolute -top-2 -right-2 bg-[#2D7A4F] text-white px-4 py-1 text-xs font-bold rounded-bl-lg rounded-tr-lg shadow-md rotate-3">
+                Lanseras 2026
+              </div>
+              
+              <div className="min-h-[80px]">
+                <Network className="h-10 w-10 text-muted-foreground mb-4" />
+                <h3 className="font-serif text-2xl font-bold mb-1 text-foreground">
+                  Full Integration & Skalning
+                </h3>
+                <p className="text-sm font-semibold text-muted-foreground mb-3">
+                  Lanseras under 2026
+                </p>
+              </div>
+              <div>
+                <p className="text-muted-foreground mb-3">
+                  När piloten bevisat värde hjälper vi er skala från 3-5 delar till 20-50 delar i produktion. Vi överser full systemintegration, training, och kontinuerlig optimering.
+                </p>
+                <p className="text-muted-foreground font-semibold">
+                  Från pilot till permanent produktionsförmåga.
+                </p>
+              </div>
+            </div>
           </div>
+        </div>
+      </section>
+
+      {/* Ecosystem Section */}
+      <section className="py-24 px-6 bg-gradient-to-br from-muted/20 to-muted/40">
+        <div className="container mx-auto max-w-5xl">
+          <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-6 observe">
+            Del av Sveriges Ekosystem inom AM
+          </h2>
+          
+          <p className="text-lg text-center text-muted-foreground mb-12 max-w-3xl mx-auto observe">
+            Vi samarbetar med ledande aktörer inom svensk additiv tillverkning – RISE, AMEXCI, Prototal, maskintillverkare – för att ge er tillgång till rätt kompetens vid rätt tidpunkt.
+          </p>
+
+          <p className="text-center text-muted-foreground observe">
+            Vi är kanalen som kopplar ihop er med rätt partner för pilot och produktion, utan att binda er till en specifik leverantör.
+          </p>
         </div>
       </section>
 
@@ -207,7 +216,7 @@ const Index = () => {
                   15+ år från management consulting och industri (Telenor, Nokia, Unibet). Bygger business case som CFO:s faktiskt tror på, och strategier som kan tas till styrelsen.
                 </p>
                 <p className="text-xs text-muted-foreground mt-2">
-                  Skriver branschanalyser om advanced manufacturing som läses av nordiska tillverkande företags VD:ar.
+                  Skriver varje vecka om AM och svensk tillverkningsindustri på LinkedIn (The Industrial Strategist) – läst av VD:ar och produktionschefer.
                 </p>
               </div>
             </div>
@@ -241,44 +250,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Ecosystem Section */}
-      <section className="py-24 px-6 bg-gradient-to-br from-muted/20 to-muted/40">
-        <div className="container mx-auto max-w-5xl">
-          <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-6 observe">
-            Del av Sveriges AM-ekosystem
-          </h2>
-          
-          <p className="text-lg text-center text-muted-foreground mb-12 max-w-3xl mx-auto observe">
-            Vi samarbetar med ledande aktörer inom svensk additiv tillverkning – RISE, AMEXCI, Prototal, maskintillverkare – för att ge er tillgång till rätt kompetens vid rätt tidpunkt.
-          </p>
-
-          <p className="text-center text-muted-foreground observe">
-            Vi är kanalen som kopplar ihop er med rätt partner för pilot och produktion, utan att binda er till en specifik leverantör.
-          </p>
-        </div>
-      </section>
-
-
-      {/* Newsletter Section */}
-      <section id="newsletter" className="py-24 px-6 bg-muted/30">
-        <div className="container mx-auto max-w-3xl text-center observe">
-          <h2 className="font-serif text-3xl md:text-4xl font-bold mb-6">
-            Följ vårt tänk om AM och svensk tillverkningsindustri
-          </h2>
-          
-          <p className="text-muted-foreground mb-4">
-            Vi publicerar djupa branschanalyser varje vecka på LinkedIn – lästa av VD:ar, produktionschefer och CFO:s.
-          </p>
-
-          <p className="text-sm text-muted-foreground">
-            Vi skriver inte fluff – vi skriver datadrivna analyser som faktiskt hjälper er förstå var marknaden är på väg.
-          </p>
-
-          <p className="text-sm font-semibold text-foreground mt-6">
-            Läs nyhetsbrevet 'The Industrial Strategist' på LinkedIn
-          </p>
-        </div>
-      </section>
 
       {/* CTA Section */}
       <section className="py-24 px-6 bg-linkedin/5">
@@ -289,7 +260,7 @@ const Index = () => {
           
           <div className="space-y-4 text-lg text-foreground mb-8 observe">
             <p>
-              Under 2026 söker vi 1-2 tillverkande företag (omsättning: 150 - 1000 MSEK) som vill vara först med att bygga verklig AM-kompetens.
+              Vi söker 1-2 tillverkande företag (150-1000 MSEK) som vill vara först med att bygga verklig AM-kompetens under 2026.
             </p>
             <p>
               För rätt företag erbjuder vi 'AM Assessment' till rabatterat pris – för att bygga "track record" tillsammans.
@@ -322,13 +293,13 @@ const Index = () => {
               <img src={logo} alt="Ecstatic Consulting" className="h-10 mb-4" />
               <p className="text-sm text-muted-foreground">
                 Sveriges oberoende AM-rådgivare.<br />
-                Hjälper nordiska tillverkande företag att utvärdera och implementera additiv tillverkning som faktiskt är lönsamt.
+                Hjälper nordiska tillverkande företag att utvärdera och implementera additiv tillverkning som faktiskt är lönsam.
               </p>
             </div>
 
             <div>
               <h3 className="font-semibold mb-3 text-foreground">Kontakt</h3>
-              <p className="text-sm text-muted-foreground">Sverige & Norden</p>
+              <p className="text-sm text-muted-foreground">Stockholm, Sverige</p>
               <a
                 href="mailto:info@ecstatic.consulting"
                 className="text-sm text-[#0A66C2] hover:underline"
@@ -360,7 +331,7 @@ const Index = () => {
                   <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
                   </svg>
-                  Micael
+                  Micael Gustavsson (Strategi)
                 </a>
                 <a
                   href="https://www.linkedin.com/in/reinhold-rutks/"
@@ -371,7 +342,7 @@ const Index = () => {
                   <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
                   </svg>
-                  Reinhold
+                  Reinhold Rutks (Teknologi)
                 </a>
               </div>
             </div>
