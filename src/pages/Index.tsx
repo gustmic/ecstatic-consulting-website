@@ -53,7 +53,7 @@ const Index = () => {
       <MinimalNav />
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-24 px-6">
+      <section className="relative pt-40 pb-32 px-6">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center observe">
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6 leading-tight">
@@ -71,54 +71,54 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Vad vi gör */}
+      {/* Så arbetar vi med er */}
       <section className="py-24 px-6 bg-muted/30">
         <div className="container mx-auto max-w-6xl">
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-6 observe">
-            Vad vi gör
+            Så arbetar vi med er
           </h2>
           
           <div className="text-lg text-muted-foreground mb-8 max-w-3xl mx-auto observe">
-            <p className="mb-3">Ni känner till additiv tillverkning, men vet inte:</p>
-            <ul className="space-y-2 mb-6">
-              <li>• Vilka av era processer som faktiskt passar AM?</li>
-              <li>• Vad riktig ROI är (inte vad leverantören påstår)?</li>
-              <li>• Hur ni integrerar detta i existerande produktion?</li>
-              <li>• Vilka leverantörer ni kan lita på?</li>
-            </ul>
-            <p>
+            <p className="mb-6">
+              Ni känner till additiv tillverkning, men saknar svar på kritiska frågor: Vilka processer passar AM? Vad är verklig ROI? Hur integrerar ni detta i befintlig produktion? Vilka leverantörer kan ni lita på?
+            </p>
+            <p className="mb-6">
               Vi erbjuder en strukturerad process från utvärdering till implementation. Fast pris, tydliga leverabler, konkreta tidsramar.
             </p>
           </div>
 
+          <h3 className="text-xl font-semibold text-foreground mb-8 max-w-3xl mx-auto observe">
+            Ni får svar på:
+          </h3>
+
           <div className="grid md:grid-cols-3 gap-8">
             {/* Card 1: AM Readiness Assessment */}
-            <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#2D7A4F] observe">
+            <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#2D7A4F] observe flex flex-col">
               <div className="min-h-[80px]">
                 <TrendingUp className="h-10 w-10 text-[#2D7A4F] mb-4" />
                 <h3 className="font-serif text-2xl font-bold mb-1 text-foreground">
                   AM Readiness Assessment
                 </h3>
                 <p className="text-sm font-semibold text-muted-foreground mb-3">
-                  4 veckor, fast pris
+                  Fast Pris
                 </p>
               </div>
-              <div>
+              <div className="flex-grow">
                 <p className="text-muted-foreground mb-3 font-semibold">Leverabler:</p>
-                <ul className="text-sm text-muted-foreground space-y-2 mb-3">
-                  <li>• 3-5 komponenter eller delar för AM-tillverkning</li>
-                  <li>• Riktig ROI per utvald komponent</li>
-                  <li>• Rekommenderade leverantörer (för pilot och fullskalig integration)</li>
-                  <li>• 6-månaders implementeringsplan</li>
+                <ul className="text-sm text-muted-foreground space-y-2 mb-6">
+                  <li>• 3-5 komponenter för AM-tillverkning</li>
+                  <li>• ROI per utvald komponent</li>
+                  <li>• Rekommenderade leverantörer</li>
+                  <li>• 6-månaders implementeringsplan för pilotprojekt</li>
                 </ul>
-                <p className="text-muted-foreground font-semibold">
-                  Ni får svar på: Ska vi satsa på AM – eller vänta?
-                </p>
               </div>
+              <p className="text-muted-foreground/80 text-sm mt-auto">
+                → Ska vi satsa på AM – eller vänta?
+              </p>
             </div>
 
             {/* Card 2: Pilot & Implementation */}
-            <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#2B4C7E] observe">
+            <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#2B4C7E] observe flex flex-col">
               <div className="min-h-[80px]">
                 <Factory className="h-10 w-10 text-[#2B4C7E] mb-4" />
                 <h3 className="font-serif text-2xl font-bold mb-1 text-foreground">
@@ -128,18 +128,25 @@ const Index = () => {
                   När ni går vidare
                 </p>
               </div>
-              <div>
-                <p className="text-muted-foreground">
-                  Vi projektleder från design till produktion. Kopplar ihop er med rätt leverantörer, överser integration, training och optimering.
-                </p>
-                <p className="text-muted-foreground mt-3">
-                  Vi finns kvar tills det faktiskt fungerar – inga överlämningar till juniorteam.
+              <div className="flex-grow">
+                <p className="text-muted-foreground mb-3 font-semibold">Leverabler:</p>
+                <ul className="text-sm text-muted-foreground space-y-2 mb-6">
+                  <li>• Designade komponenter för AM-produktion</li>
+                  <li>• Tillverkade pilotdelar via vårt nätverk</li>
+                  <li>• ROI-validering baserad på faktiska kostnader</li>
+                  <li>• Implementeringsplan för skalning</li>
+                </ul>
+                <p className="text-muted-foreground text-sm mb-6">
+                  Vi projektleder från design till produktion och finns kvar tills det faktiskt fungerar – inga överlämningar till juniorteam.
                 </p>
               </div>
+              <p className="text-muted-foreground/80 text-sm mt-auto">
+                → Fungerar AM i vår produktion?
+              </p>
             </div>
 
             {/* Card 3: Full Integration & Skalning (GREYED OUT) */}
-            <div className="relative bg-card rounded-2xl p-8 shadow-sm transition-all border-t-4 border-muted opacity-60 observe">
+            <div className="relative bg-card rounded-2xl p-8 shadow-sm transition-all border-t-4 border-muted opacity-60 observe flex flex-col">
               {/* "Lanseras 2026" ribbon */}
               <div className="absolute -top-2 -right-2 bg-[#2D7A4F] text-white px-4 py-1 text-xs font-bold rounded-bl-lg rounded-tr-lg shadow-md rotate-3">
                 Lanseras 2026
@@ -154,28 +161,32 @@ const Index = () => {
                   Lanseras under 2026
                 </p>
               </div>
-              <div>
-                <p className="text-muted-foreground mb-3">
-                  När piloten bevisat värde hjälper vi er skala från 3-5 delar till 20-50 delar i produktion. Vi överser full systemintegration, training, och kontinuerlig optimering.
-                </p>
-                <p className="text-muted-foreground font-semibold">
-                  Från pilot till permanent produktionsförmåga.
-                </p>
+              <div className="flex-grow">
+                <p className="text-muted-foreground mb-3 font-semibold">Leverabler:</p>
+                <ul className="text-sm text-muted-foreground space-y-2 mb-6">
+                  <li>• Skalning från 3-5 till 20-50 delar</li>
+                  <li>• Full systemintegration (MES/ERP)</li>
+                  <li>• Training och kompetensutveckling</li>
+                  <li>• Kontinuerlig processoptimering</li>
+                </ul>
               </div>
+              <p className="text-muted-foreground/80 text-sm mt-auto">
+                → Från pilot till permanent produktionsförmåga.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Ecosystem Section */}
-      <section className="py-24 px-6 bg-gradient-to-br from-muted/20 to-muted/40">
+      <section className="py-16 px-6 bg-gradient-to-br from-muted/20 to-muted/40">
         <div className="container mx-auto max-w-5xl">
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-6 observe">
             Del av Sveriges Ekosystem inom AM
           </h2>
           
           <p className="text-lg text-center text-muted-foreground mb-12 max-w-3xl mx-auto observe">
-            Vi samarbetar med ledande aktörer inom svensk additiv tillverkning – RISE, AMEXCI, Prototal, maskintillverkare – för att ge er tillgång till rätt kompetens vid rätt tidpunkt.
+            Vi samarbetar med Sveriges ledande aktörer inom additiv tillverkning – <span className="font-bold">RISE</span>, <span className="font-bold">AMEXCI</span>, <span className="font-bold">Prototal</span> – för att ge er tillgång till rätt kompetens vid rätt tidpunkt.
           </p>
 
           <p className="text-center text-muted-foreground observe">
@@ -185,7 +196,7 @@ const Index = () => {
       </section>
 
       {/* Om oss Section */}
-      <section id="om-oss" className="py-24 px-6 bg-muted/30">
+      <section id="om-oss" className="py-24 px-6 bg-background">
         <div className="container mx-auto max-w-5xl">
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-8 observe">
             Beprövad expertis – strategiskt och tekniskt
