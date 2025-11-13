@@ -92,7 +92,7 @@ const Index = () => {
           <div className="grid md:grid-cols-3 gap-8">
             {/* Card 1: AM Readiness Assessment */}
             <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#2D7A4F] observe flex flex-col">
-              <div className="min-h-[80px]">
+              <div className="min-h-[120px] flex flex-col">
                 <TrendingUp className="h-10 w-10 text-[#2D7A4F] mb-4" />
                 <h3 className="font-serif text-2xl font-bold mb-1 text-foreground">
                   AM Readiness Assessment
@@ -117,7 +117,7 @@ const Index = () => {
 
             {/* Card 2: Pilot */}
             <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#2B4C7E] observe flex flex-col">
-              <div className="min-h-[80px]">
+              <div className="min-h-[120px] flex flex-col">
                 <Factory className="h-10 w-10 text-[#2B4C7E] mb-4" />
                 <h3 className="font-serif text-2xl font-bold mb-1 text-foreground">
                   Pilot
@@ -147,7 +147,7 @@ const Index = () => {
                 Lanseras 2026
               </div>
               
-              <div className="min-h-[80px]">
+              <div className="min-h-[120px] flex flex-col">
                 <Network className="h-10 w-10 text-muted-foreground mb-4" />
                 <h3 className="font-serif text-2xl font-bold mb-1 text-foreground">
                   Full Integration & Skalning
