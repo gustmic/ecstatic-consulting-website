@@ -110,7 +110,7 @@ const Index = () => {
                   <li>• 6-månaders implementeringsplan för pilotprojekt</li>
                 </ul>
               </div>
-              <p className="text-muted-foreground/80 text-sm mt-auto min-h-[40px] flex items-end">
+              <p className="text-muted-foreground/80 text-sm mt-auto min-h-[48px] flex items-end">
                 → Ska vi satsa på AM – eller vänta?
               </p>
             </div>
@@ -135,7 +135,7 @@ const Index = () => {
                   <li>• Implementeringsplan för skalning</li>
                 </ul>
               </div>
-              <p className="text-muted-foreground/80 text-sm mt-auto min-h-[40px] flex items-end">
+              <p className="text-muted-foreground/80 text-sm mt-auto min-h-[48px] flex items-end">
                 → Fungerar AM i vår produktion?
               </p>
             </div>
@@ -165,7 +165,7 @@ const Index = () => {
                   <li>• Kontinuerlig processoptimering</li>
                 </ul>
               </div>
-              <p className="text-muted-foreground/80 text-sm mt-auto min-h-[40px] flex items-end">
+              <p className="text-muted-foreground/80 text-sm mt-auto min-h-[48px] flex items-end">
                 → Från pilot till permanent produktionsförmåga.
               </p>
             </div>
