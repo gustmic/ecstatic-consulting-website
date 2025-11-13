@@ -91,21 +91,22 @@ const Index = () => {
 
           <div className="grid md:grid-cols-3 gap-8">
             {/* Card 1: AM Readiness Assessment */}
-            <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#2D7A4F] observe flex flex-col">
-              <div>
+            <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#2D7A4F] observe flex flex-col h-full">
+              <div className="flex-shrink-0">>
                 <TrendingUp className="h-10 w-10 text-[#2D7A4F] mb-4" />
                 <h3 className="font-serif text-2xl font-bold mb-1 text-foreground min-h-[64px]">
                   AM Readiness Assessment
                 </h3>
                 <p className="text-sm font-semibold text-muted-foreground mb-3">4 veckor, Fast Pris</p>
               </div>
-              <div className="flex-grow min-h-[320px]">
-                <p className="text-muted-foreground mb-3 font-semibold">Leverabler:</p>
-                <ul className="text-sm text-muted-foreground space-y-2 mb-6">
-                  <li>• 3-5 komponenter för AM-tillverkning</li>
-                  <li>• ROI per utvald komponent</li>
-                  <li>• Rekommenderade leverantörer</li>
-                  <li>• 6-månaders implementeringsplan för pilotprojekt</li>
+              <div className="flex-grow flex flex-col justify-between">
+                <div>
+                  <p className="text-muted-foreground mb-3 font-semibold">Leverabler:</p>
+                  <ul className="text-sm text-muted-foreground space-y-2 mb-6">
+                    <li>• 3-5 komponenter för AM-tillverkning</li>
+                    <li>• ROI per utvald komponent</li>
+                    <li>• Rekommenderade leverantörer</li>
+                    <li>• 6-månaders implementeringsplan för pilotprojekt</li>
                 </ul>
               </div>
               <p className="text-muted-foreground/80 text-sm mt-auto min-h-[48px] flex items-end">
