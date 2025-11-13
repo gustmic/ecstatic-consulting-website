@@ -61,7 +61,7 @@ const Index = () => {
             </h1>
             <div className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed space-y-4">
               <p>
-                Vi hjälper nordiska tillverkande företag (150-1000 MSEK) navigera från nyfikenhet till strategiskt beslut inom Additiv Tillverkning.
+                Vi hjälper nordiska tillverkande företag (150-1000 MSEK) att navigera från nyfikenhet till strategiskt beslut inom additiv tillverkning.
               </p>
               <p className="font-semibold text-foreground">
                 Oberoende. Datadriven. Tekniskt grundad.
@@ -80,10 +80,12 @@ const Index = () => {
           
           <div className="text-lg text-muted-foreground mb-8 max-w-3xl mx-auto observe">
             <p className="mb-6">
-              Ni känner redan till additiv tillverkning, men saknar svar på kritiska frågor: Vilka processer passar AM? Vad är verklig ROI? Hur integrerar ni detta i befintlig produktion? Vilka leverantörer kan ni lita på?
+              Ni känner redan till additiv tillverkning, men saknar svar på kritiska frågor:<br />
+              Vilka processer passar AM? Vad är verklig ROI? Hur integrerar ni detta i befintlig produktion? Vilka leverantörer kan ni lita på?
             </p>
             <p className="mb-6">
-              Vi erbjuder en strukturerad process från utvärdering till implementation. Fast pris, tydliga leverabler, konkreta tidsramar.
+              Vi erbjuder en strukturerad process från utvärdering till implementation.<br />
+              Fast pris, tydliga leverabler, konkreta tidsramar.
             </p>
           </div>
 
@@ -96,7 +98,7 @@ const Index = () => {
                   AM Readiness Assessment
                 </h3>
                 <p className="text-sm font-semibold text-muted-foreground mb-3">
-                  Fast Pris
+                  4 veckor, Fast Pris
                 </p>
               </div>
               <div className="flex-grow">
@@ -113,12 +115,12 @@ const Index = () => {
               </p>
             </div>
 
-            {/* Card 2: Pilot & Implementering */}
+            {/* Card 2: Pilot */}
             <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#2B4C7E] observe flex flex-col">
               <div className="min-h-[80px]">
                 <Factory className="h-10 w-10 text-[#2B4C7E] mb-4" />
                 <h3 className="font-serif text-2xl font-bold mb-1 text-foreground">
-                  Pilot & Implementering
+                  Pilot
                 </h3>
                 <p className="text-sm font-semibold text-muted-foreground mb-3">
                   När ni går vidare
@@ -170,7 +172,8 @@ const Index = () => {
           </div>
 
           <p className="text-center text-muted-foreground mt-8 max-w-3xl mx-auto observe">
-            Vi projektleder alla steg från design till produktion och finns kvar tills det faktiskt fungerar – inga överlämningar till juniorteam.
+            Vi projektleder alla steg från design till produktion och finns kvar tills det faktiskt fungerar –<br />
+            inga överlämningar till juniora team.
           </p>
         </div>
       </section>
@@ -183,7 +186,9 @@ const Index = () => {
           </h2>
           
           <p className="text-lg text-center text-muted-foreground mb-12 max-w-3xl mx-auto observe">
-            Vi samarbetar med Sveriges ledande aktörer inom additiv tillverkning – <span className="font-bold">RISE</span>, <span className="font-bold">AMEXCI</span>, <span className="font-bold">Prototal</span> – för att ge er tillgång till rätt kompetens vid rätt tidpunkt.
+            Vi samarbetar med Sveriges ledande aktörer inom additiv tillverkning<br />
+            – <span className="font-bold">RISE</span>, <span className="font-bold">AMEXCI</span>, <span className="font-bold">Prototal</span> –<br />
+            för att ge er tillgång till rätt kompetens vid rätt tidpunkt.
           </p>
 
           <p className="text-center text-muted-foreground observe">
@@ -251,10 +256,6 @@ const Index = () => {
               </div>
             </div>
           </div>
-
-          <p className="text-center text-muted-foreground observe">
-            Vi kombinerar strategisk analys med teknisk problemlösning – och eftersom vi inte säljer maskiner eller tjänster kan vi rekommendera det som faktiskt är bäst för er produktion.
-          </p>
         </div>
       </section>
 
@@ -268,13 +269,17 @@ const Index = () => {
           
           <div className="space-y-4 text-lg text-foreground mb-8 observe">
             <p>
-              Vi söker 1-2 tillverkande företag (150-1000 MSEK) som vill vara först med att bygga verklig AM-kompetens under 2026.
+              Vi söker 1-2 tillverkande företag (150-1000 MSEK) som vill vara först med att bygga verklig<br />
+              AM-kompetens under 2026.
             </p>
             <p>
-              För rätt företag erbjuder vi 'AM Assessment' till rabatterat pris – för att bygga "track record" tillsammans.
+              För rätt företag erbjuder vi 'AM Readiness Assessment' till rabatterat pris –<br />
+              för att bygga "track record" tillsammans.
             </p>
             <p>
-              Ett samtal på 30 minuter där vi diskuterar era utmaningar inom additiv tillverkning. Vi delar med oss om perspektiv på var svensk tillverkningsindustri är på väg, och ser om ett samarbete kan passa oss båda.
+              Ett samtal på 30 minuter där vi diskuterar era utmaningar inom additiv tillverkning.<br />
+              Vi delar med oss om perspektiv på var svensk tillverkningsindustri är på väg,<br />
+              och ser om ett samarbete kan passa oss båda.
             </p>
             <p className="text-sm text-muted-foreground">
               Ingen pitch. Ingen PowerPoint. Bara ett ärligt samtal om era verkliga utmaningar.
