@@ -61,11 +61,10 @@ const Index = () => {
             </h1>
             <div className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed space-y-4">
               <p>
-                Vi hjälper nordiska tillverkande företag (150-1000 MSEK) att navigera från nyfikenhet till strategiskt beslut inom additiv tillverkning.
+                Vi hjälper nordiska tillverkande företag (150-1000 MSEK) att navigera från nyfikenhet till strategiskt
+                beslut inom additiv tillverkning.
               </p>
-              <p className="font-semibold text-foreground">
-                Oberoende. Datadriven. Tekniskt grundad.
-              </p>
+              <p className="font-semibold text-foreground">Oberoende. Datadriven. Tekniskt grundad.</p>
             </div>
           </div>
         </div>
@@ -74,17 +73,18 @@ const Index = () => {
       {/* Så arbetar vi med er */}
       <section className="py-24 px-6 bg-muted/30">
         <div className="container mx-auto max-w-6xl">
-          <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-6 observe">
-            Så arbetar vi med er
-          </h2>
-          
+          <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-6 observe">Så arbetar vi med er</h2>
+
           <div className="text-lg text-muted-foreground mb-8 max-w-3xl mx-auto observe">
             <p className="mb-6">
-              Ni känner redan till additiv tillverkning, men saknar svar på kritiska frågor:<br />
-              Vilka processer passar AM? Vad är verklig ROI? Hur integrerar ni detta i befintlig produktion? Vilka leverantörer kan ni lita på?
+              Ni känner redan till additiv tillverkning, men saknar svar på kritiska frågor:
+              <br />
+              Vilka processer passar AM? Vad är verklig ROI? Hur integrerar ni detta i befintlig produktion? Vilka
+              leverantörer kan ni lita på?
             </p>
             <p className="mb-6">
-              Vi erbjuder en strukturerad process från utvärdering till implementation.<br />
+              Vi erbjuder en strukturerad process från utvärdering till implementation.
+              <br />
               Fast pris, tydliga leverabler, konkreta tidsramar.
             </p>
           </div>
@@ -97,9 +97,7 @@ const Index = () => {
                 <h3 className="font-serif text-2xl font-bold mb-1 text-foreground min-h-[64px]">
                   AM Readiness Assessment
                 </h3>
-                <p className="text-sm font-semibold text-muted-foreground mb-3">
-                  4 veckor, Fast Pris
-                </p>
+                <p className="text-sm font-semibold text-muted-foreground mb-3">4 veckor, Fast Pris</p>
               </div>
               <div className="flex-grow">
                 <p className="text-muted-foreground mb-3 font-semibold">Leverabler:</p>
@@ -119,12 +117,8 @@ const Index = () => {
             <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#2B4C7E] observe flex flex-col">
               <div>
                 <Factory className="h-10 w-10 text-[#2B4C7E] mb-4" />
-                <h3 className="font-serif text-2xl font-bold mb-1 text-foreground min-h-[64px]">
-                  Pilot
-                </h3>
-                <p className="text-sm font-semibold text-muted-foreground mb-3">
-                  När ni går vidare
-                </p>
+                <h3 className="font-serif text-2xl font-bold mb-1 text-foreground min-h-[64px]">Pilot</h3>
+                <p className="text-sm font-semibold text-muted-foreground mb-3">När ni går vidare</p>
               </div>
               <div className="flex-grow">
                 <p className="text-muted-foreground mb-3 font-semibold">Leverabler:</p>
@@ -146,15 +140,13 @@ const Index = () => {
               <div className="absolute -top-2 -right-2 bg-[#2D7A4F] text-white px-4 py-1 text-xs font-bold rounded-bl-lg rounded-tr-lg shadow-md rotate-3">
                 Lanseras 2026
               </div>
-              
+
               <div>
                 <Network className="h-10 w-10 text-muted-foreground mb-4" />
                 <h3 className="font-serif text-2xl font-bold mb-1 text-foreground min-h-[64px]">
                   Full Integration & Skalning
                 </h3>
-                <p className="text-sm font-semibold text-muted-foreground mb-3">
-                  Lanseras under 2026
-                </p>
+                <p className="text-sm font-semibold text-muted-foreground mb-3">Lanseras under 2026</p>
               </div>
               <div className="flex-grow">
                 <p className="text-muted-foreground mb-3 font-semibold">Leverabler:</p>
@@ -184,15 +176,17 @@ const Index = () => {
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-6 observe">
             Del av Sveriges Ekosystem inom AM
           </h2>
-          
+
           <p className="text-lg text-center text-muted-foreground mb-12 max-w-3xl mx-auto observe">
-            Vi samarbetar med Sveriges ledande aktörer inom additiv tillverkning<br />
-            – <span className="font-bold">RISE</span>, <span className="font-bold">AMEXCI</span>, <span className="font-bold">Prototal</span> –<br />
+            Vi samarbetar med Sveriges ledande aktörer inom additiv tillverkning
+            <br />– <span className="font-bold">RISE</span>, <span className="font-bold">AMEXCI</span>,{" "}
+            <span className="font-bold">Prototal</span> –<br />
             för att ge er tillgång till rätt kompetens vid rätt tidpunkt.
           </p>
 
           <p className="text-center text-muted-foreground observe">
-            Vi är kanalen som kopplar ihop er med rätt partner för pilot och produktion, utan att binda er till en specifik leverantör.
+            Vi är kanalen som kopplar ihop er med rätt partner för pilot och produktion, utan att binda er till en
+            specifik leverantör.
           </p>
         </div>
       </section>
@@ -203,10 +197,12 @@ const Index = () => {
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-8 observe">
             Beprövad expertis – strategiskt och tekniskt
           </h2>
-          
+
           <p className="text-lg text-muted-foreground text-center mb-12 max-w-3xl mx-auto observe">
             Vi är två partners med kompletterande styrkor som täcker hela spannet –{" "}
-            <span className="hidden md:inline"><br /></span>
+            <span className="hidden md:inline">
+              <br />
+            </span>
             från strategisk analys till teknisk implementation.
           </p>
 
@@ -216,20 +212,18 @@ const Index = () => {
               <img
                 src={micaelImage}
                 alt="Micael Gustavsson"
-                className="w-24 h-24 rounded-lg object-cover flex-shrink-0"
+                className="w-32 h-32 rounded-lg object-cover flex-shrink-0"
               />
               <div>
-                <h3 className="font-semibold text-foreground mb-1">
-                  Micael Gustavsson
-                </h3>
-                <p className="text-xs text-linkedin font-medium mb-2">
-                  Managing Partner - Strategy & Analytics
-                </p>
+                <h3 className="font-semibold text-foreground mb-1">Micael Gustavsson</h3>
+                <p className="text-xs text-linkedin font-medium mb-2">Managing Partner - Strategy & Analytics</p>
                 <p className="text-xs text-muted-foreground">
-                  15+ år från management consulting och industri (Telenor, Nokia, Unibet). Bygger business case som CFO:s faktiskt tror på, och strategier som kan tas till styrelsen.
+                  15+ år från management consulting och industri (Telenor, Nokia, Unibet). Bygger business case som
+                  CFO:s faktiskt tror på, och strategier som kan tas till styrelsen.
                 </p>
                 <p className="text-xs text-muted-foreground mt-2">
-                  Skriver varje vecka om AM och svensk tillverkningsindustri på LinkedIn (The Industrial Strategist) – läst av VD:ar och produktionschefer.
+                  Skriver varje vecka om AM och svensk tillverkningsindustri på LinkedIn (The Industrial Strategist) –
+                  läst av VD:ar och produktionschefer.
                 </p>
               </div>
             </div>
@@ -241,17 +235,15 @@ const Index = () => {
                 className="w-24 h-24 rounded-lg object-cover flex-shrink-0"
               />
               <div>
-                <h3 className="font-semibold text-foreground mb-1">
-                  Reinhold Rutks
-                </h3>
-                <p className="text-xs text-linkedin font-medium mb-2">
-                  Managing Partner - Technology & Innovation
-                </p>
+                <h3 className="font-semibold text-foreground mb-1">Reinhold Rutks</h3>
+                <p className="text-xs text-linkedin font-medium mb-2">Managing Partner - Technology & Innovation</p>
                 <p className="text-xs text-muted-foreground">
-                  40 år av industriell problemlösning inom elektrostatik, ytbehandling och processutveckling. Har löst produktionsproblem som räddat 10+ MSEK för nordiska tillverkande företag.
+                  40 år av industriell problemlösning inom elektrostatik, ytbehandling och processutveckling. Har löst
+                  produktionsproblem som räddat 10+ MSEK för nordiska tillverkande företag.
                 </p>
                 <p className="text-xs text-muted-foreground mt-2">
-                  Vet vilka teknologier som faktiskt fungerar på fabriksgolvet – inte bara i PowerPoints. Läser fabriksgolv och validerar om AM passar eller inte.
+                  Vet vilka teknologier som faktiskt fungerar på fabriksgolvet – inte bara i PowerPoints. Läser
+                  fabriksgolv och validerar om AM passar eller inte.
                 </p>
               </div>
             </div>
@@ -259,17 +251,18 @@ const Index = () => {
         </div>
       </section>
 
-
       {/* CTA Section */}
       <section className="py-24 px-6 bg-linkedin/5">
         <div className="container mx-auto max-w-4xl text-center">
           <h2 className="font-serif text-3xl md:text-4xl font-bold mb-6 observe">
-            Inled samtal med oss -<br />låt oss utforska er situation tillsammans
+            Inled samtal med oss -<br />
+            låt oss utforska er situation tillsammans
           </h2>
-          
+
           <div className="space-y-4 text-lg text-foreground mb-8 observe">
             <p>
-              Vi söker 1-2 tillverkande företag (150-1000 MSEK) som vill vara först med att bygga verklig<br />
+              Vi söker 1-2 tillverkande företag (150-1000 MSEK) som vill vara först med att bygga verklig
+              <br />
               AM-kompetens under 2026.
             </p>
             <p>
@@ -277,8 +270,10 @@ const Index = () => {
               för att bygga "track record" tillsammans.
             </p>
             <p>
-              Ett samtal på 30 minuter där vi diskuterar era utmaningar inom additiv tillverkning.<br />
-              Vi delar med oss om perspektiv på var svensk tillverkningsindustri är på väg,<br />
+              Ett samtal på 30 minuter där vi diskuterar era utmaningar inom additiv tillverkning.
+              <br />
+              Vi delar med oss om perspektiv på var svensk tillverkningsindustri är på väg,
+              <br />
               och ser om ett samarbete kan passa oss båda.
             </p>
             <p className="text-sm text-muted-foreground">
@@ -287,11 +282,7 @@ const Index = () => {
           </div>
 
           <div className="flex justify-center observe">
-            <Button
-              size="lg"
-              onClick={openCalendly}
-              className="bg-[#2D7A4F] hover:bg-[#246841] text-white"
-            >
+            <Button size="lg" onClick={openCalendly} className="bg-[#2D7A4F] hover:bg-[#246841] text-white">
               Boka samtal
             </Button>
           </div>
@@ -305,18 +296,17 @@ const Index = () => {
             <div>
               <img src={logo} alt="Ecstatic Consulting" className="h-10 mb-4" />
               <p className="text-sm text-muted-foreground">
-                Sveriges oberoende AM-rådgivare.<br />
-                Hjälper nordiska tillverkande företag att utvärdera och implementera additiv tillverkning som faktiskt är lönsam.
+                Sveriges oberoende AM-rådgivare.
+                <br />
+                Hjälper nordiska tillverkande företag att utvärdera och implementera additiv tillverkning som faktiskt
+                är lönsam.
               </p>
             </div>
 
             <div>
               <h3 className="font-semibold mb-3 text-foreground">Kontakt</h3>
               <p className="text-sm text-muted-foreground">Stockholm, Sverige</p>
-              <a
-                href="mailto:info@ecstatic.consulting"
-                className="text-sm text-[#0A66C2] hover:underline"
-              >
+              <a href="mailto:info@ecstatic.consulting" className="text-sm text-[#0A66C2] hover:underline">
                 info@ecstatic.consulting
               </a>
             </div>
