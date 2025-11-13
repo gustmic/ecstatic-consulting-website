@@ -212,7 +212,7 @@ const Index = () => {
               <img
                 src={micaelImage}
                 alt="Micael Gustavsson"
-                className="w-36 h-36 rounded-lg object-cover flex-shrink-0"
+                className="w-40 h-40 rounded-lg object-cover flex-shrink-0"
               />
               <div>
                 <h3 className="font-semibold text-foreground mb-1">Micael Gustavsson</h3>
@@ -232,7 +232,7 @@ const Index = () => {
               <img
                 src={reinholdImage}
                 alt="Reinhold Rutks"
-                className="w-36 h-36 rounded-lg object-cover flex-shrink-0"
+                className="w-40 h-40 rounded-lg object-cover flex-shrink-0"
               />
               <div>
                 <h3 className="font-semibold text-foreground mb-1">Reinhold Rutks</h3>
