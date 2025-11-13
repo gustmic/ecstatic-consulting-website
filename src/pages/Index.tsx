@@ -99,7 +99,7 @@ const Index = () => {
                 </h3>
                 <p className="text-sm font-semibold text-muted-foreground mb-3">4 veckor, Fast Pris</p>
               </div>
-              <div className="flex-grow">
+              <div className="flex-grow min-h-[280px]">
                 <p className="text-muted-foreground mb-3 font-semibold">Leverabler:</p>
                 <ul className="text-sm text-muted-foreground space-y-2 mb-6">
                   <li>• 3-5 komponenter för AM-tillverkning</li>
@@ -120,7 +120,7 @@ const Index = () => {
                 <h3 className="font-serif text-2xl font-bold mb-1 text-foreground min-h-[64px]">Pilot</h3>
                 <p className="text-sm font-semibold text-muted-foreground mb-3">När ni går vidare</p>
               </div>
-              <div className="flex-grow">
+              <div className="flex-grow min-h-[280px]">
                 <p className="text-muted-foreground mb-3 font-semibold">Leverabler:</p>
                 <ul className="text-sm text-muted-foreground space-y-2 mb-6">
                   <li>• Designade komponenter för AM-produktion</li>
@@ -148,7 +148,7 @@ const Index = () => {
                 </h3>
                 <p className="text-sm font-semibold text-muted-foreground mb-3">Lanseras under 2026</p>
               </div>
-              <div className="flex-grow">
+              <div className="flex-grow min-h-[280px]">
                 <p className="text-muted-foreground mb-3 font-semibold">Leverabler:</p>
                 <ul className="text-sm text-muted-foreground space-y-2 mb-6">
                   <li>• Skalning från 3-5 till 20-50 delar</li>
