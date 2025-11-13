@@ -279,7 +279,7 @@ const Index = () => {
             <p>
               För rätt företag erbjuder vi 'AM Readiness Assessment' till introduktionspris –
               <br />
-              för vi prioriterar långsiktiga samarbeten framför volym.
+              då vi prioriterar långsiktiga samarbeten framför volym.
             </p>
             <p className="text-sm text-muted-foreground">
               Ingen pitch. Ingen PowerPoint. Bara ett ärligt samtal om era verkliga utmaningar.
