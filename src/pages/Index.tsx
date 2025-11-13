@@ -266,7 +266,7 @@ const Index = () => {
 
           <div className="space-y-4 text-lg text-foreground mb-8 observe">
             <p>
-              Vi söker 1-2 tillverkande företag (150-1000 MSEK) som vill vara först med att bygga
+              Vi söker 1-2 tillverkande företag (150-1000 MSEK) som vill vara först ut med att bygga
               <br />
               verklig AM-kompetens under 2026.
             </p>
