@@ -277,7 +277,7 @@ const Index = () => {
               oss båda.
             </p>
             <p>
-              För rätt företag erbjuder vi 'AM Readiness Assessment' till introduktionspris –
+              För rätt företag erbjuder vi 'AM Readiness Assessment' till introduktionspris,
               <br />
               då vi prioriterar långsiktiga samarbeten framför volym.
             </p>
