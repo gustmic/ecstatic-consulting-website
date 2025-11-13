@@ -109,7 +109,9 @@ const Index = () => {
                     <li>• 6-månaders implementeringsplan för pilotprojekt</li>
                   </ul>
                 </div>
-                <p className="text-muted-foreground/80 text-sm">→ Ska vi satsa på AM – eller vänta?</p>
+                <p className="text-muted-foreground/80 text-sm min-h-[40px] flex items-start">
+                  → Ska vi satsa på AM – eller vänta?
+                </p>
               </div>
             </div>
 
@@ -130,7 +132,9 @@ const Index = () => {
                     <li>• Implementeringsplan för skalning</li>
                   </ul>
                 </div>
-                <p className="text-muted-foreground/80 text-sm">→ Fungerar AM i vår produktion?</p>
+                <p className="text-muted-foreground/80 text-sm min-h-[40px] flex items-start">
+                  → Fungerar AM i vår produktion?
+                </p>
               </div>
             </div>
 
@@ -158,11 +162,12 @@ const Index = () => {
                     <li>• Kontinuerlig processoptimering</li>
                   </ul>
                 </div>
-                <p className="text-muted-foreground/80 text-sm">→ Från pilot till permanent produktionsförmåga.</p>
+                <p className="text-muted-foreground/80 text-sm min-h-[40px] flex items-start">
+                  → Från pilot till permanent produktionsförmåga.
+                </p>
               </div>
             </div>
           </div>
-
           <p className="text-center text-muted-foreground mt-8 max-w-3xl mx-auto observe">
             Vi projektleder alla steg från design till produktion och finns kvar tills det faktiskt fungerar –<br />
             inga överlämningar till juniora team.
