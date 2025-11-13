@@ -271,15 +271,15 @@ const Index = () => {
               verklig AM-kompetens under 2026.
             </p>
             <p>
-              För rätt företag erbjuder vi 'AM Readiness Assessment' till rabatterat pris –<br />
-              för att bygga "track record" tillsammans.
+              Ett 30-minuters samtal där vi diskuterar era specifika utmaningar inom additiv tillverkning.
+              <br />
+              Vi delar perspektiv på var svensk tillverkningsindustri är på väg, och utvärderar om ett samarbete passar
+              oss båda.
             </p>
             <p>
-              Ett samtal på 30 minuter där vi diskuterar era utmaningar inom additiv tillverkning.
+              För rätt företag erbjuder vi 'AM Readiness Assessment' till introduktionspris –
               <br />
-              Vi delar med oss om perspektiv på var svensk tillverkningsindustri är på väg,
-              <br />
-              och ser om ett samarbete kan passa oss båda.
+              då vi prioriterar långsiktiga samarbeten framför volym.
             </p>
             <p className="text-sm text-muted-foreground">
               Ingen pitch. Ingen PowerPoint. Bara ett ärligt samtal om era verkliga utmaningar.
