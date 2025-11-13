@@ -64,7 +64,7 @@ const Index = () => {
                 Vi hjälper nordiska tillverkande företag (150-1000 MSEK) navigera från nyfikenhet till strategiskt beslut inom Additiv Tillverkning.
               </p>
               <p className="font-semibold text-foreground">
-                Oberoende. Datadriven. Ingen kickback.
+                Oberoende. Datadriven. Tekniskt grundad.
               </p>
             </div>
           </div>
@@ -80,16 +80,12 @@ const Index = () => {
           
           <div className="text-lg text-muted-foreground mb-8 max-w-3xl mx-auto observe">
             <p className="mb-6">
-              Ni känner till additiv tillverkning, men saknar svar på kritiska frågor: Vilka processer passar AM? Vad är verklig ROI? Hur integrerar ni detta i befintlig produktion? Vilka leverantörer kan ni lita på?
+              Ni känner redan till additiv tillverkning, men saknar svar på kritiska frågor: Vilka processer passar AM? Vad är verklig ROI? Hur integrerar ni detta i befintlig produktion? Vilka leverantörer kan ni lita på?
             </p>
             <p className="mb-6">
               Vi erbjuder en strukturerad process från utvärdering till implementation. Fast pris, tydliga leverabler, konkreta tidsramar.
             </p>
           </div>
-
-          <h3 className="text-xl font-semibold text-foreground mb-8 max-w-3xl mx-auto observe">
-            Ni får svar på:
-          </h3>
 
           <div className="grid md:grid-cols-3 gap-8">
             {/* Card 1: AM Readiness Assessment */}
@@ -117,12 +113,12 @@ const Index = () => {
               </p>
             </div>
 
-            {/* Card 2: Pilot & Implementation */}
+            {/* Card 2: Pilot & Implementering */}
             <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#2B4C7E] observe flex flex-col">
               <div className="min-h-[80px]">
                 <Factory className="h-10 w-10 text-[#2B4C7E] mb-4" />
                 <h3 className="font-serif text-2xl font-bold mb-1 text-foreground">
-                  Pilot & Implementation
+                  Pilot & Implementering
                 </h3>
                 <p className="text-sm font-semibold text-muted-foreground mb-3">
                   När ni går vidare
@@ -136,9 +132,6 @@ const Index = () => {
                   <li>• ROI-validering baserad på faktiska kostnader</li>
                   <li>• Implementeringsplan för skalning</li>
                 </ul>
-                <p className="text-muted-foreground text-sm mb-6">
-                  Vi projektleder från design till produktion och finns kvar tills det faktiskt fungerar – inga överlämningar till juniorteam.
-                </p>
               </div>
               <p className="text-muted-foreground/80 text-sm mt-auto">
                 → Fungerar AM i vår produktion?
@@ -175,6 +168,10 @@ const Index = () => {
               </p>
             </div>
           </div>
+
+          <p className="text-center text-muted-foreground mt-8 max-w-3xl mx-auto observe">
+            Vi projektleder alla steg från design till produktion och finns kvar tills det faktiskt fungerar – inga överlämningar till juniorteam.
+          </p>
         </div>
       </section>
 
