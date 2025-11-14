@@ -91,81 +91,69 @@ const Index = () => {
 
           <div className="grid md:grid-cols-3 gap-8">
             {/* Card 1: AM Readiness Assessment */}
-            <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#2D7A4F] observe flex flex-col h-full">
-              <div className="flex-shrink-0">
+            <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#2D7A4F] observe grid grid-rows-[auto_auto_1fr_auto]">
+              <div>
                 <TrendingUp className="h-10 w-10 text-[#2D7A4F] mb-4" />
-                <h3 className="font-serif text-2xl font-bold mb-1 text-foreground min-h-[64px]">
+                <h3 className="font-serif text-2xl font-bold mb-1 text-foreground">
                   AM Readiness Assessment
                 </h3>
                 <p className="text-sm font-semibold text-muted-foreground mb-3">4 veckor, Fast Pris</p>
               </div>
-              <div className="flex-grow flex flex-col justify-between">
-                <div>
-                  <p className="text-muted-foreground mb-3 font-semibold">Leverabler:</p>
-                  <ul className="text-sm text-muted-foreground space-y-2 mb-6">
-                    <li>• 3-5 komponenter för AM-tillverkning</li>
-                    <li>• ROI per utvald komponent</li>
-                    <li>• Rekommenderade leverantörer</li>
-                    <li>• 6-månaders implementeringsplan för pilotprojekt</li>
-                  </ul>
-                </div>
-                <p className="text-muted-foreground/80 text-sm min-h-[40px] flex items-start">
-                  → Ska vi satsa på AM – eller vänta?
-                </p>
-              </div>
+              <p className="text-muted-foreground mb-3 font-semibold">Leverabler:</p>
+              <ul className="text-sm text-muted-foreground space-y-2 mb-6">
+                <li>• 3-5 komponenter för AM-tillverkning</li>
+                <li>• ROI per utvald komponent</li>
+                <li>• Rekommenderade leverantörer</li>
+                <li>• 6-månaders implementeringsplan för pilotprojekt</li>
+              </ul>
+              <p className="text-muted-foreground/80 text-sm self-end">
+                → Ska vi satsa på AM – eller vänta?
+              </p>
             </div>
 
             {/* Card 2: Pilot */}
-            <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#2B4C7E] observe flex flex-col h-full">
-              <div className="flex-shrink-0">
+            <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#2B4C7E] observe grid grid-rows-[auto_auto_1fr_auto]">
+              <div>
                 <Factory className="h-10 w-10 text-[#2B4C7E] mb-4" />
-                <h3 className="font-serif text-2xl font-bold mb-1 text-foreground min-h-[64px]">Pilot</h3>
+                <h3 className="font-serif text-2xl font-bold mb-1 text-foreground">Pilot</h3>
                 <p className="text-sm font-semibold text-muted-foreground mb-3">När ni går vidare</p>
               </div>
-              <div className="flex-grow flex flex-col justify-between">
-                <div>
-                  <p className="text-muted-foreground mb-3 font-semibold">Leverabler:</p>
-                  <ul className="text-sm text-muted-foreground space-y-2 mb-6">
-                    <li>• Designade komponenter för AM-produktion</li>
-                    <li>• Tillverkade pilotdelar via vårt nätverk</li>
-                    <li>• ROI-validering baserad på faktiska kostnader</li>
-                    <li>• Implementeringsplan för skalning</li>
-                  </ul>
-                </div>
-                <p className="text-muted-foreground/80 text-sm min-h-[40px] flex items-start">
-                  → Fungerar AM i vår produktion?
-                </p>
-              </div>
+              <p className="text-muted-foreground mb-3 font-semibold">Leverabler:</p>
+              <ul className="text-sm text-muted-foreground space-y-2 mb-6">
+                <li>• Designade komponenter för AM-produktion</li>
+                <li>• Tillverkade pilotdelar via vårt nätverk</li>
+                <li>• ROI-validering baserad på faktiska kostnader</li>
+                <li>• Implementeringsplan för skalning</li>
+              </ul>
+              <p className="text-muted-foreground/80 text-sm self-end">
+                → Fungerar AM i vår produktion?
+              </p>
             </div>
 
             {/* Card 3: Full Integration & Skalning (GREYED OUT) */}
-            <div className="relative bg-card rounded-2xl p-8 shadow-sm transition-all border-t-4 border-muted opacity-60 observe flex flex-col h-full">
+            <div className="relative bg-card rounded-2xl p-8 shadow-sm transition-all border-t-4 border-muted opacity-60 observe grid grid-rows-[auto_auto_1fr_auto]">
               {/* "Lanseras 2026" ribbon */}
               <div className="absolute -top-2 -right-2 bg-[#2D7A4F] text-white px-4 py-1 text-xs font-bold rounded-bl-lg rounded-tr-lg shadow-md rotate-3">
                 Lanseras 2026
               </div>
 
-              <div className="flex-shrink-0">
+              <div>
                 <Network className="h-10 w-10 text-muted-foreground mb-4" />
-                <h3 className="font-serif text-2xl font-bold mb-1 text-foreground min-h-[64px]">
+                <h3 className="font-serif text-2xl font-bold mb-1 text-foreground">
                   Full Integration & Skalning
                 </h3>
                 <p className="text-sm font-semibold text-muted-foreground mb-3">Lanseras under 2026</p>
               </div>
-              <div className="flex-grow flex flex-col justify-between">
-                <div>
-                  <p className="text-muted-foreground mb-3 font-semibold">Leverabler:</p>
-                  <ul className="text-sm text-muted-foreground space-y-2 mb-6">
-                    <li>• Skalning från 3-5 till 20-50 delar</li>
-                    <li>• Full systemintegration (MES/ERP)</li>
-                    <li>• Training och kompetensutveckling</li>
-                    <li>• Kontinuerlig processoptimering</li>
-                  </ul>
-                </div>
-                <p className="text-muted-foreground/80 text-sm min-h-[40px] flex items-start">
-                  → Från pilot till permanent produktionsförmåga.
-                </p>
-              </div>
+              <p className="text-muted-foreground mb-3 font-semibold">Leverabler:</p>
+              <ul className="text-sm text-muted-foreground space-y-2 mb-6">
+                <li>• Skalning från 3-5 till 20-50 delar</li>
+                <li>• Full systemintegration (MES/ERP)</li>
+                <li>• Training och kompetensutveckling</li>
+                <li>• Kontinuerlig processoptimering</li>
+              </ul>
+              <p className="text-muted-foreground/80 text-sm self-end">
+                → Från pilot till permanent produktionsförmåga.
+              </p>
             </div>
           </div>
           <p className="text-center text-muted-foreground mt-8 max-w-3xl mx-auto observe">
