@@ -89,9 +89,9 @@ const Index = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-8 md:grid-rows-[auto_auto_1fr_auto]">
             {/* Card 1: AM Readiness Assessment */}
-            <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#2D7A4F] observe grid grid-rows-[auto_auto_1fr_auto]">
+            <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#2D7A4F] observe grid md:grid-rows-subgrid md:row-span-4">
               <div>
                 <TrendingUp className="h-10 w-10 text-[#2D7A4F] mb-4" />
                 <h3 className="font-serif text-2xl font-bold mb-1 text-foreground">
@@ -112,7 +112,7 @@ const Index = () => {
             </div>
 
             {/* Card 2: Pilot */}
-            <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#2B4C7E] observe grid grid-rows-[auto_auto_1fr_auto]">
+            <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#2B4C7E] observe grid md:grid-rows-subgrid md:row-span-4">
               <div>
                 <Factory className="h-10 w-10 text-[#2B4C7E] mb-4" />
                 <h3 className="font-serif text-2xl font-bold mb-1 text-foreground">Pilot</h3>
@@ -131,7 +131,7 @@ const Index = () => {
             </div>
 
             {/* Card 3: Full Integration & Skalning (GREYED OUT) */}
-            <div className="relative bg-card rounded-2xl p-8 shadow-sm transition-all border-t-4 border-muted opacity-60 observe grid grid-rows-[auto_auto_1fr_auto]">
+            <div className="relative bg-card rounded-2xl p-8 shadow-sm transition-all border-t-4 border-muted opacity-60 observe grid md:grid-rows-subgrid md:row-span-4">
               {/* "Lanseras 2026" ribbon */}
               <div className="absolute -top-2 -right-2 bg-[#2D7A4F] text-white px-4 py-1 text-xs font-bold rounded-bl-lg rounded-tr-lg shadow-md rotate-3">
                 Lanseras 2026
