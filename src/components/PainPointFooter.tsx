@@ -8,7 +8,7 @@ export default function PainPointFooter() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div>
-            <img src={logo} alt="Ecstatic Consulting" className="h-10 w-auto mb-4" />
+            <img src={logo} alt="Ecstatic Consulting" className="h-10 w-auto max-w-[200px] object-contain mb-4" />
             <p className="text-sm text-muted-foreground mb-4">
               Hjälper nordiska tillverkare att lösa kritiska utmaningar inom strategi, teknik och data.
             </p>
