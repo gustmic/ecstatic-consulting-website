@@ -254,11 +254,6 @@ const Index = () => {
               Vi delar perspektiv på var svensk tillverkningsindustri är på väg, och utvärderar om ett samarbete passar
               oss båda.
             </p>
-            <p>
-              För rätt företag erbjuder vi 'AM Readiness Assessment' till introduktionspris,
-              <br />
-              då vi prioriterar långsiktiga samarbeten framför volym.
-            </p>
             <p className="text-sm text-muted-foreground">
               Ingen pitch. Ingen PowerPoint. Bara ett ärligt samtal om era verkliga utmaningar.
             </p>
