@@ -114,6 +114,7 @@ const Index = () => {
                 → Ska vi satsa på AM – eller vänta?
               </p>
             </div>
+            </div>
 
             {/* Card 2: Pilot */}
             <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#2B4C7E] observe flex flex-col h-full">
@@ -134,6 +135,7 @@ const Index = () => {
               <p className="text-muted-foreground/80 text-sm mt-auto min-h-[48px] flex items-end">
                 → Fungerar AM i vår produktion?
               </p>
+            </div>
             </div>
 
             {/* Card 3: Full Integration & Skalning (GREYED OUT) */}
@@ -162,6 +164,7 @@ const Index = () => {
               <p className="text-muted-foreground/80 text-sm mt-auto min-h-[48px] flex items-end">
                 → Från pilot till permanent produktionsförmåga.
               </p>
+            </div>
             </div>
           </div>
 
