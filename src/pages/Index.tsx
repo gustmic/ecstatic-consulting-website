@@ -107,7 +107,8 @@ const Index = () => {
                     <li>• ROI per utvald komponent</li>
                     <li>• Rekommenderade leverantörer</li>
                     <li>• 6-månaders implementeringsplan för pilotprojekt</li>
-                </ul>
+                  </ul>
+                </div>
               </div>
               <p className="text-muted-foreground/80 text-sm mt-auto min-h-[48px] flex items-end">
                 → Ska vi satsa på AM – eller vänta?
