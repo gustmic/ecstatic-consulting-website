@@ -40,7 +40,7 @@ const MinimalNav = () => {
             <img
               src={logo}
               alt="Ecstatic Consulting"
-              className="h-8 transition-transform group-hover:scale-105"
+              className="h-8 w-auto max-w-[200px] object-contain transition-transform group-hover:scale-105"
             />
           </Link>
 

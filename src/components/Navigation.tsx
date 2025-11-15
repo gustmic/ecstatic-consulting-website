@@ -7,7 +7,7 @@ const Navigation = () => {
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3 group">
-            <img src={logo} alt="Ecstatic Consulting" className="h-10 transition-transform group-hover:scale-105" />
+            <img src={logo} alt="Ecstatic Consulting" className="h-10 w-auto max-w-[200px] object-contain transition-transform group-hover:scale-105" />
           </Link>
           
           <div className="hidden md:flex items-center gap-8">
