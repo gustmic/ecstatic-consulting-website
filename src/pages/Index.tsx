@@ -191,43 +191,47 @@ const Index = () => {
 
           {/* Founder Cards */}
           <div className="grid md:grid-cols-2 gap-8 mb-12 observe">
-            <div className="bg-card rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow flex items-start gap-4">
-              <img
-                src={micaelImage}
-                alt="Micael Gustavsson"
-                className="w-36 h-36 rounded-lg object-cover flex-shrink-0"
-              />
-              <div>
-                <h3 className="font-semibold text-foreground mb-1">Micael Gustavsson</h3>
-                <p className="text-xs text-linkedin font-medium mb-2">Managing Partner - Strategy & Analytics</p>
-                <p className="text-xs text-muted-foreground">
-                  15+ år från management consulting och industri (Telenor, Nokia, Unibet). Bygger business case som
-                  CFO:s faktiskt tror på, och strategier som kan tas till styrelsen.
-                </p>
-                <p className="text-xs text-muted-foreground mt-2">
-                  Skriver varje vecka om AM och svensk tillverkningsindustri på LinkedIn (The Industrial Strategist) –
-                  läst av VD:ar och produktionschefer.
-                </p>
+            <div className="bg-card rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4">
+                <img
+                  src={micaelImage}
+                  alt="Micael Gustavsson"
+                  className="w-32 h-32 sm:w-36 sm:h-36 rounded-lg object-cover flex-shrink-0"
+                />
+                <div className="flex-1 text-center sm:text-left">
+                  <h3 className="font-semibold text-foreground mb-1">Micael Gustavsson</h3>
+                  <p className="text-xs text-linkedin font-medium mb-2">Managing Partner - Strategy & Analytics</p>
+                  <p className="text-xs text-muted-foreground">
+                    15+ år från management consulting och industri (Telenor, Nokia, Unibet). Bygger business case som
+                    CFO:s faktiskt tror på, och strategier som kan tas till styrelsen.
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Skriver varje vecka om AM och svensk tillverkningsindustri på LinkedIn (The Industrial Strategist) –
+                    läst av VD:ar och produktionschefer.
+                  </p>
+                </div>
               </div>
             </div>
 
-            <div className="bg-card rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow flex items-start gap-4">
-              <img
-                src={reinholdImage}
-                alt="Reinhold Rutks"
-                className="w-36 h-36 rounded-lg object-cover flex-shrink-0"
-              />
-              <div>
-                <h3 className="font-semibold text-foreground mb-1">Reinhold Rutks</h3>
-                <p className="text-xs text-linkedin font-medium mb-2">Managing Partner - Technology & Innovation</p>
-                <p className="text-xs text-muted-foreground">
-                  40 år av industriell problemlösning inom elektrostatik, ytbehandling och processutveckling. Har löst
-                  produktionsproblem som räddat 10+ MSEK för nordiska tillverkande företag.
-                </p>
-                <p className="text-xs text-muted-foreground mt-2">
-                  Vet vilka teknologier som faktiskt fungerar på fabriksgolvet – inte bara i PowerPoints. Läser
-                  fabriksgolv och validerar om AM passar eller inte.
-                </p>
+            <div className="bg-card rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4">
+                <img
+                  src={reinholdImage}
+                  alt="Reinhold Rutks"
+                  className="w-32 h-32 sm:w-36 sm:h-36 rounded-lg object-cover flex-shrink-0"
+                />
+                <div className="flex-1 text-center sm:text-left">
+                  <h3 className="font-semibold text-foreground mb-1">Reinhold Rutks</h3>
+                  <p className="text-xs text-linkedin font-medium mb-2">Managing Partner - Technology & Innovation</p>
+                  <p className="text-xs text-muted-foreground">
+                    40 år av industriell problemlösning inom elektrostatik, ytbehandling och processutveckling. Har löst
+                    produktionsproblem som räddat 10+ MSEK för nordiska tillverkande företag.
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Vet vilka teknologier som faktiskt fungerar på fabriksgolvet – inte bara i PowerPoints. Läser
+                    fabriksgolv och validerar om AM passar eller inte.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
