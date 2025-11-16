@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import MinimalNav from "@/components/MinimalNav";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Target, TrendingUp, Leaf, Network, Factory, CheckCircle2 } from "lucide-react";
+import { Target, TrendingUp, Leaf, Network, Factory, CheckCircle2, Linkedin } from "lucide-react";
 import micaelImage from "@/assets/micael-gustavsson.webp";
 import reinholdImage from "@/assets/reinhold-rutks.webp";
 import logo from "@/assets/logo.webp";
@@ -13,6 +13,7 @@ const Index = () => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add("animate-fade-in");
+          observer.unobserve(entry.target); // Stop observing after animation
         }
       });
     };
@@ -25,15 +26,20 @@ const Index = () => {
       observer.observe(element);
     });
 
-    const calendlyScript = document.createElement("link");
-    calendlyScript.href = "https://assets.calendly.com/assets/external/widget.css";
-    calendlyScript.rel = "stylesheet";
-    document.head.appendChild(calendlyScript);
+    // Improved Calendly loading check
+    if (window.Calendly) return; // Already loaded globally
+    
+    if (document.querySelector('script[src*="calendly"]')) return; // Loading in progress
+    
+    const link = document.createElement("link");
+    link.href = "https://assets.calendly.com/assets/external/widget.css";
+    link.rel = "stylesheet";
+    document.head.appendChild(link);
 
-    const calendlyJs = document.createElement("script");
-    calendlyJs.src = "https://assets.calendly.com/assets/external/widget.js";
-    calendlyJs.async = true;
-    document.head.appendChild(calendlyJs);
+    const script = document.createElement("script");
+    script.src = "https://assets.calendly.com/assets/external/widget.js";
+    script.async = true;
+    document.head.appendChild(script);
 
     return () => {
       observer.disconnect();
@@ -41,11 +47,14 @@ const Index = () => {
   }, []);
 
   const openCalendly = () => {
-    if ((window as any).Calendly) {
-      (window as any).Calendly.initPopupWidget({
-        url: "https://calendly.com/micael-gustavsson-ecstatic/utforskande-mote",
-      });
+    if (!window.Calendly) {
+      console.error("Calendly not loaded yet");
+      return;
     }
+    
+    window.Calendly.initPopupWidget({
+      url: "https://calendly.com/micael-gustavsson-ecstatic/utforskande-mote",
+    });
   };
 
   return (
@@ -97,11 +106,11 @@ const Index = () => {
                 <h3 className="font-serif text-2xl font-bold mb-1 text-foreground">AM Readiness Assessment</h3>
                 <p className="text-sm font-semibold text-muted-foreground mb-3">4 veckor, Fast Pris</p>
                 <p className="text-muted-foreground mb-3 font-semibold">Leverabler:</p>
-                <ul className="text-sm text-muted-foreground space-y-2 mb-6">
-                  <li>• 3-5 komponenter för AM-tillverkning</li>
-                  <li>• ROI per utvald komponent</li>
-                  <li>• Rekommenderade leverantörer</li>
-                  <li>• 6-månaders implementeringsplan för pilotprojekt</li>
+                <ul className="text-sm text-muted-foreground space-y-2 mb-6 list-disc pl-5">
+                  <li>3-5 komponenter för AM-tillverkning</li>
+                  <li>ROI per utvald komponent</li>
+                  <li>Rekommenderade leverantörer</li>
+                  <li>6-månaders implementeringsplan för pilotprojekt</li>
                 </ul>
               </div>
               <p className="text-muted-foreground/80 text-sm mt-4">→ Ska vi satsa på AM – eller vänta?</p>
@@ -114,11 +123,11 @@ const Index = () => {
                 <h3 className="font-serif text-2xl font-bold mb-1 text-foreground">Pilot</h3>
                 <p className="text-sm font-semibold text-muted-foreground mb-3">När ni går vidare</p>
                 <p className="text-muted-foreground mb-3 font-semibold">Leverabler:</p>
-                <ul className="text-sm text-muted-foreground space-y-2 mb-6">
-                  <li>• Designade komponenter för AM-produktion</li>
-                  <li>• Tillverkade pilotdelar via vårt nätverk</li>
-                  <li>• ROI-validering baserad på faktiska kostnader</li>
-                  <li>• Implementeringsplan för skalning</li>
+                <ul className="text-sm text-muted-foreground space-y-2 mb-6 list-disc pl-5">
+                  <li>Designade komponenter för AM-produktion</li>
+                  <li>Tillverkade pilotdelar via vårt nätverk</li>
+                  <li>ROI-validering baserad på faktiska kostnader</li>
+                  <li>Implementeringsplan för skalning</li>
                 </ul>
               </div>
               <p className="text-muted-foreground/80 text-sm mt-4">→ Fungerar AM i vår produktion?</p>
@@ -126,8 +135,7 @@ const Index = () => {
 
             {/* Card 3: Full Integration & Skalning (GREYED OUT) */}
             <div className="relative bg-card rounded-2xl p-8 shadow-sm transition-all border-t-4 border-muted opacity-60 observe flex flex-col">
-              {/* "Lanseras 2026" ribbon */}
-              <div className="absolute -top-2 -right-2 bg-[#2D7A4F] text-white px-4 py-1 text-xs font-bold rounded-bl-lg rounded-tr-lg shadow-md rotate-3">
+              <div className="absolute top-0 right-0 bg-[#2D7A4F] text-white px-3 py-1 text-xs font-bold rounded-bl-lg shadow-md">
                 Lanseras 2026
               </div>
 
@@ -136,11 +144,11 @@ const Index = () => {
                 <h3 className="font-serif text-2xl font-bold mb-1 text-foreground">Full Integration & Skalning</h3>
                 <p className="text-sm font-semibold text-muted-foreground mb-3">Lanseras under 2026</p>
                 <p className="text-muted-foreground mb-3 font-semibold">Leverabler:</p>
-                <ul className="text-sm text-muted-foreground space-y-2 mb-6">
-                  <li>• Skalning från 3-5 till 20-50 delar</li>
-                  <li>• Full systemintegration (MES/ERP)</li>
-                  <li>• Training och kompetensutveckling</li>
-                  <li>• Kontinuerlig processoptimering</li>
+                <ul className="text-sm text-muted-foreground space-y-2 mb-6 list-disc pl-5">
+                  <li>Skalning från 3-5 till 20-50 delar</li>
+                  <li>Full systemintegration (MES/ERP)</li>
+                  <li>Training och kompetensutveckling</li>
+                  <li>Kontinuerlig processoptimering</li>
                 </ul>
               </div>
               <p className="text-muted-foreground/80 text-sm mt-4">→ Från pilot till permanent produktionsförmåga.</p>
@@ -302,9 +310,7 @@ const Index = () => {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-sm text-[#0A66C2] hover:underline"
                 >
-                  <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-                  </svg>
+                  <Linkedin className="h-5 w-5" />
                   Ecstatic Consulting
                 </a>
                 <a
@@ -313,9 +319,7 @@ const Index = () => {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-sm text-[#0A66C2] hover:underline"
                 >
-                  <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-                  </svg>
+                  <Linkedin className="h-5 w-5" />
                   Micael Gustavsson (Strategi)
                 </a>
                 <a
@@ -324,9 +328,7 @@ const Index = () => {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-sm text-[#0A66C2] hover:underline"
                 >
-                  <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-                  </svg>
+                  <Linkedin className="h-5 w-5" />
                   Reinhold Rutks (Teknologi)
                 </a>
               </div>
