@@ -2,14 +2,14 @@ import { useEffect } from "react";
 import MinimalNav from "@/components/MinimalNav";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Target, TrendingUp, Leaf, Network, Factory, CheckCircle2 } from "lucide-react";
+import { TrendingUp, Network, Factory } from "lucide-react";
 import micaelImage from "@/assets/micael-gustavsson.webp";
 import reinholdImage from "@/assets/reinhold-rutks.webp";
 import logo from "@/assets/logo.webp";
 import linkedinLogo from "@/assets/linkedin-logo.png";
 import { Helmet } from "react-helmet-async";
 
-const Index = () => {
+const IndexEN = () => {
   useEffect(() => {
     const observerCallback = (entries: IntersectionObserverEntry[]) => {
       entries.forEach((entry) => {
@@ -353,4 +353,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default IndexEN;

@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import MinimalNav from "@/components/MinimalNav";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Target, TrendingUp, Leaf, Network, Factory, CheckCircle2 } from "lucide-react";
+import { TrendingUp, Network, Factory } from "lucide-react";
 import micaelImage from "@/assets/micael-gustavsson.webp";
 import reinholdImage from "@/assets/reinhold-rutks.webp";
 import logo from "@/assets/logo.webp";
@@ -114,7 +114,7 @@ const Index = () => {
               <div className="mb-auto">
                 <TrendingUp className="h-10 w-10 text-[#2D7A4F] mb-4" />
                 <h3 className="font-serif text-2xl font-bold mb-1 text-foreground">AM Readiness Assessment</h3>
-                <p className="text-sm font-semibold text-muted-foreground mb-3">4 veckor, Fast Pris</p>
+                <p className="text-sm font-semibold text-muted-foreground mb-3">5 veckor, Fast Pris</p>
                 <p className="text-muted-foreground mb-3 font-semibold">Leverabler:</p>
                 <ul className="text-sm text-muted-foreground space-y-2 mb-6 list-disc pl-5">
                   <li>3-5 komponenter för AM-tillverkning</li>
