@@ -7,6 +7,7 @@ import micaelImage from "@/assets/micael-gustavsson.webp";
 import reinholdImage from "@/assets/reinhold-rutks.webp";
 import logo from "@/assets/logo.webp";
 import linkedinLogo from "@/assets/linkedin-logo.png";
+import { Helmet } from "react-helmet-async";
 
 const Index = () => {
   useEffect(() => {
@@ -59,7 +60,12 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background" lang="sv">
+      <Helmet>
+        <html lang="sv" />
+        <title>Ecstatic Consulting - Sveriges oberoende AM-rådgivare</title>
+        <meta name="description" content="Vi hjälper nordiska tillverkande företag (150-1000 MSEK) att navigera från nyfikenhet till strategiskt beslut inom additiv tillverkning. Oberoende. Datadriven. Tekniskt grundad." />
+      </Helmet>
       <MinimalNav />
 
       {/* Hero Section */}

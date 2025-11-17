@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import logo from "@/assets/logo.webp";
 import { Button } from "@/components/ui/button";
@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 const MinimalNav = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const location = useLocation();
+  const isEnglish = location.pathname === '/en';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -45,12 +47,32 @@ const MinimalNav = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-6">
+            {/* Language Switcher */}
+            <div className="flex items-center gap-2 bg-muted/50 rounded-lg p-1">
+              <Link
+                to="/"
+                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                  !isEnglish ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                🇸🇪 SV
+              </Link>
+              <Link
+                to="/en"
+                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                  isEnglish ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                🇬🇧 EN
+              </Link>
+            </div>
+            
             <Button
               onClick={() => scrollToSection("contact")}
               className="bg-[#2D7A4F] hover:bg-[#246841] text-white"
             >
-              Boka samtal
+              {isEnglish ? 'Book a Call' : 'Boka samtal'}
             </Button>
           </div>
 
@@ -66,29 +88,33 @@ const MinimalNav = () => {
         {/* Mobile Menu */}
         {mobileMenuOpen && (
           <div className="md:hidden mt-4 pb-4 space-y-3 border-t border-border pt-4">
-            <button
-              onClick={() => scrollToSection("utmaningar")}
-              className="block w-full text-left px-4 py-2 text-sm font-medium text-foreground hover:text-linkedin transition-colors"
-            >
-              Utmaningar
-            </button>
-            <button
-              onClick={() => scrollToSection("om-oss")}
-              className="block w-full text-left px-4 py-2 text-sm font-medium text-foreground hover:text-linkedin transition-colors"
-            >
-              Om oss
-            </button>
-            <button
-              onClick={() => scrollToSection("newsletter")}
-              className="block w-full text-left px-4 py-2 text-sm font-medium text-foreground hover:text-linkedin transition-colors"
-            >
-              Newsletter
-            </button>
+            {/* Language Switcher Mobile */}
+            <div className="flex items-center gap-2 bg-muted/50 rounded-lg p-1 mb-3">
+              <Link
+                to="/"
+                className={`flex-1 text-center px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  !isEnglish ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground'
+                }`}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                🇸🇪 Swedish
+              </Link>
+              <Link
+                to="/en"
+                className={`flex-1 text-center px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  isEnglish ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground'
+                }`}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                🇬🇧 English
+              </Link>
+            </div>
+            
             <Button
               onClick={() => scrollToSection("contact")}
               className="w-full bg-[#2D7A4F] hover:bg-[#246841] text-white"
             >
-              Boka samtal
+              {isEnglish ? 'Book a Call' : 'Boka samtal'}
             </Button>
           </div>
         )}
