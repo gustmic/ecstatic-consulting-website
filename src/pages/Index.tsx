@@ -66,7 +66,7 @@ const Index = () => {
         <title>Ecstatic Consulting - Sveriges oberoende AM-rådgivare</title>
         <meta
           name="description"
-          content="Vi hjälper nordiska tillverkande företag (150-1000 MSEK) att navigera från nyfikenhet till strategiskt beslut inom additiv tillverkning. Oberoende. Datadriven. Tekniskt grundad."
+          content="Vi hjälper nordiska tillverkande företag (300-1000 MSEK) att navigera från nyfikenhet till strategiskt beslut inom additiv tillverkning. Oberoende. Datadriven. Tekniskt grundad."
         />
       </Helmet>
       <MinimalNav />
@@ -80,7 +80,7 @@ const Index = () => {
             </h1>
             <div className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed space-y-4">
               <p>
-                Vi hjälper nordiska tillverkande företag (150-1000 MSEK) att navigera från nyfikenhet till strategiskt
+                Vi hjälper nordiska tillverkande företag (300-1000 MSEK) att navigera från nyfikenhet till strategiskt
                 beslut inom additiv tillverkning.
               </p>
               <p className="font-semibold text-foreground">Oberoende. Datadriven. Tekniskt grundad.</p>
@@ -266,7 +266,7 @@ const Index = () => {
 
           <div className="space-y-4 text-lg text-foreground mb-8 observe">
             <p>
-              Vi söker 1-2 tillverkande företag (150-1000 MSEK) som vill vara först ut med att bygga
+              Vi söker 1-2 tillverkande företag (300-1000 MSEK) som vill vara först ut med att bygga
               <br />
               verklig AM-kompetens under 2026.
             </p>

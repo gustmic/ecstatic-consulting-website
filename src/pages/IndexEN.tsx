@@ -66,7 +66,7 @@ const IndexEN = () => {
         <title>Ecstatic Consulting - Sweden's Independent AM Advisors</title>
         <meta
           name="description"
-          content="We help Nordic manufacturing companies (150-1000 MSEK) navigate from curiosity to strategic decision-making in additive manufacturing. Independent. Data-driven. Technically grounded."
+          content="We help Nordic manufacturing companies (300-1000 MSEK) navigate from curiosity to strategic decision-making in additive manufacturing. Independent. Data-driven. Technically grounded."
         />
       </Helmet>
       <MinimalNav />
@@ -80,7 +80,7 @@ const IndexEN = () => {
             </h1>
             <div className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed space-y-4">
               <p>
-                We help Nordic manufacturing companies (150-1000 MSEK) navigate from curiosity to strategic
+                We help Nordic manufacturing companies (300-1000 MSEK) navigate from curiosity to strategic
                 decision-making in additive manufacturing.
               </p>
               <p className="font-semibold text-foreground">Independent. Data-driven. Technically grounded.</p>
@@ -266,7 +266,7 @@ const IndexEN = () => {
 
           <div className="space-y-4 text-lg text-foreground mb-8 observe">
             <p>
-              We're looking for 1-2 manufacturing companies (150-1000 MSEK) who want to be first movers in building real
+              We're looking for 1-2 manufacturing companies (300-1000 MSEK) who want to be first movers in building real
               AM capability during 2026.
             </p>
             <p>
