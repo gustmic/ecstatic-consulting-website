@@ -2,10 +2,11 @@ import { useEffect } from "react";
 import MinimalNav from "@/components/MinimalNav";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Target, TrendingUp, Leaf, Network, Factory, CheckCircle2, Linkedin } from "lucide-react";
+import { Target, TrendingUp, Leaf, Network, Factory, CheckCircle2 } from "lucide-react";
 import micaelImage from "@/assets/micael-gustavsson.webp";
 import reinholdImage from "@/assets/reinhold-rutks.webp";
 import logo from "@/assets/logo.webp";
+import linkedinLogo from "@/assets/linkedin-logo.png";
 
 const Index = () => {
   useEffect(() => {
@@ -310,7 +311,7 @@ const Index = () => {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-sm text-[#0A66C2] hover:underline"
                 >
-                  <Linkedin className="h-5 w-5" />
+                  <img src={linkedinLogo} alt="LinkedIn" className="h-5 w-5" />
                   Ecstatic Consulting
                 </a>
                 <a
@@ -319,7 +320,7 @@ const Index = () => {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-sm text-[#0A66C2] hover:underline"
                 >
-                  <Linkedin className="h-5 w-5" />
+                  <img src={linkedinLogo} alt="LinkedIn" className="h-5 w-5" />
                   Micael Gustavsson (Strategi)
                 </a>
                 <a
@@ -328,7 +329,7 @@ const Index = () => {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-sm text-[#0A66C2] hover:underline"
                 >
-                  <Linkedin className="h-5 w-5" />
+                  <img src={linkedinLogo} alt="LinkedIn" className="h-5 w-5" />
                   Reinhold Rutks (Teknologi)
                 </a>
               </div>
