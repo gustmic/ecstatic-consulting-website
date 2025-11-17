@@ -6,11 +6,6 @@ import micaelImage from "@/assets/micael-gustavsson.webp";
 import reinholdImage from "@/assets/reinhold-rutks.webp";
 import logo from "@/assets/logo.webp";
 
-declare global {
-  interface Window {
-    Calendly: any;
-  }
-}
 
 const IndexOptimized = () => {
   useEffect(() => {
