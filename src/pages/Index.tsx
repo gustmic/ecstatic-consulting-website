@@ -30,9 +30,9 @@ const Index = () => {
 
     // Improved Calendly loading check
     if (window.Calendly) return; // Already loaded globally
-    
+
     if (document.querySelector('script[src*="calendly"]')) return; // Loading in progress
-    
+
     const link = document.createElement("link");
     link.href = "https://assets.calendly.com/assets/external/widget.css";
     link.rel = "stylesheet";
@@ -53,7 +53,7 @@ const Index = () => {
       console.error("Calendly not loaded yet");
       return;
     }
-    
+
     window.Calendly.initPopupWidget({
       url: "https://calendly.com/micael-gustavsson-ecstatic/utforskande-mote",
     });
@@ -64,7 +64,10 @@ const Index = () => {
       <Helmet>
         <html lang="sv" />
         <title>Ecstatic Consulting - Sveriges oberoende AM-rådgivare</title>
-        <meta name="description" content="Vi hjälper nordiska tillverkande företag (150-1000 MSEK) att navigera från nyfikenhet till strategiskt beslut inom additiv tillverkning. Oberoende. Datadriven. Tekniskt grundad." />
+        <meta
+          name="description"
+          content="Vi hjälper nordiska tillverkande företag (150-1000 MSEK) att navigera från nyfikenhet till strategiskt beslut inom additiv tillverkning. Oberoende. Datadriven. Tekniskt grundad."
+        />
       </Helmet>
       <MinimalNav />
 
@@ -336,7 +339,7 @@ const Index = () => {
                   className="inline-flex items-center gap-2 text-sm text-[#0A66C2] hover:underline"
                 >
                   <img src={linkedinLogo} alt="LinkedIn" className="h-5 w-5" />
-                  Reinhold Rutks (Teknologi)
+                  Reinhold Rutks (Teknik)
                 </a>
               </div>
             </div>
