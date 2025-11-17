@@ -130,7 +130,7 @@ const IndexEN = () => {
             <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all border-t-4 border-[#2B4C7E] observe flex flex-col">
               <div className="mb-auto">
                 <Factory className="h-10 w-10 text-[#2B4C7E] mb-4" />
-                <h3 className="font-serif text-2xl font-bold mb-1 text-foreground">Pilot</h3>
+                <h3 className="font-serif text-2xl font-bold mb-1 text-foreground">Pilot&nbsp;</h3>
                 <p className="text-sm font-semibold text-muted-foreground mb-3">When you move forward</p>
                 <p className="text-muted-foreground mb-3 font-semibold">Deliverables:</p>
                 <ul className="text-sm text-muted-foreground space-y-2 mb-6 list-disc pl-5">
