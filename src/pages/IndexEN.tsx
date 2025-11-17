@@ -89,10 +89,10 @@ const IndexEN = () => {
         </div>
       </section>
 
-      {/* How We Work With You */}
+      {/* How we work with you */}
       <section className="py-24 px-6 bg-muted/30">
         <div className="container mx-auto max-w-6xl">
-          <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-6 observe">How We Work With You</h2>
+          <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-6 observe">How we work with you</h2>
 
           <div className="text-lg text-muted-foreground mb-8 max-w-3xl mx-auto observe">
             <p className="mb-6">
