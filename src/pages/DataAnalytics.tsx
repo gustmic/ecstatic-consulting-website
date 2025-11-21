@@ -4,7 +4,6 @@ import { Card } from "@/components/ui/card";
 import dataImage from "@/assets/data-bg.jpg";
 import { CheckCircle2, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import TestimonialsCarousel from "@/components/TestimonialsCarousel";
 import CaseStudySpotlight from "@/components/CaseStudySpotlight";
 import { HeroChallenge } from "@/components/HeroChallenge";
 
@@ -118,9 +117,6 @@ const DataAnalytics = () => {
           </div>
         </div>
       </section>
-
-      {/* Testimonials Carousel */}
-      <TestimonialsCarousel serviceArea="Data Analytics" />
 
       {/* CTA Section */}
       <section className="py-12 md:py-20 bg-gradient-to-br from-secondary to-accent">

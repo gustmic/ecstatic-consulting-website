@@ -4,7 +4,6 @@ import { Card } from "@/components/ui/card";
 import technologyImage from "@/assets/technology-bg.jpg";
 import { CheckCircle2, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import TestimonialsCarousel from "@/components/TestimonialsCarousel";
 import CaseStudySpotlight from "@/components/CaseStudySpotlight";
 import { HeroChallenge } from "@/components/HeroChallenge";
 
@@ -118,9 +117,6 @@ const Technology = () => {
           </div>
         </div>
       </section>
-
-      {/* Testimonials Carousel */}
-      <TestimonialsCarousel serviceArea="Technology" />
 
       {/* CTA Section */}
       <section className="py-12 md:py-20 bg-gradient-to-br from-accent to-primary">
