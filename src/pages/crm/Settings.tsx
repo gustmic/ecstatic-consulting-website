@@ -1,443 +1,205 @@
-import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import Navigation from "@/components/Navigation";
-import { Button } from "@/components/ui/button";
+import { CRMNav } from "@/components/crm/CRMNav";
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
-
-interface UserPreferences {
-  id?: string;
-  user_id: string;
-  default_contacts_view: string;
-  items_per_page: number;
-  email_notifications: boolean;
-  date_format: string;
-  theme: string;
-}
 
 const Settings = () => {
   const [loading, setLoading] = useState(true);
-  const [stages, setStages] = useState<string[]>([]);
-  const [serviceTypes, setServiceTypes] = useState<string[]>([]);
-  const [stageProbabilities, setStageProbabilities] = useState<Record<string, number>>({});
-  const [newStage, setNewStage] = useState("");
-  const [newType, setNewType] = useState("");
-  const [preferences, setPreferences] = useState<UserPreferences>({
-    user_id: "",
-    default_contacts_view: "table",
+  const [userId, setUserId] = useState<string | null>(null);
+  const [preferences, setPreferences] = useState({
     items_per_page: 25,
-    email_notifications: true,
-    date_format: "dd MMM yyyy",
+    date_format: "MM/dd/yyyy",
     theme: "system",
+    default_contacts_view: "table",
   });
-  const navigate = useNavigate();
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
       if (!session) {
         navigate("/admin");
         return;
       }
 
-      await fetchSettings();
+      setUserId(session.user.id);
+      fetchPreferences(session.user.id);
       setLoading(false);
     };
 
     checkAuth();
+  }, []);
 
-    // Set up realtime subscription for settings
-    const channel = supabase
-      .channel('settings-changes')
-      .on('postgres_changes', {
-        event: '*',
-        schema: 'public',
-        table: 'settings'
-      }, () => {
-        fetchSettings();
-      })
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [navigate]);
-
-  const fetchSettings = async () => {
-    // Get current user
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) return;
-
-    // Fetch pipeline settings
-    const { data: stagesData } = await supabase
-      .from('settings')
-      .select('value')
-      .eq('key', 'stages')
-      .single();
-
-    const { data: typesData } = await supabase
-      .from('settings')
-      .select('value')
-      .eq('key', 'service_types')
-      .single();
-
-    const { data: probData } = await supabase
-      .from('settings')
-      .select('value')
-      .eq('key', 'stage_probabilities')
-      .single();
-
-    if (stagesData) setStages(stagesData.value as string[]);
-    if (typesData) setServiceTypes(typesData.value as string[]);
-    if (probData) setStageProbabilities(probData.value as Record<string, number>);
-
-
-    // Fetch user preferences
-    const { data: prefsData } = await supabase
-      .from('user_preferences')
-      .select('*')
-      .eq('user_id', session.user.id)
+  const fetchPreferences = async (userId: string) => {
+    const { data, error } = await supabase
+      .from("user_preferences")
+      .select("*")
+      .eq("user_id", userId)
       .maybeSingle();
 
-    if (prefsData) {
-      setPreferences(prefsData);
-    } else {
-      setPreferences(prev => ({ ...prev, user_id: session.user.id }));
-    }
-  };
-
-  const handleAddStage = async () => {
-    if (!newStage.trim()) return;
-
-    const updatedStages = [...stages, newStage.trim()];
-    const updatedProbs = { ...stageProbabilities, [newStage.trim()]: 50 };
-
-    await saveSettings('stages', updatedStages);
-    await saveSettings('stage_probabilities', updatedProbs);
-
-    setStages(updatedStages);
-    setStageProbabilities(updatedProbs);
-    setNewStage("");
-  };
-
-  const handleRemoveStage = async (stage: string) => {
-    const updatedStages = stages.filter(s => s !== stage);
-    const updatedProbs = { ...stageProbabilities };
-    delete updatedProbs[stage];
-
-    await saveSettings('stages', updatedStages);
-    await saveSettings('stage_probabilities', updatedProbs);
-
-    // Update all contacts that have this stage to null
-    const { error: updateError } = await supabase
-      .from('contacts')
-      .update({ stage: null })
-      .eq('stage', stage);
-    
-    if (updateError) {
-      toast({
-        variant: "destructive",
-        title: "Error updating contacts",
-        description: updateError.message,
+    if (!error && data) {
+      setPreferences({
+        items_per_page: data.items_per_page,
+        date_format: data.date_format,
+        theme: data.theme,
+        default_contacts_view: data.default_contacts_view,
       });
-      return;
     }
-
-    setStages(updatedStages);
-    setStageProbabilities(updatedProbs);
-    toast({ 
-      title: "Pipeline stage removed",
-      description: "All contacts with this stage have been updated"
-    });
   };
 
-  const handleAddServiceType = async () => {
-    if (!newType.trim()) return;
+  const handleSave = async () => {
+    if (!userId) return;
 
-    const updatedTypes = [...serviceTypes, newType.trim()];
-    await saveSettings('service_types', updatedTypes);
-    setServiceTypes(updatedTypes);
-    setNewType("");
-  };
-
-  const handleRemoveServiceType = async (type: string) => {
-    const updatedTypes = serviceTypes.filter(t => t !== type);
-    await saveSettings('service_types', updatedTypes);
-    
-    // Update all projects that have this type to null
-    const { error: updateError } = await supabase
-      .from('projects')
-      .update({ type: null })
-      .eq('type', type);
-    
-    if (updateError) {
-      toast({
-        variant: "destructive",
-        title: "Error updating projects",
-        description: updateError.message,
-      });
-      return;
-    }
-    
-    setServiceTypes(updatedTypes);
-    toast({ 
-      title: "Service type removed",
-      description: "All projects with this type have been updated"
-    });
-  };
-
-  const handleProbabilityChange = async (stage: string, value: number) => {
-    const updatedProbs = { ...stageProbabilities, [stage]: value };
-    await saveSettings('stage_probabilities', updatedProbs);
-    setStageProbabilities(updatedProbs);
-  };
-
-  const saveSettings = async (key: string, value: any) => {
     const { error } = await supabase
-      .from('settings')
-      .update({ value })
-      .eq('key', key);
+      .from("user_preferences")
+      .upsert({
+        user_id: userId,
+        items_per_page: preferences.items_per_page,
+        date_format: preferences.date_format,
+        theme: preferences.theme,
+        default_contacts_view: preferences.default_contacts_view,
+      })
+      .eq("user_id", userId);
 
     if (error) {
       toast({
-        variant: "destructive",
-        title: "Error saving settings",
+        title: "Error",
         description: error.message,
+        variant: "destructive",
       });
     } else {
-      toast({ title: "Settings saved" });
-    }
-  };
-
-
-  const handleSavePreferences = async () => {
-    try {
-      const { error } = await supabase
-        .from('user_preferences')
-        .upsert(preferences, { onConflict: 'user_id' });
-
-      if (error) throw error;
-
-      toast({ title: "Preferences saved successfully" });
-    } catch (error: any) {
       toast({
-        variant: "destructive",
-        title: "Error saving preferences",
-        description: error.message,
+        title: "Success",
+        description: "Preferences saved",
       });
     }
   };
 
   if (loading) {
-    return null;
+    return (
+      <div className="min-h-screen bg-background">
+        <CRMNav />
+        <div className="container mx-auto px-6 py-8">
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="min-h-screen bg-background">
-      <Navigation />
-      
-      <div className="container mx-auto px-4 md:px-6 pt-32 pb-20">
-        <div className="mb-6">
-          <Link to="/admin/crm">
-            <Button variant="ghost" size="sm">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Dashboard
-            </Button>
-          </Link>
-        </div>
+      <CRMNav />
 
-        <div className="max-w-4xl">
-          <h1 className="font-serif text-4xl font-bold mb-2">Settings</h1>
-          <p className="text-muted-foreground mb-8">
-            Configure your CRM preferences and system settings
-          </p>
+      <div className="container mx-auto px-6 py-8 max-w-2xl">
+        <h1 className="font-serif text-4xl font-bold mb-6">Settings</h1>
+
+        <Card className="p-6">
+          <h2 className="font-serif text-2xl font-semibold mb-6">
+            Display Preferences
+          </h2>
 
           <div className="space-y-6">
-            {/* User Preferences */}
-            <Card className="p-6">
-              <h2 className="font-serif text-2xl font-semibold mb-4">Display Preferences</h2>
-              
-              <div className="space-y-6">
-                <div className="space-y-2">
-                  <Label>Default Contacts View</Label>
-                  <Select
-                    value={preferences.default_contacts_view}
-                    onValueChange={(value) =>
-                      setPreferences({ ...preferences, default_contacts_view: value })
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="table">Table View</SelectItem>
-                      <SelectItem value="kanban">Kanban View</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+            <div>
+              <Label htmlFor="items_per_page">Items per page</Label>
+              <Select
+                value={preferences.items_per_page.toString()}
+                onValueChange={(value) =>
+                  setPreferences({
+                    ...preferences,
+                    items_per_page: parseInt(value),
+                  })
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="10">10</SelectItem>
+                  <SelectItem value="25">25</SelectItem>
+                  <SelectItem value="50">50</SelectItem>
+                  <SelectItem value="100">100</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
-                <div className="space-y-2">
-                  <Label>Items Per Page</Label>
-                  <Select
-                    value={preferences.items_per_page.toString()}
-                    onValueChange={(value) =>
-                      setPreferences({ ...preferences, items_per_page: parseInt(value) })
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="10">10</SelectItem>
-                      <SelectItem value="25">25</SelectItem>
-                      <SelectItem value="50">50</SelectItem>
-                      <SelectItem value="100">100</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+            <div>
+              <Label htmlFor="date_format">Date format</Label>
+              <Select
+                value={preferences.date_format}
+                onValueChange={(value) =>
+                  setPreferences({ ...preferences, date_format: value })
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="dd MMM yyyy">dd MMM yyyy</SelectItem>
+                  <SelectItem value="yyyy-MM-dd">yyyy-MM-dd</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
-                <div className="space-y-2">
-                  <Label>Date Format</Label>
-                  <Select
-                    value={preferences.date_format}
-                    onValueChange={(value) =>
-                      setPreferences({ ...preferences, date_format: value })
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="dd MMM yyyy">DD MMM YYYY (12 jun 2025)</SelectItem>
-                      <SelectItem value="yyyy-MM-dd">YYYY-MM-DD (2025-06-12)</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+            <div>
+              <Label htmlFor="theme">Theme</Label>
+              <Select
+                value={preferences.theme}
+                onValueChange={(value) =>
+                  setPreferences({ ...preferences, theme: value })
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="light">Light</SelectItem>
+                  <SelectItem value="dark">Dark</SelectItem>
+                  <SelectItem value="system">System</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
-                <div className="space-y-2">
-                  <Label>Theme</Label>
-                  <Select
-                    value={preferences.theme}
-                    onValueChange={(value) =>
-                      setPreferences({ ...preferences, theme: value })
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="light">Light</SelectItem>
-                      <SelectItem value="dark">Dark</SelectItem>
-                      <SelectItem value="system">System</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+            <div>
+              <Label htmlFor="default_contacts_view">Default Contacts View</Label>
+              <Select
+                value={preferences.default_contacts_view}
+                onValueChange={(value) =>
+                  setPreferences({
+                    ...preferences,
+                    default_contacts_view: value,
+                  })
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="table">Table</SelectItem>
+                  <SelectItem value="kanban">Kanban</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
-                <div className="flex items-center justify-between pt-4 border-t">
-                  <div className="space-y-0.5">
-                    <Label>Email Notifications</Label>
-                    <p className="text-sm text-muted-foreground">
-                      Receive email notifications for follow-ups and updates
-                    </p>
-                  </div>
-                  <Switch
-                    checked={preferences.email_notifications}
-                    onCheckedChange={(checked) =>
-                      setPreferences({ ...preferences, email_notifications: checked })
-                    }
-                  />
-                </div>
-              </div>
-
-              <div className="flex justify-end mt-6">
-                <Button onClick={handleSavePreferences}>
-                  Save Preferences
-                </Button>
-              </div>
-            </Card>
-            <Card className="p-6">
-              <h2 className="font-serif text-2xl font-semibold mb-4">Pipeline Stages</h2>
-              <p className="text-sm text-muted-foreground mb-4">
-                Manage the stages in your sales pipeline and their probability weights
-              </p>
-
-              <div className="space-y-4 mb-4">
-                {stages.map(stage => (
-                  <div key={stage} className="grid grid-cols-[180px_1fr_auto] items-center gap-4">
-                    <Badge className="w-full justify-center text-center px-3 py-2">{stage}</Badge>
-                    <div className="flex items-center gap-3">
-                      <Label className="shrink-0">Probability: <span className="font-mono">{stageProbabilities[stage].toString().padStart(3, '\u00A0')}%</span></Label>
-                      <Input
-                        type="range"
-                        min="0"
-                        max="100"
-                        value={stageProbabilities[stage] || 0}
-                        onChange={(e) => handleProbabilityChange(stage, parseInt(e.target.value))}
-                        className="flex-1"
-                      />
-                    </div>
-                    <Button
-                      size="sm"
-                      variant="destructive"
-                      onClick={() => handleRemoveStage(stage)}
-                      className="shrink-0"
-                    >
-                      Remove
-                    </Button>
-                  </div>
-                ))}
-              </div>
-
-              <div className="flex gap-2">
-                <Input
-                  placeholder="New stage name"
-                  value={newStage}
-                  onChange={(e) => setNewStage(e.target.value)}
-                />
-                <Button onClick={handleAddStage}>Add Stage</Button>
-              </div>
-            </Card>
-
-            <Card className="p-6">
-              <h2 className="font-serif text-2xl font-semibold mb-4">Service Types</h2>
-              <p className="text-sm text-muted-foreground mb-4">
-                Manage the types of services you offer
-              </p>
-
-              <div className="flex gap-2 flex-wrap mb-4">
-                {serviceTypes.map(type => (
-                  <Badge key={type} variant="outline" className="gap-2">
-                    {type}
-                    <button
-                      onClick={() => handleRemoveServiceType(type)}
-                      className="hover:text-destructive"
-                    >
-                      ×
-                    </button>
-                  </Badge>
-                ))}
-              </div>
-
-              <div className="flex gap-2">
-                <Input
-                  placeholder="New service type"
-                  value={newType}
-                  onChange={(e) => setNewType(e.target.value)}
-                />
-                <Button onClick={handleAddServiceType}>Add Type</Button>
-              </div>
-            </Card>
+            <Button onClick={handleSave} className="w-full">
+              Save Preferences
+            </Button>
           </div>
-        </div>
+        </Card>
       </div>
     </div>
   );

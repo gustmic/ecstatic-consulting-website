@@ -1,502 +1,468 @@
-import { useEffect, useState } from "react";
-import { useNavigate, Link, useSearchParams } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import Navigation from "@/components/Navigation";
+import { CRMNav } from "@/components/crm/CRMNav";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, Plus, Search, LayoutGrid, Table as TableIcon, Download } from "lucide-react";
+import { Plus, Pencil, Trash2, ExternalLink } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import ContactsTable from "@/components/crm/ContactsTable";
-import ContactModal from "@/components/crm/ContactModal";
-import KanbanView from "@/components/crm/KanbanView";
-import ContactDetail from "@/components/crm/ContactDetail";
-import EmailModal from "@/components/crm/EmailModal";
-import { formatDate, formatCurrency } from "@/lib/formatters";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+
+interface Contact {
+  id: string;
+  name: string;
+  title: string | null;
+  email: string;
+  phone: string | null;
+  linkedin_url: string | null;
+  company_id: string | null;
+  is_primary: boolean;
+  notes: string | null;
+  companies?: { name: string };
+}
+
+interface Company {
+  id: string;
+  name: string;
+}
 
 const Contacts = () => {
-  const [searchParams] = useSearchParams();
-  const [loading, setLoading] = useState(true);
-  const [contacts, setContacts] = useState<any[]>([]);
-  const [filteredContacts, setFilteredContacts] = useState<any[]>([]);
+  const [contacts, setContacts] = useState<Contact[]>([]);
+  const [filteredContacts, setFilteredContacts] = useState<Contact[]>([]);
+  const [companies, setCompanies] = useState<Company[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [viewMode, setViewMode] = useState<"table" | "kanban">("table");
-  const [stageFilter, setStageFilter] = useState<string>("all");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingContact, setEditingContact] = useState<any>(null);
-  const [detailContactId, setDetailContactId] = useState<string | null>(null);
-  const [isDetailOpen, setIsDetailOpen] = useState(false);
-  const [emailContactId, setEmailContactId] = useState<string | null>(null);
-  const [isEmailOpen, setIsEmailOpen] = useState(false);
-  const [selectedContacts, setSelectedContacts] = useState<string[]>([]);
-  const [bulkAction, setBulkAction] = useState<string>("");
-  const [stages, setStages] = useState<string[]>([]);
-  const [preferencesLoaded, setPreferencesLoaded] = useState(false);
-  const navigate = useNavigate();
+  const [companyFilter, setCompanyFilter] = useState("all");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editingContact, setEditingContact] = useState<Contact | null>(null);
+  const [formData, setFormData] = useState({
+    name: "",
+    title: "",
+    email: "",
+    phone: "",
+    linkedin_url: "",
+    company_id: "",
+    is_primary: false,
+    notes: "",
+  });
   const { toast } = useToast();
 
-  // Set search query from URL parameter on mount
   useEffect(() => {
-    const searchParam = searchParams.get('search');
-    if (searchParam) {
-      setSearchQuery(searchParam);
-    }
-  }, [searchParams]);
+    fetchContacts();
+    fetchCompanies();
+  }, []);
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session) {
-        navigate("/admin");
-        return;
-      }
-
-      // Fetch user preferences first
-      const { data: prefsData } = await supabase
-        .from('user_preferences')
-        .select('*')
-        .eq('user_id', session.user.id)
-        .maybeSingle();
-
-      if (prefsData?.default_contacts_view) {
-        setViewMode(prefsData.default_contacts_view as "table" | "kanban");
-      }
-      setPreferencesLoaded(true);
-
-      await fetchContacts();
-      await fetchStages();
-      setLoading(false);
-    };
-
-    checkAuth();
-
-    // Set up realtime subscription for contacts
-    const contactsChannel = supabase
-      .channel('contacts-changes')
-      .on('postgres_changes', {
-        event: '*',
-        schema: 'public',
-        table: 'contacts'
-      }, () => {
-        fetchContacts();
-      })
-      .subscribe();
-
-    // Set up realtime subscription for settings
-    const settingsChannel = supabase
-      .channel('contacts-settings-changes')
-      .on('postgres_changes', {
-        event: '*',
-        schema: 'public',
-        table: 'settings'
-      }, () => {
-        fetchStages();
-      })
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(contactsChannel);
-      supabase.removeChannel(settingsChannel);
-    };
-  }, [navigate]);
-
-  useEffect(() => {
-    // Filter contacts based on search query and stage
     let filtered = contacts;
 
-    if (stageFilter !== "all") {
-      filtered = filtered.filter(c => c.stage === stageFilter);
-    }
-
-    if (searchQuery.trim() !== "") {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(contact => 
-        contact.name.toLowerCase().includes(query) ||
-        contact.email.toLowerCase().includes(query) ||
-        (contact.company && contact.company.toLowerCase().includes(query))
+    if (searchQuery) {
+      filtered = filtered.filter(
+        (c) =>
+          c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          c.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          c.companies?.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
-    setFilteredContacts(filtered);
-  }, [searchQuery, contacts, stageFilter]);
-
-  const fetchStages = async () => {
-    const { data } = await supabase
-      .from('settings')
-      .select('value')
-      .eq('key', 'stages')
-      .single();
-    
-    if (data) {
-      setStages(data.value as string[]);
+    if (companyFilter !== "all") {
+      filtered = filtered.filter((c) => c.company_id === companyFilter);
     }
-  };
+
+    setFilteredContacts(filtered);
+  }, [searchQuery, companyFilter, contacts]);
 
   const fetchContacts = async () => {
     const { data, error } = await supabase
-      .from('contacts')
-      .select('*')
-      .order('created_at', { ascending: false });
+      .from("contacts")
+      .select("*, companies(name)")
+      .order("name");
 
-    if (error) {
-      toast({
-        variant: "destructive",
-        title: "Error loading contacts",
-        description: error.message,
-      });
-    } else {
-      setContacts(data || []);
-      setFilteredContacts(data || []);
+    if (!error && data) {
+      setContacts(data);
+    }
+  };
+
+  const fetchCompanies = async () => {
+    const { data, error } = await supabase
+      .from("companies")
+      .select("id, name")
+      .order("name");
+
+    if (!error && data) {
+      setCompanies(data);
     }
   };
 
   const handleAddContact = () => {
     setEditingContact(null);
-    setIsModalOpen(true);
+    setFormData({
+      name: "",
+      title: "",
+      email: "",
+      phone: "",
+      linkedin_url: "",
+      company_id: "",
+      is_primary: false,
+      notes: "",
+    });
+    setModalOpen(true);
   };
 
-  const handleEditContact = (contact: any) => {
+  const handleEditContact = (contact: Contact) => {
     setEditingContact(contact);
-    setIsModalOpen(true);
+    setFormData({
+      name: contact.name,
+      title: contact.title || "",
+      email: contact.email,
+      phone: contact.phone || "",
+      linkedin_url: contact.linkedin_url || "",
+      company_id: contact.company_id || "",
+      is_primary: contact.is_primary,
+      notes: contact.notes || "",
+    });
+    setModalOpen(true);
   };
 
   const handleDeleteContact = async (id: string) => {
     if (!confirm("Are you sure you want to delete this contact?")) return;
 
-    const { error } = await supabase
-      .from('contacts')
-      .delete()
-      .eq('id', id);
+    const { error } = await supabase.from("contacts").delete().eq("id", id);
 
     if (error) {
       toast({
-        variant: "destructive",
-        title: "Error deleting contact",
+        title: "Error",
         description: error.message,
+        variant: "destructive",
       });
     } else {
-      toast({ title: "Contact deleted" });
+      toast({ title: "Success", description: "Contact deleted" });
       fetchContacts();
     }
   };
 
-  const handleSaveContact = async (contactData: any) => {
-    const { data: { session } } = await supabase.auth.getSession();
-    
+  const handleSave = async () => {
+    if (!formData.name || !formData.email) {
+      toast({
+        title: "Error",
+        description: "Name and email are required",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const { data: { user } } = await supabase.auth.getUser();
+
+    const payload = {
+      name: formData.name,
+      title: formData.title || null,
+      email: formData.email,
+      phone: formData.phone || null,
+      linkedin_url: formData.linkedin_url || null,
+      company_id: formData.company_id || null,
+      is_primary: formData.is_primary,
+      notes: formData.notes || null,
+      created_by: user?.id,
+    };
+
     if (editingContact) {
-      // Update existing contact
       const { error } = await supabase
-        .from('contacts')
-        .update(contactData)
-        .eq('id', editingContact.id);
+        .from("contacts")
+        .update(payload)
+        .eq("id", editingContact.id);
 
       if (error) {
         toast({
-          variant: "destructive",
-          title: "Error updating contact",
+          title: "Error",
           description: error.message,
-        });
-        return;
-      }
-      toast({ title: "Contact updated" });
-    } else {
-      // Create new contact
-      const { error } = await supabase
-        .from('contacts')
-        .insert([{ ...contactData, created_by: session?.user.id }]);
-
-      if (error) {
-        toast({
           variant: "destructive",
-          title: "Error creating contact",
-          description: error.message,
         });
-        return;
-      }
-      toast({ title: "Contact created" });
-    }
-
-    setIsModalOpen(false);
-    fetchContacts();
-  };
-
-  const handleStageChange = async (contactId: string, newStage: string) => {
-    const { error } = await supabase
-      .from('contacts')
-      .update({ stage: newStage })
-      .eq('id', contactId);
-
-    if (error) {
-      toast({
-        variant: "destructive",
-        title: "Error updating stage",
-        description: error.message,
-      });
-    } else {
-      // Log interaction
-      const { data: { session } } = await supabase.auth.getSession();
-      const contact = contacts.find(c => c.id === contactId);
-      
-      await supabase.from('interactions').insert({
-        contact_id: contactId,
-        type: 'Follow-up',
-        subject: `Stage changed to ${newStage}`,
-        notes: `Stage changed from ${contact?.stage} to ${newStage}`,
-        logged_by: session?.user.id,
-        date: new Date().toISOString().split('T')[0],
-      });
-
-      toast({ title: "Stage updated" });
-      fetchContacts();
-    }
-  };
-
-  const handleViewContact = (contact: any) => {
-    setDetailContactId(contact.id);
-    setIsDetailOpen(true);
-  };
-
-  const handleExportCSV = () => {
-    const headers = ["Name", "Company", "Email", "Stage", "Phone", "Last Contacted", "Next Follow-Up"];
-    const rows = filteredContacts.map(c => [
-      c.name,
-      c.company || "",
-      c.email,
-      c.stage,
-      c.phone || "",
-      c.last_contacted ? formatDate(c.last_contacted) : "",
-      c.next_followup ? formatDate(c.next_followup) : "",
-    ]);
-
-    const csvContent = [
-      headers.join(";"),
-      ...rows.map(row => row.join(";"))
-    ].join("\n");
-
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement("a");
-    const url = URL.createObjectURL(blob);
-    const today = new Date().toISOString().split('T')[0];
-    
-    link.setAttribute("href", url);
-    link.setAttribute("download", `ecstatic_contacts_${today}.csv`);
-    link.style.visibility = 'hidden';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-    toast({ title: "Contacts exported" });
-  };
-
-  const handleEmailContact = (contact: any) => {
-    setEmailContactId(contact.id);
-    setIsEmailOpen(true);
-  };
-
-  const handleBulkAction = async () => {
-    if (selectedContacts.length === 0 || !bulkAction) return;
-
-    if (bulkAction.startsWith("stage:")) {
-      const newStage = bulkAction.split(":")[1];
-      
-      // Get names of selected contacts for confirmation
-      const selectedContactNames = contacts
-        .filter(c => selectedContacts.includes(c.id))
-        .map(c => c.name);
-      
-      const namesList = selectedContactNames.slice(0, 5).join(', ') + 
-        (selectedContactNames.length > 5 ? ` and ${selectedContactNames.length - 5} more` : '');
-      
-      const confirmed = confirm(
-        `Change stage to "${newStage}" for ${selectedContacts.length} contact${selectedContacts.length > 1 ? 's' : ''}?\n\n${namesList}`
-      );
-      
-      if (!confirmed) {
-        setBulkAction("");
-        return;
-      }
-      
-      const { error } = await supabase
-        .from('contacts')
-        .update({ stage: newStage })
-        .in('id', selectedContacts);
-
-      if (!error) {
-        // Log interactions for stage changes
-        const { data: { session } } = await supabase.auth.getSession();
-        const interactions = selectedContacts.map(contactId => ({
-          contact_id: contactId,
-          type: 'Follow-up',
-          subject: `Bulk stage change to ${newStage}`,
-          notes: `Stage changed to ${newStage} via bulk action`,
-          logged_by: session?.user.id,
-          date: new Date().toISOString().split('T')[0],
-        }));
-        
-        await supabase.from('interactions').insert(interactions);
-        
-        toast({ title: `Stage updated for ${selectedContacts.length} contacts` });
-        setSelectedContacts([]);
-        fetchContacts();
       } else {
+        toast({ title: "Success", description: "Contact updated" });
+        setModalOpen(false);
+        fetchContacts();
+      }
+    } else {
+      const { error } = await supabase.from("contacts").insert(payload);
+
+      if (error) {
         toast({
-          variant: "destructive",
-          title: "Error updating stages",
+          title: "Error",
           description: error.message,
+          variant: "destructive",
         });
+      } else {
+        toast({ title: "Success", description: "Contact created" });
+        setModalOpen(false);
+        fetchContacts();
       }
     }
-    
-    setBulkAction("");
   };
-
-  if (loading) {
-    return null;
-  }
 
   return (
     <div className="min-h-screen bg-background">
-      <Navigation />
-      
-      <div className="container mx-auto px-4 md:px-6 pt-32 pb-20">
-        <div className="mb-6">
-          <Link to="/admin/crm">
-            <Button variant="ghost" size="sm">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Dashboard
-            </Button>
-          </Link>
+      <CRMNav />
+
+      <div className="container mx-auto px-6 py-8">
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="font-serif text-4xl font-bold">Contacts</h1>
+          <Button onClick={handleAddContact}>
+            <Plus className="h-4 w-4 mr-2" />
+            New Contact
+          </Button>
         </div>
 
-        <div className="mb-8 flex items-center justify-between">
-          <div>
-            <h1 className="font-serif text-4xl font-bold mb-2">Contacts</h1>
-            <p className="text-muted-foreground">
-              Manage your contacts and relationships
-            </p>
-          </div>
-          
-          <div className="flex items-center gap-3">
-            <Button onClick={handleAddContact}>
-              <Plus className="mr-2 h-4 w-4" />
-              Add Contact
-            </Button>
-            <Button variant="outline" onClick={handleExportCSV}>
-              <Download className="mr-2 h-4 w-4" />
-              Export CSV
-            </Button>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-4 mb-6">
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search contacts..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
-            />
-          </div>
-
-          <Select value={stageFilter} onValueChange={setStageFilter}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Filter by stage" />
+        <div className="flex gap-4 mb-6">
+          <Input
+            placeholder="Search contacts..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="max-w-md"
+          />
+          <Select value={companyFilter} onValueChange={setCompanyFilter}>
+            <SelectTrigger className="w-64">
+              <SelectValue placeholder="Filter by company" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Stages</SelectItem>
-              {stages.map(stage => (
-                <SelectItem key={stage} value={stage}>{stage}</SelectItem>
+              <SelectItem value="all">All Companies</SelectItem>
+              {companies.map((company) => (
+                <SelectItem key={company.id} value={company.id}>
+                  {company.name}
+                </SelectItem>
               ))}
             </SelectContent>
           </Select>
+        </div>
 
-          {selectedContacts.length > 0 && (
-            <>
-              <Select value={bulkAction} onValueChange={setBulkAction}>
-                <SelectTrigger className="w-[200px]">
-                  <SelectValue placeholder="Change stage for selected" />
+        <Card>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Name</TableHead>
+                <TableHead>Title</TableHead>
+                <TableHead>Company</TableHead>
+                <TableHead>Email</TableHead>
+                <TableHead>LinkedIn</TableHead>
+                <TableHead>Phone</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredContacts.length === 0 ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={7}
+                    className="text-center text-muted-foreground py-8"
+                  >
+                    No contacts found
+                  </TableCell>
+                </TableRow>
+              ) : (
+                filteredContacts.map((contact) => (
+                  <TableRow key={contact.id}>
+                    <TableCell className="font-medium">
+                      {contact.name}
+                      {contact.is_primary && (
+                        <span className="ml-2 text-xs bg-primary text-primary-foreground px-2 py-1 rounded">
+                          Primary
+                        </span>
+                      )}
+                    </TableCell>
+                    <TableCell>{contact.title || "-"}</TableCell>
+                    <TableCell>{contact.companies?.name || "-"}</TableCell>
+                    <TableCell>{contact.email}</TableCell>
+                    <TableCell>
+                      {contact.linkedin_url ? (
+                        <a
+                          href={contact.linkedin_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-primary hover:underline inline-flex items-center gap-1"
+                        >
+                          LinkedIn
+                          <ExternalLink className="h-3 w-3" />
+                        </a>
+                      ) : (
+                        "-"
+                      )}
+                    </TableCell>
+                    <TableCell>{contact.phone || "-"}</TableCell>
+                    <TableCell className="text-right">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleEditContact(contact)}
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleDeleteContact(contact.id)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </Card>
+      </div>
+
+      <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>
+              {editingContact ? "Edit Contact" : "New Contact"}
+            </DialogTitle>
+          </DialogHeader>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="name">Name *</Label>
+              <Input
+                id="name"
+                value={formData.name}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
+                placeholder="Full name"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="title">Title</Label>
+              <Input
+                id="title"
+                value={formData.title}
+                onChange={(e) =>
+                  setFormData({ ...formData, title: e.target.value })
+                }
+                placeholder="Job title"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="company">Company *</Label>
+              <Select
+                value={formData.company_id}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, company_id: value })
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select company" />
                 </SelectTrigger>
                 <SelectContent>
-                  {stages.map(stage => (
-                    <SelectItem key={stage} value={`stage:${stage}`}>Change to {stage}</SelectItem>
+                  {companies.map((company) => (
+                    <SelectItem key={company.id} value={company.id}>
+                      {company.name}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
-              <Button onClick={handleBulkAction} disabled={!bulkAction}>
-                Apply to {selectedContacts.length}
-              </Button>
-            </>
-          )}
+            </div>
 
-          <div className="flex gap-2 border rounded-md p-1">
-            <Button
-              variant={viewMode === "table" ? "default" : "ghost"}
-              size="sm"
-              onClick={() => setViewMode("table")}
-            >
-              <TableIcon className="h-4 w-4" />
-            </Button>
-            <Button
-              variant={viewMode === "kanban" ? "default" : "ghost"}
-              size="sm"
-              onClick={() => setViewMode("kanban")}
-            >
-              <LayoutGrid className="h-4 w-4" />
-            </Button>
+            <div>
+              <Label htmlFor="email">Email *</Label>
+              <Input
+                id="email"
+                type="email"
+                value={formData.email}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
+                placeholder="email@example.com"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="phone">Phone</Label>
+              <Input
+                id="phone"
+                value={formData.phone}
+                onChange={(e) =>
+                  setFormData({ ...formData, phone: e.target.value })
+                }
+                placeholder="+46 70 123 4567"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="linkedin">LinkedIn URL</Label>
+              <Input
+                id="linkedin"
+                value={formData.linkedin_url}
+                onChange={(e) =>
+                  setFormData({ ...formData, linkedin_url: e.target.value })
+                }
+                placeholder="https://linkedin.com/in/username"
+              />
+            </div>
+
+            <div className="col-span-2">
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="is_primary"
+                  checked={formData.is_primary}
+                  onCheckedChange={(checked) =>
+                    setFormData({ ...formData, is_primary: !!checked })
+                  }
+                />
+                <Label htmlFor="is_primary" className="cursor-pointer">
+                  Primary contact for this company
+                </Label>
+              </div>
+            </div>
+
+            <div className="col-span-2">
+              <Label htmlFor="notes">Notes</Label>
+              <Textarea
+                id="notes"
+                value={formData.notes}
+                onChange={(e) =>
+                  setFormData({ ...formData, notes: e.target.value })
+                }
+                placeholder="Additional notes..."
+                rows={3}
+              />
+            </div>
           </div>
-        </div>
 
-        {viewMode === "table" ? (
-          <ContactsTable
-            contacts={filteredContacts}
-            onEdit={handleEditContact}
-            onDelete={handleDeleteContact}
-            onEmail={handleEmailContact}
-            selectedContacts={selectedContacts}
-            onSelectionChange={setSelectedContacts}
-          />
-        ) : (
-          <KanbanView
-            contacts={filteredContacts}
-            onContactClick={handleViewContact}
-            onStageChange={handleStageChange}
-            stages={stages}
-          />
-        )}
-
-        <ContactModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          onSave={handleSaveContact}
-          contact={editingContact}
-        />
-
-        <ContactDetail
-          isOpen={isDetailOpen}
-          onClose={() => setIsDetailOpen(false)}
-          contactId={detailContactId}
-          onEdit={() => {
-            const contact = contacts.find(c => c.id === detailContactId);
-            if (contact) {
-              setIsDetailOpen(false);
-              handleEditContact(contact);
-            }
-          }}
-        />
-
-        <EmailModal
-          isOpen={isEmailOpen}
-          onClose={() => {
-            setIsEmailOpen(false);
-            fetchContacts(); // Refresh to show updated last_contacted
-          }}
-          contactId={emailContactId}
-          contactEmail={contacts.find(c => c.id === emailContactId)?.email}
-          contactName={contacts.find(c => c.id === emailContactId)?.name}
-        />
-      </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setModalOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleSave}>
+              {editingContact ? "Update" : "Create"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

@@ -1,326 +1,192 @@
-import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import Navigation from "@/components/Navigation";
+import { CRMNav } from "@/components/crm/CRMNav";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Search, Settings, BarChart3, Users, Briefcase } from "lucide-react";
-import SummaryCards from "@/components/crm/SummaryCards";
-import UpcomingFollowUps from "@/components/crm/UpcomingFollowUps";
-import RevenueChart from "@/components/crm/RevenueChart";
-import GlobalSearch from "@/components/GlobalSearch";
+import { Input } from "@/components/ui/input";
+import { Plus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { getMonthName } from "@/lib/formatters";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
 
-const CRMDashboard = () => {
-  const [loading, setLoading] = useState(true);
-  const [totalContacts, setTotalContacts] = useState(0);
-  const [activeProjects, setActiveProjects] = useState(0);
-  const [pipelineValue, setPipelineValue] = useState(0);
-  const [nextFollowUp, setNextFollowUp] = useState<{ date: string; contactName: string } | null>(null);
-  const [followUps, setFollowUps] = useState<any[]>([]);
-  const [revenueData, setRevenueData] = useState<any[]>([]);
-  const [revenueTimeRange, setRevenueTimeRange] = useState<3 | 6 | 12>(6);
-  const [searchOpen, setSearchOpen] = useState(false);
-  const navigate = useNavigate();
+interface Project {
+  id: string;
+  name: string;
+  type: "Assessment" | "Pilot" | "Integration";
+  pipeline_status: "Meeting Booked" | "Proposal Sent" | "Won" | "Lost";
+  project_status: "Planned" | "Ongoing" | "Completed" | null;
+  project_value_kr: number;
+  probability_percent: number;
+  start_date: string;
+  end_date: string;
+  created_at: string;
+}
+
+const Dashboard = () => {
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [viewMode, setViewMode] = useState<"kanban" | "table">("kanban");
+  const [typeFilter, setTypeFilter] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showLost, setShowLost] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session) {
-        navigate("/admin");
-        return;
-      }
-
-      await fetchDashboardData();
-      setLoading(false);
-    };
-
     checkAuth();
+  }, []);
 
-    // Set up realtime subscriptions for all relevant tables
-    const contactsChannel = supabase
-      .channel('dashboard-contacts')
-      .on('postgres_changes', {
-        event: '*',
-        schema: 'public',
-        table: 'contacts'
-      }, () => {
-        fetchDashboardData();
-      })
-      .subscribe();
+  const checkAuth = async () => {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
 
-    const projectsChannel = supabase
-      .channel('dashboard-projects')
-      .on('postgres_changes', {
-        event: '*',
-        schema: 'public',
-        table: 'projects'
-      }, () => {
-        fetchDashboardData();
-      })
-      .subscribe();
-
-    const interactionsChannel = supabase
-      .channel('dashboard-interactions')
-      .on('postgres_changes', {
-        event: '*',
-        schema: 'public',
-        table: 'interactions'
-      }, () => {
-        fetchDashboardData();
-      })
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(contactsChannel);
-      supabase.removeChannel(projectsChannel);
-      supabase.removeChannel(interactionsChannel);
-    };
-  }, [navigate]);
-
-  const fetchDashboardData = async () => {
-    // Fetch total contacts
-    const { count: contactCount } = await supabase
-      .from('contacts')
-      .select('*', { count: 'exact', head: true });
-    setTotalContacts(contactCount || 0);
-
-    // Fetch active projects
-    const { count: projectCount } = await supabase
-      .from('projects')
-      .select('*', { count: 'exact', head: true })
-      .eq('status', 'Ongoing');
-    setActiveProjects(projectCount || 0);
-
-    // Fetch pipeline value (weighted)
-    const { data: projects } = await supabase
-      .from('projects')
-      .select('status, project_value_kr');
-    
-    const weights: Record<string, number> = { Lead: 0.2, Prospect: 0.4, Proposal: 0.6, Contract: 1.0, Client: 0 };
-    const totalValue = projects?.reduce((sum, p) => sum + (p.project_value_kr * (weights[p.status] || 0)), 0) || 0;
-    setPipelineValue(totalValue);
-
-    // Fetch next follow-up
-    const { data: nextFollow } = await supabase
-      .from('contacts')
-      .select('name, next_followup')
-      .not('next_followup', 'is', null)
-      .gte('next_followup', new Date().toISOString().split('T')[0])
-      .order('next_followup', { ascending: true })
-      .limit(1)
-      .maybeSingle();
-    
-    if (nextFollow) {
-      setNextFollowUp({ date: nextFollow.next_followup, contactName: nextFollow.name });
+    if (!session) {
+      navigate("/admin");
+      return;
     }
 
-    // Fetch upcoming follow-ups (next 7 days or overdue)
-    const today = new Date().toISOString().split('T')[0];
-    const nextWeek = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
-    
-    const { data: upcomingFollowUps } = await supabase
-      .from('contacts')
-      .select('id, name, company, stage, next_followup, has_overdue_followup')
-      .not('next_followup', 'is', null)
-      .or(`next_followup.lte.${nextWeek},has_overdue_followup.eq.true`)
-      .order('next_followup', { ascending: true });
-    
-    setFollowUps(upcomingFollowUps?.map(f => ({
-      id: f.id,
-      contact_name: f.name,
-      company: f.company || 'No company',
-      stage: f.stage,
-      next_followup: f.next_followup,
-      is_overdue: f.has_overdue_followup
-    })) || []);
-
-    // Calculate revenue projection for next 6 months
-    await calculateRevenueProjection();
+    fetchProjects();
   };
 
-  const calculateRevenueProjection = async () => {
-    const { data: projects } = await supabase
-      .from('projects')
-      .select('*');
+  const fetchProjects = async () => {
+    const { data, error } = await supabase
+      .from("projects")
+      .select("*")
+      .order("created_at", { ascending: false });
 
-    if (!projects) return;
-
-    console.log('Projects for revenue calculation:', projects);
-
-    // Get next 12 months
-    const months: { month: string; confirmed: number; potential: number }[] = [];
-    const today = new Date();
-    
-    for (let i = 0; i < 12; i++) {
-      const date = new Date(today.getFullYear(), today.getMonth() + i, 1);
-      months.push({
-        month: `${getMonthName(date.getMonth())} ${date.getFullYear()}`,
-        confirmed: 0,
-        potential: 0,
-      });
-    }
-
-    // Stage probabilities
-    const stageProbabilities: Record<string, number> = {
-      Lead: 0.2,
-      Prospect: 0.4,
-      Proposal: 0.6,
-      Contract: 1.0,
-      Planned: 0.6,
-      Ongoing: 1.0,
-      Completed: 1.0,
-    };
-
-    // Distribute project revenue across months
-    projects.forEach((project) => {
-      const startDate = new Date(project.start_date);
-      const endDate = new Date(project.end_date);
-      const monthsInProject = Math.max(1, 
-        (endDate.getFullYear() - startDate.getFullYear()) * 12 + 
-        (endDate.getMonth() - startDate.getMonth()) + 1
-      );
-      const monthlyValue = project.project_value_kr / monthsInProject;
-
-      months.forEach((month, idx) => {
-        const monthDate = new Date(today.getFullYear(), today.getMonth() + idx, 1);
-        const monthEnd = new Date(today.getFullYear(), today.getMonth() + idx + 1, 0);
-
-        // Check if project overlaps with this month
-        if (startDate <= monthEnd && endDate >= monthDate) {
-          const isConfirmed = project.status === 'Ongoing' || project.status === 'Completed';
-          const probability = stageProbabilities[project.status] || 0;
-
-          if (isConfirmed) {
-            month.confirmed += monthlyValue;
-          } else {
-            month.potential += monthlyValue * probability;
-          }
-        }
-      });
-    });
-
-    console.log('Calculated revenue data:', months);
-    setRevenueData(months);
-  };
-
-  const handleCompleteFollowUp = async (contactId: string) => {
-    const { error } = await supabase
-      .from('contacts')
-      .update({ next_followup: null })
-      .eq('id', contactId);
-
-    if (!error) {
-      toast({ title: "Follow-up completed" });
-      fetchDashboardData();
+    if (!error && data) {
+      setProjects(data);
     }
   };
 
-  const handleSnoozeFollowUp = async (contactId: string, days: number) => {
-    const newDate = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
-    
-    const { error } = await supabase
-      .from('contacts')
-      .update({ next_followup: newDate })
-      .eq('id', contactId);
+  const filteredProjects = projects.filter((p) => {
+    if (!showLost && p.pipeline_status === "Lost") return false;
+    if (typeFilter !== "all" && p.type !== typeFilter) return false;
+    if (
+      searchQuery &&
+      !p.name.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+      return false;
+    return true;
+  });
 
-    if (!error) {
-      toast({ title: `Follow-up snoozed for ${days} days` });
-      fetchDashboardData();
+  const groupedByStatus = {
+    "Meeting Booked": filteredProjects.filter(
+      (p) => p.pipeline_status === "Meeting Booked"
+    ),
+    "Proposal Sent": filteredProjects.filter(
+      (p) => p.pipeline_status === "Proposal Sent"
+    ),
+    Won: filteredProjects.filter((p) => p.pipeline_status === "Won"),
+    Lost: filteredProjects.filter((p) => p.pipeline_status === "Lost"),
+  };
+
+  const getTypeBadgeColor = (type: string) => {
+    switch (type) {
+      case "Assessment":
+        return "bg-blue-500";
+      case "Pilot":
+        return "bg-green-500";
+      case "Integration":
+        return "bg-purple-500";
+      default:
+        return "bg-gray-500";
     }
   };
-
-  const handleEmailFollowUp = (contactId: string) => {
-    // TODO: Implement email modal
-    toast({ title: "Email feature coming soon" });
-  };
-
-  if (loading) {
-    return null;
-  }
 
   return (
     <div className="min-h-screen bg-background">
-      <Navigation />
-      
-      <div className="container mx-auto px-4 md:px-6 pt-32 pb-20">
-        <div className="mb-6">
-          <Link to="/admin/landing">
-            <Button variant="ghost" size="sm">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Admin Portal
-            </Button>
-          </Link>
+      <CRMNav />
+
+      <div className="container mx-auto px-6 py-8">
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="font-serif text-4xl font-bold">Projects Pipeline</h1>
+          <Button onClick={() => navigate("/admin/crm/projects/new")}>
+            <Plus className="h-4 w-4 mr-2" />
+            New Project
+          </Button>
         </div>
 
-        <div className="mb-8 flex items-center justify-between">
-          <div>
-            <h1 className="font-serif text-4xl font-bold mb-2">CRM Dashboard</h1>
-            <p className="text-muted-foreground">
-              Manage your contacts, projects, and revenue
-            </p>
-          </div>
-          
-          <div className="flex gap-2">
-            <Link to="/admin/crm/analytics">
-              <Button variant="outline" size="sm">
-                <BarChart3 className="mr-2 h-4 w-4" />
-                Analytics
-              </Button>
-            </Link>
-            <Link to="/admin/crm/contacts">
-              <Button variant="outline" size="sm">
-                <Users className="mr-2 h-4 w-4" />
-                Contacts
-              </Button>
-            </Link>
-            <Link to="/admin/crm/projects">
-              <Button variant="outline" size="sm">
-                <Briefcase className="mr-2 h-4 w-4" />
-                Projects
-              </Button>
-            </Link>
-            <Link to="/admin/crm/settings">
-              <Button variant="outline" size="sm">
-                <Settings className="mr-2 h-4 w-4" />
-                Settings
-              </Button>
-            </Link>
-            <Button variant="outline" size="sm" onClick={() => setSearchOpen(true)}>
-              <Search className="mr-2 h-4 w-4" />
-              Search
-            </Button>
-          </div>
+        <div className="flex gap-4 mb-6">
+          <Input
+            placeholder="Search projects..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="max-w-md"
+          />
+          <Select value={typeFilter} onValueChange={setTypeFilter}>
+            <SelectTrigger className="w-48">
+              <SelectValue placeholder="Filter by type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Types</SelectItem>
+              <SelectItem value="Assessment">Assessment</SelectItem>
+              <SelectItem value="Pilot">Pilot</SelectItem>
+              <SelectItem value="Integration">Integration</SelectItem>
+            </SelectContent>
+          </Select>
+          <Button
+            variant={showLost ? "default" : "outline"}
+            onClick={() => setShowLost(!showLost)}
+          >
+            {showLost ? "Hide" : "Show"} Lost
+          </Button>
         </div>
 
-        <div className="space-y-8">
-          <SummaryCards
-            totalContacts={totalContacts}
-            activeProjects={activeProjects}
-            pipelineValue={pipelineValue}
-            nextFollowUp={nextFollowUp}
-          />
-
-          <UpcomingFollowUps
-            followUps={followUps}
-            onComplete={handleCompleteFollowUp}
-            onSnooze={handleSnoozeFollowUp}
-            onEmail={handleEmailFollowUp}
-          />
-
-          <RevenueChart 
-            data={revenueData} 
-            timeRange={revenueTimeRange}
-            onTimeRangeChange={setRevenueTimeRange}
-          />
+        {/* Kanban View */}
+        <div className="grid grid-cols-4 gap-6">
+          {Object.entries(groupedByStatus).map(([status, projects]) => (
+            <div key={status}>
+              <h2 className="font-semibold text-lg mb-4">
+                {status} ({projects.length})
+              </h2>
+              <div className="space-y-4">
+                {projects.map((project) => (
+                  <Card key={project.id} className="p-4 cursor-pointer hover:shadow-lg transition-shadow">
+                    <h3 className="font-semibold mb-2">{project.name}</h3>
+                    <Badge className={getTypeBadgeColor(project.type)}>
+                      {project.type}
+                    </Badge>
+                    <div className="mt-3 text-sm text-muted-foreground">
+                      <div>
+                        Value: {project.project_value_kr.toLocaleString()} kr
+                      </div>
+                      <div>
+                        Weighted:{" "}
+                        {(
+                          (project.project_value_kr *
+                            project.probability_percent) /
+                          100
+                        ).toLocaleString()}{" "}
+                        kr
+                      </div>
+                      {project.start_date && (
+                        <div className="mt-2 text-xs">
+                          Days in stage:{" "}
+                          {Math.floor(
+                            (new Date().getTime() -
+                              new Date(project.created_at).getTime()) /
+                              (1000 * 60 * 60 * 24)
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
-        
-        <GlobalSearch open={searchOpen} setOpen={setSearchOpen} />
       </div>
     </div>
   );
 };
 
-export default CRMDashboard;
+export default Dashboard;
