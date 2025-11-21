@@ -14,139 +14,94 @@ export type Database = {
   }
   public: {
     Tables: {
-      blog_posts: {
+      companies: {
         Row: {
-          author_id: string | null
-          category: string
-          content: string
           created_at: string
           id: string
-          published: boolean
-          title: string
+          name: string
+          notes: string | null
           updated_at: string
+          website: string | null
         }
         Insert: {
-          author_id?: string | null
-          category: string
-          content: string
           created_at?: string
           id?: string
-          published?: boolean
-          title: string
+          name: string
+          notes?: string | null
           updated_at?: string
+          website?: string | null
         }
         Update: {
-          author_id?: string | null
-          category?: string
-          content?: string
           created_at?: string
           id?: string
-          published?: boolean
-          title?: string
+          name?: string
+          notes?: string | null
           updated_at?: string
+          website?: string | null
         }
         Relationships: []
       }
       contacts: {
         Row: {
           company: string | null
+          company_id: string | null
           created_at: string | null
           created_by: string | null
           email: string
           engagement_score: number | null
-          has_overdue_followup: boolean | null
           id: string
-          last_contacted: string | null
+          is_primary: boolean | null
           lead_source: string | null
           linkedin: string | null
+          linkedin_url: string | null
           name: string
-          next_followup: string | null
           notes: string | null
           phone: string | null
-          stage: string | null
           tags: string[] | null
           title: string | null
         }
         Insert: {
           company?: string | null
+          company_id?: string | null
           created_at?: string | null
           created_by?: string | null
           email: string
           engagement_score?: number | null
-          has_overdue_followup?: boolean | null
           id?: string
-          last_contacted?: string | null
+          is_primary?: boolean | null
           lead_source?: string | null
           linkedin?: string | null
+          linkedin_url?: string | null
           name: string
-          next_followup?: string | null
           notes?: string | null
           phone?: string | null
-          stage?: string | null
           tags?: string[] | null
           title?: string | null
         }
         Update: {
           company?: string | null
+          company_id?: string | null
           created_at?: string | null
           created_by?: string | null
           email?: string
           engagement_score?: number | null
-          has_overdue_followup?: boolean | null
           id?: string
-          last_contacted?: string | null
+          is_primary?: boolean | null
           lead_source?: string | null
           linkedin?: string | null
+          linkedin_url?: string | null
           name?: string
-          next_followup?: string | null
           notes?: string | null
           phone?: string | null
-          stage?: string | null
           tags?: string[] | null
           title?: string | null
         }
-        Relationships: []
-      }
-      interactions: {
-        Row: {
-          attachment_url: string | null
-          contact_id: string
-          created_at: string | null
-          date: string
-          id: string
-          logged_by: string | null
-          notes: string | null
-          subject: string | null
-          type: string
-        }
-        Insert: {
-          attachment_url?: string | null
-          contact_id: string
-          created_at?: string | null
-          date?: string
-          id?: string
-          logged_by?: string | null
-          notes?: string | null
-          subject?: string | null
-          type: string
-        }
-        Update: {
-          attachment_url?: string | null
-          contact_id?: string
-          created_at?: string | null
-          date?: string
-          id?: string
-          logged_by?: string | null
-          notes?: string | null
-          subject?: string | null
-          type?: string
-        }
         Relationships: [
           {
-            foreignKeyName: "interactions_contact_id_fkey"
-            columns: ["contact_id"]
+            foreignKeyName: "contacts_company_id_fkey"
+            columns: ["company_id"]
             isOneToOne: false
-            referencedRelation: "contacts"
+            referencedRelation: "companies"
             referencedColumns: ["id"]
           },
         ]
@@ -172,10 +127,81 @@ export type Database = {
         }
         Relationships: []
       }
+      project_companies: {
+        Row: {
+          company_id: string
+          created_at: string
+          id: string
+          project_id: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          id?: string
+          project_id: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          id?: string
+          project_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_companies_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_companies_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_contacts: {
+        Row: {
+          contact_id: string
+          created_at: string
+          id: string
+          project_id: string
+        }
+        Insert: {
+          contact_id: string
+          created_at?: string
+          id?: string
+          project_id: string
+        }
+        Update: {
+          contact_id?: string
+          created_at?: string
+          id?: string
+          project_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_contacts_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_contacts_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       projects: {
         Row: {
           actual_hours: number | null
-          client_id: string
           created_at: string | null
           created_by: string | null
           end_date: string
@@ -184,14 +210,18 @@ export type Database = {
           lead_source: string | null
           name: string
           notes: string | null
+          pipeline_status: Database["public"]["Enums"]["pipeline_status"]
+          primary_contact_id: string
+          probability_percent: number
+          project_status:
+            | Database["public"]["Enums"]["project_execution_status"]
+            | null
           project_value_kr: number
           start_date: string
-          status: string
-          type: string
+          type: Database["public"]["Enums"]["project_type"]
         }
         Insert: {
           actual_hours?: number | null
-          client_id: string
           created_at?: string | null
           created_by?: string | null
           end_date: string
@@ -200,14 +230,18 @@ export type Database = {
           lead_source?: string | null
           name: string
           notes?: string | null
+          pipeline_status?: Database["public"]["Enums"]["pipeline_status"]
+          primary_contact_id: string
+          probability_percent?: number
+          project_status?:
+            | Database["public"]["Enums"]["project_execution_status"]
+            | null
           project_value_kr: number
           start_date: string
-          status?: string
-          type: string
+          type: Database["public"]["Enums"]["project_type"]
         }
         Update: {
           actual_hours?: number | null
-          client_id?: string
           created_at?: string | null
           created_by?: string | null
           end_date?: string
@@ -216,15 +250,20 @@ export type Database = {
           lead_source?: string | null
           name?: string
           notes?: string | null
+          pipeline_status?: Database["public"]["Enums"]["pipeline_status"]
+          primary_contact_id?: string
+          probability_percent?: number
+          project_status?:
+            | Database["public"]["Enums"]["project_execution_status"]
+            | null
           project_value_kr?: number
           start_date?: string
-          status?: string
-          type?: string
+          type?: Database["public"]["Enums"]["project_type"]
         }
         Relationships: [
           {
             foreignKeyName: "projects_client_id_fkey"
-            columns: ["client_id"]
+            columns: ["primary_contact_id"]
             isOneToOne: false
             referencedRelation: "contacts"
             referencedColumns: ["id"]
@@ -243,48 +282,6 @@ export type Database = {
         Update: {
           key?: string
           value?: Json
-        }
-        Relationships: []
-      }
-      testimonials: {
-        Row: {
-          client_company: string
-          client_name: string
-          client_title: string | null
-          created_at: string
-          id: string
-          image_url: string | null
-          is_featured: boolean
-          logo_url: string | null
-          quote: string
-          service_area: string | null
-          updated_at: string
-        }
-        Insert: {
-          client_company: string
-          client_name: string
-          client_title?: string | null
-          created_at?: string
-          id?: string
-          image_url?: string | null
-          is_featured?: boolean
-          logo_url?: string | null
-          quote: string
-          service_area?: string | null
-          updated_at?: string
-        }
-        Update: {
-          client_company?: string
-          client_name?: string
-          client_title?: string | null
-          created_at?: string
-          id?: string
-          image_url?: string | null
-          is_featured?: boolean
-          logo_url?: string | null
-          quote?: string
-          service_area?: string | null
-          updated_at?: string
         }
         Relationships: []
       }
@@ -362,6 +359,9 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "user"
+      pipeline_status: "Meeting Booked" | "Proposal Sent" | "Won" | "Lost"
+      project_execution_status: "Planned" | "Ongoing" | "Completed"
+      project_type: "Assessment" | "Pilot" | "Integration"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -490,6 +490,9 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "user"],
+      pipeline_status: ["Meeting Booked", "Proposal Sent", "Won", "Lost"],
+      project_execution_status: ["Planned", "Ongoing", "Completed"],
+      project_type: ["Assessment", "Pilot", "Integration"],
     },
   },
 } as const
