@@ -8,10 +8,8 @@ import { ThemeProvider } from "./components/ThemeProvider";
 import ScrollToTop from "./components/ScrollToTop";
 import Index from "./pages/Index";
 import IndexEN from "./pages/IndexEN";
-import IndexOptimized from "./pages/IndexOptimized";
 import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
-import AdminContent from "./pages/AdminContent";
 import SetupAdmin from "./pages/SetupAdmin";
 import CRMDashboard from "./pages/crm/Dashboard";
 import Contacts from "./pages/crm/Contacts";
@@ -33,10 +31,8 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/en" element={<IndexEN />} />
-            <Route path="/optimized" element={<IndexOptimized />} />
             <Route path="/admin" element={<Auth />} />
             <Route path="/admin/setup" element={<SetupAdmin />} />
-            <Route path="/admin/content" element={<AdminContent />} />
             <Route path="/admin/crm" element={<CRMDashboard />} />
             <Route path="/admin/crm/contacts" element={<Contacts />} />
             <Route path="/admin/crm/companies" element={<Companies />} />
