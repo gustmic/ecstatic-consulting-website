@@ -1,13 +1,8 @@
-import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import Navigation from "@/components/Navigation";
-import { Button } from "@/components/ui/button";
+import { CRMNav } from "@/components/crm/CRMNav";
 import { Card } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import { ArrowLeft, Calendar } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -15,353 +10,304 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useToast } from "@/hooks/use-toast";
-import ConversionFunnel from "@/components/crm/ConversionFunnel";
-import WinLossAnalysis from "@/components/crm/WinLossAnalysis";
-import { ExpandableHelp } from "@/components/crm/ExpandableHelp";
-import { HelpTooltip } from "@/components/crm/HelpTooltip";
-import { StickyMetricsSummary } from "@/components/crm/StickyMetricsSummary";
-import { AnalyticsSection } from "@/components/crm/AnalyticsSection";
-import { analyticsHelp } from "@/lib/analyticsHelp";
+
+interface Project {
+  id: string;
+  name: string;
+  type: "Assessment" | "Pilot" | "Integration";
+  pipeline_status: "Meeting Booked" | "Proposal Sent" | "Won" | "Lost";
+  project_status: "Planned" | "Ongoing" | "Completed" | null;
+  project_value_kr: number;
+  probability_percent: number;
+  start_date: string;
+  end_date: string;
+  created_at: string;
+}
 
 const Analytics = () => {
-  const [loading, setLoading] = useState(true);
-  const [funnelData, setFunnelData] = useState<any[]>([]);
-  const [winLossData, setWinLossData] = useState<any>(null);
-  const [metrics, setMetrics] = useState({
-    overallConversion: 0,
-    avgDealCycle: 0,
-    totalPipelineValue: 0,
-  });
-  const [dateRange, setDateRange] = useState<'30' | '90' | '365' | 'all'>('all');
-  const [showHelp, setShowHelp] = useState(true);
-  const navigate = useNavigate();
-  const { toast } = useToast();
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [timeFilter, setTimeFilter] = useState("all");
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session) {
-        navigate("/admin");
-        return;
-      }
+    fetchProjects();
+  }, []);
 
-      await fetchAnalyticsData();
-    };
+  const fetchProjects = async () => {
+    const { data, error } = await supabase
+      .from("projects")
+      .select("*")
+      .order("created_at", { ascending: false });
 
-    checkAuth();
-
-    // Set up realtime subscriptions
-    const contactsChannel = supabase
-      .channel('analytics-contacts')
-      .on('postgres_changes', {
-        event: '*',
-        schema: 'public',
-        table: 'contacts'
-      }, () => {
-        fetchAnalyticsData();
-      })
-      .subscribe();
-
-    const projectsChannel = supabase
-      .channel('analytics-projects')
-      .on('postgres_changes', {
-        event: '*',
-        schema: 'public',
-        table: 'projects'
-      }, () => {
-        fetchAnalyticsData();
-      })
-      .subscribe();
-
-    const interactionsChannel = supabase
-      .channel('analytics-interactions')
-      .on('postgres_changes', {
-        event: '*',
-        schema: 'public',
-        table: 'interactions'
-      }, () => {
-        fetchAnalyticsData();
-      })
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(contactsChannel);
-      supabase.removeChannel(projectsChannel);
-      supabase.removeChannel(interactionsChannel);
-    };
-  }, [navigate, dateRange]);
-
-  const fetchAnalyticsData = async () => {
-    try {
-      setLoading(true);
-
-      // Calculate date filter
-      let dateFilter: Date | null = null;
-      if (dateRange !== 'all') {
-        const days = parseInt(dateRange);
-        dateFilter = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
-      }
-
-      // Fetch stages from settings
-      const { data: stagesData } = await supabase
-        .from('settings')
-        .select('value')
-        .eq('key', 'stages')
-        .single();
-
-      const stages = stagesData?.value as string[] || ['Lead', 'Prospect', 'Proposal', 'Contract', 'Client'];
-
-      // Fetch all contacts with their stages
-      let contactsQuery = supabase
-        .from('contacts')
-        .select('id, name, company, stage, created_at');
-      
-      if (dateFilter) {
-        contactsQuery = contactsQuery.gte('created_at', dateFilter.toISOString());
-      }
-
-      const { data: contacts, error: contactsError } = await contactsQuery;
-
-      if (contactsError) {
-        toast({
-          title: "Error fetching contacts",
-          description: contactsError.message,
-          variant: "destructive",
-        });
-        return;
-      }
-
-    if (!contacts) return;
-
-    // Calculate funnel data
-    const stageCounts: Record<string, number> = {};
-    
-    stages.forEach(stage => {
-      stageCounts[stage] = contacts.filter(c => c.stage === stage).length;
-    });
-
-    const funnelWithConversion = stages.map((stage, idx) => {
-      const count = stageCounts[stage];
-      let conversionRate = undefined;
-      
-      if (idx > 0) {
-        const prevCount = stageCounts[stages[idx - 1]];
-        conversionRate = prevCount > 0 ? Math.round((count / prevCount) * 100) : 0;
-      }
-      
-      return { stage, count, conversionRate };
-    });
-
-    setFunnelData(funnelWithConversion);
-
-    // Calculate win/loss data (using last stage as "won")
-    const totalContacts = contacts.length;
-    const wonStage = stages[stages.length - 1]; // Last stage is considered "won"
-    const clientContacts = contacts.filter(c => c.stage === wonStage).length;
-    const overallWinRate = totalContacts > 0 ? Math.round((clientContacts / totalContacts) * 100) : 0;
-
-    const stageBreakdown = stages.map(stage => {
-      const total = stageCounts[stage];
-      const won = stage === wonStage ? total : Math.round(total * (clientContacts / totalContacts));
-      const winRate = total > 0 ? Math.round((won / total) * 100) : 0;
-      
-      return { stage, total, won, winRate };
-    });
-
-    setWinLossData({ overallWinRate, stageBreakdown });
-
-    // Calculate key metrics
-    // Overall conversion (Lead to Won)
-    const firstStage = stages[0] || 'Lead';
-    const leadCount = stageCounts[firstStage] || 0;
-    const overallConversion = leadCount > 0 ? Math.round((clientContacts / (leadCount + clientContacts)) * 100) : 0;
-
-    // Average deal cycle (simplified - based on days since creation)
-    const clientContactsWithDates = contacts.filter(c => c.stage === wonStage);
-    let avgDealCycle = 0;
-    if (clientContactsWithDates.length > 0) {
-      const totalDays = clientContactsWithDates.reduce((sum, c) => {
-        const created = new Date(c.created_at);
-        const now = new Date();
-        const days = Math.floor((now.getTime() - created.getTime()) / (1000 * 60 * 60 * 24));
-        return sum + days;
-      }, 0);
-      avgDealCycle = Math.round(totalDays / clientContactsWithDates.length);
-    }
-
-    // Total pipeline value
-    const { data: projects } = await supabase
-      .from('projects')
-      .select('project_value_kr, status, created_at');
-    
-    const totalPipelineValue = projects
-      ?.filter(p => p.status !== wonStage && p.status !== 'Completed')
-      .reduce((sum, p) => sum + (p.project_value_kr || 0), 0) || 0;
-
-    setMetrics({
-      overallConversion,
-      avgDealCycle,
-      totalPipelineValue,
-    });
-
-    } catch (error: any) {
-      toast({
-        title: "Error loading analytics",
-        description: error.message || "Failed to load analytics data",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
+    if (!error && data) {
+      setProjects(data);
     }
   };
 
-  if (loading) {
+  // Capacity Check
+  const activeAssessments = projects.filter(
+    (p) =>
+      p.type === "Assessment" &&
+      p.project_status === "Ongoing" &&
+      new Date(p.start_date) <= new Date() &&
+      new Date(p.end_date) >= new Date()
+  ).length;
+
+  const activePilots = projects.filter(
+    (p) =>
+      p.type === "Pilot" &&
+      p.project_status === "Ongoing" &&
+      new Date(p.start_date) <= new Date() &&
+      new Date(p.end_date) >= new Date()
+  ).length;
+
+  const startingThisMonth = projects.filter((p) => {
+    if (!p.start_date) return false;
+    const startDate = new Date(p.start_date);
+    const now = new Date();
     return (
-      <div className="min-h-screen bg-background">
-        <Navigation />
-        
-        <div className="container mx-auto px-4 md:px-6 pt-32 pb-20">
-          <div className="mb-6">
-            <Skeleton className="h-10 w-48" />
-          </div>
-
-          <div className="mb-8">
-            <Skeleton className="h-10 w-64 mb-2" />
-            <Skeleton className="h-6 w-96" />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            {[1, 2, 3, 4].map((i) => (
-              <Card key={i} className="p-6">
-                <Skeleton className="h-20 w-full" />
-              </Card>
-            ))}
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {[1, 2].map((i) => (
-              <Card key={i} className="p-6">
-                <Skeleton className="h-64 w-full" />
-              </Card>
-            ))}
-          </div>
-        </div>
-      </div>
+      startDate.getMonth() === now.getMonth() &&
+      startDate.getFullYear() === now.getFullYear()
     );
-  }
+  }).length;
+
+  // Pipeline Health
+  const pipelineProjects = projects.filter(
+    (p) =>
+      p.pipeline_status === "Meeting Booked" ||
+      p.pipeline_status === "Proposal Sent"
+  );
+  const pipelineValue = pipelineProjects.reduce(
+    (sum, p) => sum + (p.project_value_kr * p.probability_percent) / 100,
+    0
+  );
+
+  const meetingBookedCount = projects.filter(
+    (p) => p.pipeline_status === "Meeting Booked"
+  ).length;
+  const proposalSentCount = projects.filter(
+    (p) => p.pipeline_status === "Proposal Sent"
+  ).length;
+
+  // Conversion Funnel
+  const totalProjects = projects.length;
+  const wonCount = projects.filter((p) => p.pipeline_status === "Won").length;
+
+  const winRate =
+    totalProjects > 0 ? ((wonCount / totalProjects) * 100).toFixed(1) : "0";
+
+  // Project Type Breakdown
+  const assessmentValue = pipelineProjects
+    .filter((p) => p.type === "Assessment")
+    .reduce((sum, p) => sum + p.project_value_kr, 0);
+  const pilotValue = pipelineProjects
+    .filter((p) => p.type === "Pilot")
+    .reduce((sum, p) => sum + p.project_value_kr, 0);
+  const integrationValue = pipelineProjects
+    .filter((p) => p.type === "Integration")
+    .reduce((sum, p) => sum + p.project_value_kr, 0);
+
+  const totalTypeValue = assessmentValue + pilotValue + integrationValue;
 
   return (
     <div className="min-h-screen bg-background">
-      <Navigation />
-      
-      <div className="container mx-auto px-4 md:px-6 pt-32 pb-8">
-        <div className="mb-6">
-          <Link to="/admin/crm">
-            <Button variant="ghost" size="sm">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to CRM Dashboard
-            </Button>
-          </Link>
+      <CRMNav />
+
+      <div className="container mx-auto px-6 py-8">
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="font-serif text-4xl font-bold">Analytics</h1>
+          <Select value={timeFilter} onValueChange={setTimeFilter}>
+            <SelectTrigger className="w-48">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="30">Last 30 days</SelectItem>
+              <SelectItem value="90">Last 90 days</SelectItem>
+              <SelectItem value="365">Last 365 days</SelectItem>
+              <SelectItem value="all">All Time</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
-        <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div>
-            <h1 className="font-serif text-4xl font-bold mb-2">📊 Pipeline Analytics</h1>
-            <p className="text-muted-foreground">
-              Data-driven insights for your consultancy
-            </p>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <Switch
-                checked={showHelp}
-                onCheckedChange={setShowHelp}
-                id="show-help"
+        {/* Capacity Check */}
+        <div className="grid grid-cols-3 gap-6 mb-8">
+          <Card className="p-6">
+            <h3 className="text-sm font-medium text-muted-foreground mb-2">
+              Active Assessments
+            </h3>
+            <div className="text-3xl font-bold mb-2">
+              {activeAssessments} / 2
+            </div>
+            <div className="w-full bg-muted rounded-full h-2">
+              <div
+                className={`h-2 rounded-full ${
+                  activeAssessments >= 2 ? "bg-destructive" : "bg-primary"
+                }`}
+                style={{ width: `${(activeAssessments / 2) * 100}%` }}
               />
-              <Label htmlFor="show-help" className="text-sm cursor-pointer">
-                Show explanations
-              </Label>
             </div>
-            
-            <div className="flex items-center gap-2">
-              <Calendar className="h-4 w-4 text-muted-foreground" />
-              <Select value={dateRange} onValueChange={(value: any) => setDateRange(value)}>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Select period" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="30">Last 30 days</SelectItem>
-                  <SelectItem value="90">Last 90 days</SelectItem>
-                  <SelectItem value="365">Last year</SelectItem>
-                  <SelectItem value="all">All time</SelectItem>
-                </SelectContent>
-              </Select>
+          </Card>
+
+          <Card className="p-6">
+            <h3 className="text-sm font-medium text-muted-foreground mb-2">
+              Active Pilots
+            </h3>
+            <div className="text-3xl font-bold mb-2">{activePilots} / 4</div>
+            <div className="w-full bg-muted rounded-full h-2">
+              <div
+                className={`h-2 rounded-full ${
+                  activePilots >= 4 ? "bg-destructive" : "bg-primary"
+                }`}
+                style={{ width: `${(activePilots / 4) * 100}%` }}
+              />
             </div>
-          </div>
+          </Card>
+
+          <Card className="p-6">
+            <h3 className="text-sm font-medium text-muted-foreground mb-2">
+              Starting This Month
+            </h3>
+            <div className="text-3xl font-bold">{startingThisMonth}</div>
+            <p className="text-sm text-muted-foreground mt-2">projects</p>
+          </Card>
         </div>
 
-        {showHelp && (
-          <ExpandableHelp title="How to use this dashboard">
-            <p>
-              This dashboard helps you answer key business questions:
-            </p>
-            <ul className="list-disc pl-5 space-y-1 mt-2">
-              <li><strong>Where to focus time?</strong> Check conversion rates and deal velocity</li>
-              <li><strong>Are we pricing correctly?</strong> Review service profitability</li>
-              <li><strong>Pipeline health?</strong> Monitor conversion funnel and pipeline value</li>
-              <li><strong>Which relationships matter?</strong> Use engagement health indicators</li>
-            </ul>
-            <p className="mt-3 text-accent">
-              💡 <strong>Pro tip:</strong> Review this dashboard weekly to spot trends early.
-            </p>
-          </ExpandableHelp>
-        )}
-      </div>
-
-      {/* Sticky Metrics Summary */}
-      <StickyMetricsSummary
-        overallConversion={metrics.overallConversion}
-        avgDealCycle={metrics.avgDealCycle}
-        totalPipelineValue={metrics.totalPipelineValue}
-      />
-
-      {/* Main Analytics Content */}
-      <div className="container mx-auto px-4 md:px-6 py-8 space-y-12">
-        {/* Conversion Funnel Section */}
-        <AnalyticsSection title="Conversion Funnel" icon="📊">
-          {showHelp && (
-            <div className="mb-4">
-              <HelpTooltip
-                title={analyticsHelp.conversionFunnel.title}
-                description={analyticsHelp.conversionFunnel.description}
-                actionable={analyticsHelp.conversionFunnel.actionable}
-              />
+        {/* Pipeline Health */}
+        <div className="grid grid-cols-3 gap-6 mb-8">
+          <Card className="p-6">
+            <h3 className="text-sm font-medium text-muted-foreground mb-2">
+              Pipeline Value
+            </h3>
+            <div className="text-3xl font-bold">
+              {pipelineValue.toLocaleString()} kr
             </div>
-          )}
-          <ConversionFunnel data={funnelData} />
-        </AnalyticsSection>
+            <p className="text-sm text-muted-foreground mt-2">(weighted)</p>
+          </Card>
 
-        {/* Win/Loss Analysis Section */}
-        <AnalyticsSection title="Win/Loss Analysis" icon="📈">
-          {showHelp && winLossData && (
-            <div className="mb-4">
-              <HelpTooltip
-                title={analyticsHelp.winLossAnalysis.title}
-                description={analyticsHelp.winLossAnalysis.description}
-                actionable={analyticsHelp.winLossAnalysis.actionable}
-              />
+          <Card className="p-6">
+            <h3 className="text-sm font-medium text-muted-foreground mb-2">
+              Meeting Booked
+            </h3>
+            <div className="text-3xl font-bold">{meetingBookedCount}</div>
+            <p className="text-sm text-muted-foreground mt-2">projects</p>
+          </Card>
+
+          <Card className="p-6">
+            <h3 className="text-sm font-medium text-muted-foreground mb-2">
+              Proposal Sent
+            </h3>
+            <div className="text-3xl font-bold">{proposalSentCount}</div>
+            <p className="text-sm text-muted-foreground mt-2">projects</p>
+          </Card>
+        </div>
+
+        {/* Conversion Funnel */}
+        <Card className="p-6 mb-8">
+          <h2 className="font-serif text-2xl font-bold mb-6">
+            Conversion Funnel
+          </h2>
+          <div className="space-y-4">
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="font-medium">Meeting Booked</span>
+                <span className="text-muted-foreground">
+                  {meetingBookedCount} projects
+                </span>
+              </div>
+              <div className="w-full bg-muted rounded-full h-4">
+                <div
+                  className="bg-primary h-4 rounded-full"
+                  style={{ width: "100%" }}
+                />
+              </div>
             </div>
-          )}
-          {winLossData && <WinLossAnalysis data={winLossData} />}
-        </AnalyticsSection>
+
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="font-medium">Proposal Sent</span>
+                <span className="text-muted-foreground">
+                  {proposalSentCount} projects
+                </span>
+              </div>
+              <div className="w-full bg-muted rounded-full h-4">
+                <div
+                  className="bg-primary h-4 rounded-full"
+                  style={{
+                    width: `${
+                      totalProjects > 0
+                        ? (proposalSentCount / totalProjects) * 100
+                        : 0
+                    }%`,
+                  }}
+                />
+              </div>
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="font-medium">Won</span>
+                <span className="text-muted-foreground">
+                  {wonCount} projects
+                </span>
+              </div>
+              <div className="w-full bg-muted rounded-full h-4">
+                <div
+                  className="bg-primary h-4 rounded-full"
+                  style={{
+                    width: `${
+                      totalProjects > 0 ? (wonCount / totalProjects) * 100 : 0
+                    }%`,
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+
+          <Card className="mt-6 p-4 bg-muted">
+            <p className="text-lg font-semibold">Overall Win Rate: {winRate}%</p>
+          </Card>
+        </Card>
+
+        {/* Project Type Breakdown */}
+        <Card className="p-6">
+          <h2 className="font-serif text-2xl font-bold mb-6">
+            Pipeline Value by Type
+          </h2>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="font-medium">Assessment</span>
+              <span className="text-muted-foreground">
+                {assessmentValue.toLocaleString()} kr (
+                {totalTypeValue > 0
+                  ? ((assessmentValue / totalTypeValue) * 100).toFixed(1)
+                  : "0"}
+                %)
+              </span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="font-medium">Pilot</span>
+              <span className="text-muted-foreground">
+                {pilotValue.toLocaleString()} kr (
+                {totalTypeValue > 0
+                  ? ((pilotValue / totalTypeValue) * 100).toFixed(1)
+                  : "0"}
+                %)
+              </span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="font-medium">Integration</span>
+              <span className="text-muted-foreground">
+                {integrationValue.toLocaleString()} kr (
+                {totalTypeValue > 0
+                  ? ((integrationValue / totalTypeValue) * 100).toFixed(1)
+                  : "0"}
+                %)
+              </span>
+            </div>
+          </div>
+        </Card>
       </div>
     </div>
   );
 };
 
 export default Analytics;
-
-
