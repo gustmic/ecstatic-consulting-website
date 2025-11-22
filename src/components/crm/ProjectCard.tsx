@@ -8,7 +8,7 @@ interface ProjectCardProps {
   project: {
     id: string;
     name: string;
-    type: "Assessment" | "Pilot" | "Integration";
+    type: string;
     project_value_kr: number;
     probability_percent: number;
     primary_contact_name?: string;
