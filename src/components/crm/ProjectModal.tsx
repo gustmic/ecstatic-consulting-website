@@ -1,152 +1,285 @@
-import { useState, useEffect } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { CalendarIcon } from "lucide-react";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 
 interface ProjectModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (project: any) => void;
-  project?: any;
+  onSave: (data: ProjectFormData) => Promise<void>;
+  project?: Project | null;
 }
 
-const ProjectModal = ({ isOpen, onClose, onSave, project }: ProjectModalProps) => {
-  const [contacts, setContacts] = useState<any[]>([]);
-  const [serviceTypes, setServiceTypes] = useState<string[]>([]);
-  const [formData, setFormData] = useState({
+interface Project {
+  id: string;
+  name: string;
+  type: "Assessment" | "Pilot" | "Integration";
+  pipeline_status: "Meeting Booked" | "Proposal Sent" | "Won" | "Lost";
+  project_status: "Planned" | "Ongoing" | "Completed" | null;
+  primary_contact_id: string;
+  project_value_kr: number;
+  start_date: string | null;
+  end_date: string | null;
+  notes: string | null;
+}
+
+interface ProjectFormData {
+  name: string;
+  type: "Assessment" | "Pilot" | "Integration";
+  pipeline_status: "Meeting Booked" | "Proposal Sent" | "Won" | "Lost";
+  project_status: "Planned" | "Ongoing" | "Completed" | null;
+  primary_contact_id: string;
+  company_ids: string[];
+  related_contact_ids: string[];
+  project_value_kr: number;
+  start_date: string;
+  end_date: string;
+  notes: string;
+}
+
+interface Contact {
+  id: string;
+  name: string;
+  company_id: string;
+  companies?: { name: string };
+}
+
+interface Company {
+  id: string;
+  name: string;
+}
+
+const DEFAULT_VALUES = {
+  Assessment: 750000,
+  Pilot: 1500000,
+  Integration: 2000000,
+};
+
+export const ProjectModal = ({ isOpen, onClose, onSave, project }: ProjectModalProps) => {
+  const [formData, setFormData] = useState<ProjectFormData>({
     name: "",
-    client_id: "",
-    type: "Strategy",
+    type: "Assessment",
+    pipeline_status: "Meeting Booked",
+    project_status: null,
+    primary_contact_id: "",
+    company_ids: [],
+    related_contact_ids: [],
+    project_value_kr: DEFAULT_VALUES.Assessment,
     start_date: "",
     end_date: "",
-    status: "Planned",
-    project_value_kr: "",
     notes: "",
   });
-  const { toast } = useToast();
+  const [contacts, setContacts] = useState<Contact[]>([]);
+  const [companies, setCompanies] = useState<Company[]>([]);
+  const [saving, setSaving] = useState(false);
+  const [startDate, setStartDate] = useState<Date | undefined>(undefined);
+  const [endDate, setEndDate] = useState<Date | undefined>(undefined);
 
   useEffect(() => {
-    fetchContacts();
-    fetchServiceTypes();
+    fetchContactsAndCompanies();
   }, []);
-
-  const fetchServiceTypes = async () => {
-    const { data } = await supabase
-      .from('settings')
-      .select('value')
-      .eq('key', 'service_types')
-      .single();
-    
-    if (data?.value) {
-      setServiceTypes(data.value as string[]);
-    }
-  };
 
   useEffect(() => {
     if (project) {
-      setFormData({
-        name: project.name || "",
-        client_id: project.client_id || "",
-        type: project.type || "Strategy",
-        start_date: project.start_date || "",
-        end_date: project.end_date || "",
-        status: project.status || "Planned",
-        project_value_kr: project.project_value_kr?.toString() || "",
-        notes: project.notes || "",
-      });
+      loadProjectData(project);
     } else {
       setFormData({
         name: "",
-        client_id: "",
-        type: "Strategy",
+        type: "Assessment",
+        pipeline_status: "Meeting Booked",
+        project_status: null,
+        primary_contact_id: "",
+        company_ids: [],
+        related_contact_ids: [],
+        project_value_kr: DEFAULT_VALUES.Assessment,
         start_date: "",
         end_date: "",
-        status: "Planned",
-        project_value_kr: "",
         notes: "",
       });
+      setStartDate(undefined);
+      setEndDate(undefined);
     }
   }, [project, isOpen]);
 
-  const fetchContacts = async () => {
-    const { data } = await supabase
-      .from('contacts')
-      .select('id, name, company')
-      .order('name');
-    setContacts(data || []);
+  const loadProjectData = async (project: Project) => {
+    const { data: projectCompanies } = await supabase
+      .from("project_companies")
+      .select("company_id")
+      .eq("project_id", project.id);
+    
+    const { data: projectContacts } = await supabase
+      .from("project_contacts")
+      .select("contact_id")
+      .eq("project_id", project.id);
+
+    setFormData({
+      name: project.name,
+      type: project.type,
+      pipeline_status: project.pipeline_status,
+      project_status: project.project_status,
+      primary_contact_id: project.primary_contact_id,
+      company_ids: projectCompanies?.map(pc => pc.company_id) || [],
+      related_contact_ids: projectContacts?.map(pc => pc.contact_id) || [],
+      project_value_kr: project.project_value_kr,
+      start_date: project.start_date || "",
+      end_date: project.end_date || "",
+      notes: project.notes || "",
+    });
+
+    if (project.start_date) setStartDate(new Date(project.start_date));
+    if (project.end_date) setEndDate(new Date(project.end_date));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const fetchContactsAndCompanies = async () => {
+    const { data: contactsData } = await supabase
+      .from("contacts")
+      .select("id, name, company_id, companies(name)")
+      .order("name");
+    
+    const { data: companiesData } = await supabase
+      .from("companies")
+      .select("id, name")
+      .order("name");
+
+    if (contactsData) setContacts(contactsData);
+    if (companiesData) setCompanies(companiesData);
+  };
+
+  const handleTypeChange = (type: "Assessment" | "Pilot" | "Integration") => {
+    setFormData({
+      ...formData,
+      type,
+      project_value_kr: DEFAULT_VALUES[type],
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validate dates
-    if (new Date(formData.end_date) < new Date(formData.start_date)) {
-      toast({
-        variant: "destructive",
-        title: "Invalid dates",
-        description: "End date must be after start date",
-      });
+    if (!formData.name.trim() || !formData.primary_contact_id || formData.company_ids.length === 0) {
       return;
     }
 
-    const projectData = {
-      ...formData,
-      project_value_kr: parseInt(formData.project_value_kr),
-    };
-
-    onSave(projectData);
+    if (formData.pipeline_status === "Won" && (!formData.start_date || !formData.end_date)) {
+      return;
+    }
+    
+    setSaving(true);
+    await onSave(formData);
+    setSaving(false);
+    onClose();
   };
+
+  const requiresProjectStatus = formData.pipeline_status === "Won";
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{project ? "Edit Project" : "Add New Project"}</DialogTitle>
+          <DialogTitle>{project ? "Edit Project" : "New Project"}</DialogTitle>
         </DialogHeader>
+        
+        <form onSubmit={handleSubmit}>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="col-span-2">
+              <Label htmlFor="name">Project Name *</Label>
+              <Input
+                id="name"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                placeholder="Project name"
+                required
+              />
+            </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <Label htmlFor="name">Project Name *</Label>
-            <Input
-              id="name"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              required
-            />
-          </div>
-
-          <div>
-            <Label htmlFor="client_id">Client *</Label>
-            <Select value={formData.client_id} onValueChange={(value) => setFormData({ ...formData, client_id: value })}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select a client" />
-              </SelectTrigger>
-              <SelectContent>
-                {contacts.map(contact => (
-                  <SelectItem key={contact.id} value={contact.id}>
-                    {contact.name} {contact.company && `(${contact.company})`}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="type">Project Type *</Label>
-              <Select value={formData.type} onValueChange={(value) => setFormData({ ...formData, type: value })}>
+              <Label htmlFor="type">Type *</Label>
+              <Select
+                value={formData.type}
+                onValueChange={(value: any) => handleTypeChange(value)}
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {serviceTypes.map(type => (
-                    <SelectItem key={type} value={type}>
-                      {type}
+                  <SelectItem value="Assessment">Assessment</SelectItem>
+                  <SelectItem value="Pilot">Pilot</SelectItem>
+                  <SelectItem value="Integration">Integration</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label htmlFor="value">Value (kr) *</Label>
+              <Input
+                id="value"
+                type="number"
+                value={formData.project_value_kr}
+                onChange={(e) => setFormData({ ...formData, project_value_kr: parseInt(e.target.value) })}
+                min="0"
+                required
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="pipeline_status">Pipeline Status *</Label>
+              <Select
+                value={formData.pipeline_status}
+                onValueChange={(value: any) => setFormData({ ...formData, pipeline_status: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Meeting Booked">Meeting Booked</SelectItem>
+                  <SelectItem value="Proposal Sent">Proposal Sent</SelectItem>
+                  <SelectItem value="Won">Won</SelectItem>
+                  <SelectItem value="Lost">Lost</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {requiresProjectStatus && (
+              <div>
+                <Label htmlFor="project_status">Project Status *</Label>
+                <Select
+                  value={formData.project_status || ""}
+                  onValueChange={(value: any) => setFormData({ ...formData, project_status: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Planned">Planned</SelectItem>
+                    <SelectItem value="Ongoing">Ongoing</SelectItem>
+                    <SelectItem value="Completed">Completed</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+
+            <div>
+              <Label htmlFor="primary_contact">Primary Contact *</Label>
+              <Select
+                value={formData.primary_contact_id}
+                onValueChange={(value) => setFormData({ ...formData, primary_contact_id: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select primary contact" />
+                </SelectTrigger>
+                <SelectContent>
+                  {contacts.map((contact) => (
+                    <SelectItem key={contact.id} value={contact.id}>
+                      {contact.name} ({(contact.companies as any)?.name})
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -154,75 +287,136 @@ const ProjectModal = ({ isOpen, onClose, onSave, project }: ProjectModalProps) =
             </div>
 
             <div>
-              <Label htmlFor="status">Status *</Label>
-              <Select value={formData.status} onValueChange={(value) => setFormData({ ...formData, status: value })}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Planned">Planned</SelectItem>
-                  <SelectItem value="Ongoing">Ongoing</SelectItem>
-                  <SelectItem value="Completed">Completed</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="start_date">Start Date *</Label>
-              <Input
-                id="start_date"
-                type="date"
-                value={formData.start_date}
-                onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
-                required
-              />
+              <Label htmlFor="companies">Companies * (hold Ctrl/Cmd for multiple)</Label>
+              <select
+                id="companies"
+                multiple
+                className="flex h-20 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                value={formData.company_ids}
+                onChange={(e) => {
+                  const selected = Array.from(e.target.selectedOptions, option => option.value);
+                  setFormData({ ...formData, company_ids: selected });
+                }}
+              >
+                {companies.map((company) => (
+                  <option key={company.id} value={company.id}>
+                    {company.name}
+                  </option>
+                ))}
+              </select>
+              <p className="text-xs text-muted-foreground mt-1">
+                Selected: {formData.company_ids.length}
+              </p>
             </div>
 
             <div>
-              <Label htmlFor="end_date">End Date *</Label>
-              <Input
-                id="end_date"
-                type="date"
-                value={formData.end_date}
-                onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
-                required
+              <Label htmlFor="related_contacts">Related Contacts (optional, hold Ctrl/Cmd for multiple)</Label>
+              <select
+                id="related_contacts"
+                multiple
+                className="flex h-20 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                value={formData.related_contact_ids}
+                onChange={(e) => {
+                  const selected = Array.from(e.target.selectedOptions, option => option.value);
+                  setFormData({ ...formData, related_contact_ids: selected });
+                }}
+              >
+                {contacts
+                  .filter(c => c.id !== formData.primary_contact_id)
+                  .map((contact) => (
+                    <option key={contact.id} value={contact.id}>
+                      {contact.name} ({(contact.companies as any)?.name})
+                    </option>
+                  ))}
+              </select>
+              <p className="text-xs text-muted-foreground mt-1">
+                Selected: {formData.related_contact_ids.length}
+              </p>
+            </div>
+
+            {requiresProjectStatus && (
+              <>
+                <div>
+                  <Label>Start Date *</Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start text-left font-normal"
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {startDate ? format(startDate, "PPP") : "Pick a date"}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                      <Calendar
+                        mode="single"
+                        selected={startDate}
+                        onSelect={(date) => {
+                          setStartDate(date);
+                          if (date) {
+                            setFormData({ ...formData, start_date: format(date, "yyyy-MM-dd") });
+                          }
+                        }}
+                        initialFocus
+                        className={cn("p-3 pointer-events-auto")}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+
+                <div>
+                  <Label>End Date *</Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start text-left font-normal"
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {endDate ? format(endDate, "PPP") : "Pick a date"}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                      <Calendar
+                        mode="single"
+                        selected={endDate}
+                        onSelect={(date) => {
+                          setEndDate(date);
+                          if (date) {
+                            setFormData({ ...formData, end_date: format(date, "yyyy-MM-dd") });
+                          }
+                        }}
+                        initialFocus
+                        disabled={(date) => startDate ? date < startDate : false}
+                        className={cn("p-3 pointer-events-auto")}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+              </>
+            )}
+
+            <div className="col-span-2">
+              <Label htmlFor="notes">Notes</Label>
+              <Textarea
+                id="notes"
+                value={formData.notes}
+                onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                placeholder="Additional notes..."
+                rows={3}
               />
             </div>
           </div>
 
-          <div>
-            <Label htmlFor="project_value_kr">Project Value (kr) *</Label>
-            <Input
-              id="project_value_kr"
-              type="number"
-              min="1"
-              value={formData.project_value_kr}
-              onChange={(e) => setFormData({ ...formData, project_value_kr: e.target.value })}
-              required
-              placeholder="150000"
-            />
-          </div>
-
-          <div>
-            <Label htmlFor="notes">Notes</Label>
-            <Textarea
-              id="notes"
-              value={formData.notes}
-              onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-              rows={4}
-            />
-          </div>
-
-          <div className="flex gap-3 justify-end">
+          <DialogFooter className="mt-6">
             <Button type="button" variant="outline" onClick={onClose}>
               Cancel
             </Button>
-            <Button type="submit">
-              {project ? "Update" : "Create"} Project
+            <Button type="submit" disabled={saving}>
+              {saving ? "Saving..." : project ? "Update" : "Create"}
             </Button>
-          </div>
+          </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>
