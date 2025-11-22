@@ -12,7 +12,6 @@ import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
 import SetupAdmin from "./pages/SetupAdmin";
 import Dashboard from "./pages/crm/Dashboard";
-import NewCompanies from "./pages/crm/NewCompanies";
 import Contacts from "./pages/crm/Contacts";
 import Companies from "./pages/crm/Companies";
 import Analytics from "./pages/crm/Analytics";
