@@ -43,58 +43,58 @@ export type Database = {
       }
       contacts: {
         Row: {
-          company: string | null
           company_id: string | null
-          created_at: string | null
+          created_at: string
           created_by: string | null
           email: string
           engagement_score: number | null
+          has_overdue_followup: boolean | null
           id: string
-          is_primary: boolean | null
-          lead_source: string | null
-          linkedin: string | null
           linkedin_url: string | null
           name: string
+          next_followup: string | null
           notes: string | null
           phone: string | null
+          stage: Database["public"]["Enums"]["contact_stage"]
           tags: string[] | null
           title: string | null
+          updated_at: string
         }
         Insert: {
-          company?: string | null
           company_id?: string | null
-          created_at?: string | null
+          created_at?: string
           created_by?: string | null
           email: string
           engagement_score?: number | null
+          has_overdue_followup?: boolean | null
           id?: string
-          is_primary?: boolean | null
-          lead_source?: string | null
-          linkedin?: string | null
           linkedin_url?: string | null
           name: string
+          next_followup?: string | null
           notes?: string | null
           phone?: string | null
+          stage?: Database["public"]["Enums"]["contact_stage"]
           tags?: string[] | null
           title?: string | null
+          updated_at?: string
         }
         Update: {
-          company?: string | null
           company_id?: string | null
-          created_at?: string | null
+          created_at?: string
           created_by?: string | null
           email?: string
           engagement_score?: number | null
+          has_overdue_followup?: boolean | null
           id?: string
-          is_primary?: boolean | null
-          lead_source?: string | null
-          linkedin?: string | null
           linkedin_url?: string | null
           name?: string
+          next_followup?: string | null
           notes?: string | null
           phone?: string | null
+          stage?: Database["public"]["Enums"]["contact_stage"]
           tags?: string[] | null
           title?: string | null
+          updated_at?: string
         }
         Relationships: [
           {
@@ -102,6 +102,47 @@ export type Database = {
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      interactions: {
+        Row: {
+          contact_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          interaction_date: string
+          notes: string | null
+          subject: string | null
+          type: Database["public"]["Enums"]["interaction_type"]
+        }
+        Insert: {
+          contact_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          interaction_date?: string
+          notes?: string | null
+          subject?: string | null
+          type: Database["public"]["Enums"]["interaction_type"]
+        }
+        Update: {
+          contact_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          interaction_date?: string
+          notes?: string | null
+          subject?: string | null
+          type?: Database["public"]["Enums"]["interaction_type"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "interactions_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
             referencedColumns: ["id"]
           },
         ]
@@ -127,148 +168,50 @@ export type Database = {
         }
         Relationships: []
       }
-      project_companies: {
-        Row: {
-          company_id: string
-          created_at: string
-          id: string
-          project_id: string
-        }
-        Insert: {
-          company_id: string
-          created_at?: string
-          id?: string
-          project_id: string
-        }
-        Update: {
-          company_id?: string
-          created_at?: string
-          id?: string
-          project_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "project_companies_company_id_fkey"
-            columns: ["company_id"]
-            isOneToOne: false
-            referencedRelation: "companies"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "project_companies_project_id_fkey"
-            columns: ["project_id"]
-            isOneToOne: false
-            referencedRelation: "projects"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      project_contacts: {
-        Row: {
-          contact_id: string
-          created_at: string
-          id: string
-          project_id: string
-        }
-        Insert: {
-          contact_id: string
-          created_at?: string
-          id?: string
-          project_id: string
-        }
-        Update: {
-          contact_id?: string
-          created_at?: string
-          id?: string
-          project_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "project_contacts_contact_id_fkey"
-            columns: ["contact_id"]
-            isOneToOne: false
-            referencedRelation: "contacts"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "project_contacts_project_id_fkey"
-            columns: ["project_id"]
-            isOneToOne: false
-            referencedRelation: "projects"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       projects: {
         Row: {
-          actual_hours: number | null
-          created_at: string | null
+          client_name: string
+          created_at: string
           created_by: string | null
-          end_date: string
-          hourly_rate: number | null
+          end_date: string | null
           id: string
-          lead_source: string | null
           name: string
           notes: string | null
-          pipeline_status: Database["public"]["Enums"]["pipeline_status"]
-          primary_contact_id: string
-          probability_percent: number
-          project_status:
-            | Database["public"]["Enums"]["project_execution_status"]
-            | null
-          project_value_kr: number
-          start_date: string
-          type: Database["public"]["Enums"]["project_type"]
+          project_value_kr: number | null
+          start_date: string | null
+          status: Database["public"]["Enums"]["project_status"]
+          type: string
+          updated_at: string
         }
         Insert: {
-          actual_hours?: number | null
-          created_at?: string | null
+          client_name: string
+          created_at?: string
           created_by?: string | null
-          end_date: string
-          hourly_rate?: number | null
+          end_date?: string | null
           id?: string
-          lead_source?: string | null
           name: string
           notes?: string | null
-          pipeline_status?: Database["public"]["Enums"]["pipeline_status"]
-          primary_contact_id: string
-          probability_percent?: number
-          project_status?:
-            | Database["public"]["Enums"]["project_execution_status"]
-            | null
-          project_value_kr: number
-          start_date: string
-          type: Database["public"]["Enums"]["project_type"]
+          project_value_kr?: number | null
+          start_date?: string | null
+          status?: Database["public"]["Enums"]["project_status"]
+          type: string
+          updated_at?: string
         }
         Update: {
-          actual_hours?: number | null
-          created_at?: string | null
+          client_name?: string
+          created_at?: string
           created_by?: string | null
-          end_date?: string
-          hourly_rate?: number | null
+          end_date?: string | null
           id?: string
-          lead_source?: string | null
           name?: string
           notes?: string | null
-          pipeline_status?: Database["public"]["Enums"]["pipeline_status"]
-          primary_contact_id?: string
-          probability_percent?: number
-          project_status?:
-            | Database["public"]["Enums"]["project_execution_status"]
-            | null
-          project_value_kr?: number
-          start_date?: string
-          type?: Database["public"]["Enums"]["project_type"]
+          project_value_kr?: number | null
+          start_date?: string | null
+          status?: Database["public"]["Enums"]["project_status"]
+          type?: string
+          updated_at?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "projects_client_id_fkey"
-            columns: ["primary_contact_id"]
-            isOneToOne: false
-            referencedRelation: "contacts"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       settings: {
         Row: {
@@ -284,6 +227,60 @@ export type Database = {
           value?: Json
         }
         Relationships: []
+      }
+      tasks: {
+        Row: {
+          contact_id: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          due_date: string | null
+          id: string
+          project_id: string | null
+          status: Database["public"]["Enums"]["task_status"]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          contact_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          project_id?: string | null
+          status?: Database["public"]["Enums"]["task_status"]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          contact_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          project_id?: string | null
+          status?: Database["public"]["Enums"]["task_status"]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tasks_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_preferences: {
         Row: {
@@ -359,9 +356,21 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "user"
-      pipeline_status: "Meeting Booked" | "Proposal Sent" | "Won" | "Lost"
-      project_execution_status: "Planned" | "Ongoing" | "Completed"
-      project_type: "Assessment" | "Pilot" | "Integration"
+      contact_stage:
+        | "Qualified Prospect"
+        | "First Meeting"
+        | "Proposal"
+        | "Client Won"
+        | "Client Lost"
+        | "No Stage"
+      interaction_type: "Email" | "Call" | "Meeting" | "Note"
+      project_status:
+        | "Planning"
+        | "Active"
+        | "On Hold"
+        | "Completed"
+        | "Cancelled"
+      task_status: "Pending" | "Completed" | "Overdue"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -490,9 +499,23 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "user"],
-      pipeline_status: ["Meeting Booked", "Proposal Sent", "Won", "Lost"],
-      project_execution_status: ["Planned", "Ongoing", "Completed"],
-      project_type: ["Assessment", "Pilot", "Integration"],
+      contact_stage: [
+        "Qualified Prospect",
+        "First Meeting",
+        "Proposal",
+        "Client Won",
+        "Client Lost",
+        "No Stage",
+      ],
+      interaction_type: ["Email", "Call", "Meeting", "Note"],
+      project_status: [
+        "Planning",
+        "Active",
+        "On Hold",
+        "Completed",
+        "Cancelled",
+      ],
+      task_status: ["Pending", "Completed", "Overdue"],
     },
   },
 } as const
