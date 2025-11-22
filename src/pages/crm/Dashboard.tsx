@@ -171,7 +171,16 @@ const Dashboard = () => {
       if (!confirmed) return;
     }
 
-    // Update pipeline status first
+    // If dragging to Won, open modal to set project_status and dates
+    if (newStatus === "Won") {
+      // Pre-set pipeline_status to "Won" in the editing project
+      const projectToEdit = { ...project, pipeline_status: "Won" };
+      setEditingProject(projectToEdit);
+      setIsModalOpen(true);
+      return; // Don't update database yet, wait for modal save
+    }
+
+    // For other statuses, update immediately
     const { error } = await supabase
       .from("projects")
       .update({ pipeline_status: newStatus })
@@ -186,16 +195,8 @@ const Dashboard = () => {
       return;
     }
 
-    // If dragging to Won, open modal to set project_status and dates
-    if (newStatus === "Won") {
-      await fetchProjects();
-      const projectToEdit = projects.find(p => p.id === projectId);
-      setEditingProject(projectToEdit);
-      setIsModalOpen(true);
-    } else {
-      toast({ title: "Project updated" });
-      fetchProjects();
-    }
+    toast({ title: "Project updated" });
+    fetchProjects();
   };
 
   const handleSaveProject = async (formData: any) => {
