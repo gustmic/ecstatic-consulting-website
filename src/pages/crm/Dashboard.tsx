@@ -434,6 +434,7 @@ const Dashboard = () => {
                 count={projects.length}
               >
                 <SortableContext
+                  id={status}
                   items={projects.map(p => p.id)}
                   strategy={verticalListSortingStrategy}
                 >
