@@ -5,6 +5,7 @@ import { CRMNav } from "@/components/crm/CRMNav";
 import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { formatCurrencySEK } from "@/lib/formatters";
 
 interface Project {
   id: string;
@@ -217,7 +218,7 @@ const Analytics = () => {
               Pipeline Value
             </h3>
             <div className="text-3xl font-bold">
-              {pipelineValue.toLocaleString()} kr
+              {formatCurrencySEK(pipelineValue)}
             </div>
             <p className="text-sm text-muted-foreground mt-2">(weighted)</p>
           </Card>

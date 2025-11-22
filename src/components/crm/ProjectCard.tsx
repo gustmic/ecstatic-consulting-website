@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { GripVertical } from "lucide-react";
+import { formatCurrencySEK } from "@/lib/formatters";
 
 interface ProjectCardProps {
   project: {
@@ -75,11 +76,11 @@ export const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
               )}
               
               <div>
-                Value: {project.project_value_kr.toLocaleString()} kr
+                Value: {formatCurrencySEK(project.project_value_kr)}
               </div>
               
               <div>
-                Weighted: {weightedValue.toLocaleString()} kr
+                Weighted: {formatCurrencySEK(weightedValue)}
               </div>
               
               <div className="text-xs mt-2 text-muted-foreground">
