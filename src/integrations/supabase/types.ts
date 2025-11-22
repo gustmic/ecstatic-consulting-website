@@ -47,16 +47,12 @@ export type Database = {
           created_at: string
           created_by: string | null
           email: string
-          engagement_score: number | null
-          has_overdue_followup: boolean | null
           id: string
+          is_primary: boolean | null
           linkedin_url: string | null
           name: string
-          next_followup: string | null
           notes: string | null
           phone: string | null
-          stage: Database["public"]["Enums"]["contact_stage"]
-          tags: string[] | null
           title: string | null
           updated_at: string
         }
@@ -65,16 +61,12 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           email: string
-          engagement_score?: number | null
-          has_overdue_followup?: boolean | null
           id?: string
+          is_primary?: boolean | null
           linkedin_url?: string | null
           name: string
-          next_followup?: string | null
           notes?: string | null
           phone?: string | null
-          stage?: Database["public"]["Enums"]["contact_stage"]
-          tags?: string[] | null
           title?: string | null
           updated_at?: string
         }
@@ -83,16 +75,12 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           email?: string
-          engagement_score?: number | null
-          has_overdue_followup?: boolean | null
           id?: string
+          is_primary?: boolean | null
           linkedin_url?: string | null
           name?: string
-          next_followup?: string | null
           notes?: string | null
           phone?: string | null
-          stage?: Database["public"]["Enums"]["contact_stage"]
-          tags?: string[] | null
           title?: string | null
           updated_at?: string
         }
@@ -102,47 +90,6 @@ export type Database = {
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "companies"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      interactions: {
-        Row: {
-          contact_id: string
-          created_at: string
-          created_by: string | null
-          id: string
-          interaction_date: string
-          notes: string | null
-          subject: string | null
-          type: Database["public"]["Enums"]["interaction_type"]
-        }
-        Insert: {
-          contact_id: string
-          created_at?: string
-          created_by?: string | null
-          id?: string
-          interaction_date?: string
-          notes?: string | null
-          subject?: string | null
-          type: Database["public"]["Enums"]["interaction_type"]
-        }
-        Update: {
-          contact_id?: string
-          created_at?: string
-          created_by?: string | null
-          id?: string
-          interaction_date?: string
-          notes?: string | null
-          subject?: string | null
-          type?: Database["public"]["Enums"]["interaction_type"]
-        }
-        Relationships: [
-          {
-            foreignKeyName: "interactions_contact_id_fkey"
-            columns: ["contact_id"]
-            isOneToOne: false
-            referencedRelation: "contacts"
             referencedColumns: ["id"]
           },
         ]
@@ -168,6 +115,78 @@ export type Database = {
         }
         Relationships: []
       }
+      project_companies: {
+        Row: {
+          company_id: string
+          created_at: string | null
+          id: string
+          project_id: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string | null
+          id?: string
+          project_id: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string | null
+          id?: string
+          project_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_companies_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_companies_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_contacts: {
+        Row: {
+          contact_id: string
+          created_at: string | null
+          id: string
+          project_id: string
+        }
+        Insert: {
+          contact_id: string
+          created_at?: string | null
+          id?: string
+          project_id: string
+        }
+        Update: {
+          contact_id?: string
+          created_at?: string | null
+          id?: string
+          project_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_contacts_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_contacts_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       projects: {
         Row: {
           client_name: string
@@ -177,9 +196,12 @@ export type Database = {
           id: string
           name: string
           notes: string | null
+          pipeline_status: string
+          primary_contact_id: string | null
+          probability_percent: number | null
+          project_status: string | null
           project_value_kr: number | null
           start_date: string | null
-          status: Database["public"]["Enums"]["project_status"]
           type: string
           updated_at: string
         }
@@ -191,9 +213,12 @@ export type Database = {
           id?: string
           name: string
           notes?: string | null
+          pipeline_status?: string
+          primary_contact_id?: string | null
+          probability_percent?: number | null
+          project_status?: string | null
           project_value_kr?: number | null
           start_date?: string | null
-          status?: Database["public"]["Enums"]["project_status"]
           type: string
           updated_at?: string
         }
@@ -205,13 +230,24 @@ export type Database = {
           id?: string
           name?: string
           notes?: string | null
+          pipeline_status?: string
+          primary_contact_id?: string | null
+          probability_percent?: number | null
+          project_status?: string | null
           project_value_kr?: number | null
           start_date?: string | null
-          status?: Database["public"]["Enums"]["project_status"]
           type?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "projects_primary_contact_id_fkey"
+            columns: ["primary_contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       settings: {
         Row: {
