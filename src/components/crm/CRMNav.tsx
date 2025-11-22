@@ -61,7 +61,7 @@ export const CRMNav = () => {
                     className={isActive("/admin/crm") ? "text-foreground bg-muted" : "text-muted-foreground hover:text-foreground"}
                   >
                     <Kanban className="h-4 w-4 mr-2" />
-                    Projects
+                    Pipeline
                   </Button>
                 </Link>
 

@@ -48,8 +48,8 @@ export const GlobalSearch = ({ open, setOpen }: GlobalSearchProps) => {
   const searchData = async (query: string) => {
     const { data: contactResults } = await supabase
       .from("contacts")
-      .select("*")
-      .or(`name.ilike.%${query}%,email.ilike.%${query}%,company.ilike.%${query}%`)
+      .select("*, companies(name)")
+      .or(`name.ilike.%${query}%,email.ilike.%${query}%`)
       .limit(5);
 
     const { data: companyResults } = await supabase
@@ -102,7 +102,7 @@ export const GlobalSearch = ({ open, setOpen }: GlobalSearchProps) => {
                 onSelect={() => handleSelect("contacts")}
               >
                 <Users className="mr-2 h-4 w-4" />
-                <span>{contact.name} - {contact.company || contact.email}</span>
+                <span>{contact.name} - {contact.companies?.name || contact.email}</span>
               </CommandItem>
             ))}
           </CommandGroup>
