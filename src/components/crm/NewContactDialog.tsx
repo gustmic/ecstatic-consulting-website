@@ -20,7 +20,7 @@ interface NewContactDialogProps {
   companies: Company[];
 }
 
-const STAGES = ["Qualified Prospect", "First Meeting", "Proposal", "Client Won", "Client Lost", "No Stage"];
+
 
 const NewContactDialog = ({ open, onOpenChange, onSuccess, companies }: NewContactDialogProps) => {
   const { toast } = useToast();
@@ -31,7 +31,6 @@ const NewContactDialog = ({ open, onOpenChange, onSuccess, companies }: NewConta
     phone: "",
     title: "",
     linkedin_url: "",
-    stage: "No Stage",
     notes: "",
   });
 
@@ -48,7 +47,6 @@ const NewContactDialog = ({ open, onOpenChange, onSuccess, companies }: NewConta
       phone: formData.phone,
       title: formData.title,
       linkedin_url: formData.linkedin_url,
-      stage: formData.stage as any,
       notes: formData.notes,
       created_by: user.id,
     }]);
@@ -66,7 +64,6 @@ const NewContactDialog = ({ open, onOpenChange, onSuccess, companies }: NewConta
         phone: "",
         title: "",
         linkedin_url: "",
-        stage: "No Stage",
         notes: "",
       });
     }
@@ -141,25 +138,6 @@ const NewContactDialog = ({ open, onOpenChange, onSuccess, companies }: NewConta
                 value={formData.linkedin_url}
                 onChange={(e) => setFormData({ ...formData, linkedin_url: e.target.value })}
               />
-            </div>
-
-            <div className="col-span-2">
-              <Label>Stage</Label>
-              <Select
-                value={formData.stage}
-                onValueChange={(value) => setFormData({ ...formData, stage: value })}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {STAGES.map((stage) => (
-                    <SelectItem key={stage} value={stage}>
-                      {stage}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
             </div>
 
             <div className="col-span-2">
