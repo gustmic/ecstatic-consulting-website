@@ -83,6 +83,19 @@ export const ProjectModal = ({ isOpen, onClose, onSave, project }: ProjectModalP
   const [saving, setSaving] = useState(false);
   const [startDate, setStartDate] = useState<Date | undefined>(undefined);
   const [endDate, setEndDate] = useState<Date | undefined>(undefined);
+  const [valueDisplay, setValueDisplay] = useState<string>("");
+
+  // Format number with Swedish thousand separators
+  const formatNumberDisplay = (value: number): string => {
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  };
+
+  // Parse formatted number back to integer
+  const parseNumberInput = (value: string): number => {
+    const cleaned = value.replace(/\s/g, '');
+    const parsed = parseInt(cleaned, 10);
+    return isNaN(parsed) ? 0 : parsed;
+  };
 
   useEffect(() => {
     fetchContactsAndCompanies();
@@ -107,6 +120,7 @@ export const ProjectModal = ({ isOpen, onClose, onSave, project }: ProjectModalP
       });
       setStartDate(undefined);
       setEndDate(undefined);
+      setValueDisplay(formatNumberDisplay(DEFAULT_VALUES.Assessment));
     }
   }, [project, isOpen]);
 
@@ -135,6 +149,8 @@ export const ProjectModal = ({ isOpen, onClose, onSave, project }: ProjectModalP
       notes: project.notes || "",
     });
 
+    setValueDisplay(formatNumberDisplay(project.project_value_kr));
+
     if (project.start_date) setStartDate(new Date(project.start_date));
     if (project.end_date) setEndDate(new Date(project.end_date));
   };
@@ -155,11 +171,21 @@ export const ProjectModal = ({ isOpen, onClose, onSave, project }: ProjectModalP
   };
 
   const handleTypeChange = (type: "Assessment" | "Pilot" | "Integration") => {
+    const newValue = DEFAULT_VALUES[type];
     setFormData({
       ...formData,
       type,
-      project_value_kr: DEFAULT_VALUES[type],
+      project_value_kr: newValue,
     });
+    setValueDisplay(formatNumberDisplay(newValue));
+  };
+
+  const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    const numericValue = parseNumberInput(inputValue);
+    
+    setFormData({ ...formData, project_value_kr: numericValue });
+    setValueDisplay(formatNumberDisplay(numericValue));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -229,10 +255,10 @@ export const ProjectModal = ({ isOpen, onClose, onSave, project }: ProjectModalP
               <Label htmlFor="value">Value (kr) *</Label>
               <Input
                 id="value"
-                type="number"
-                value={formData.project_value_kr}
-                onChange={(e) => setFormData({ ...formData, project_value_kr: parseInt(e.target.value) })}
-                min="0"
+                type="text"
+                value={valueDisplay}
+                onChange={handleValueChange}
+                placeholder="0"
                 required
               />
             </div>
