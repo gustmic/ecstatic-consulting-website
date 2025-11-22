@@ -1,12 +1,15 @@
 // Swedish number and date formatting utilities
 
-export const formatCurrency = (amount: number): string => {
+export const formatCurrencySEK = (amount: number): string => {
   return new Intl.NumberFormat('sv-SE', {
     style: 'decimal',
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
-  }).format(amount).replace(/,/g, ' ') + ' kr';
+  }).format(amount).replace(/\u00A0/g, ' ') + ' kr';
 };
+
+// Legacy alias for backward compatibility
+export const formatCurrency = formatCurrencySEK;
 
 export const formatDate = (date: string | Date, format: string = "dd MMM yyyy"): string => {
   const d = typeof date === 'string' ? new Date(date) : date;
