@@ -5,6 +5,7 @@ import { CRMNav } from "@/components/crm/CRMNav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Plus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import ProjectModal from "@/components/crm/ProjectModal";
@@ -50,6 +51,10 @@ const Dashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<any>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [confirmLostDialog, setConfirmLostDialog] = useState<{ isOpen: boolean; project: Project | null }>({ 
+    isOpen: false, 
+    project: null 
+  });
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -165,10 +170,10 @@ const Dashboard = () => {
     const project = projects.find(p => p.id === projectId);
     if (!project || project.pipeline_status === newStatus) return;
 
-    // If dragging to Lost, confirm
+    // If dragging to Lost, show confirmation dialog
     if (newStatus === "Lost") {
-      const confirmed = confirm("Mark this project as Lost?");
-      if (!confirmed) return;
+      setConfirmLostDialog({ isOpen: true, project });
+      return;
     }
 
     // If dragging to Won, open modal to set project_status and dates
@@ -197,6 +202,29 @@ const Dashboard = () => {
 
     toast({ title: "Project updated" });
     fetchProjects();
+  };
+
+  const handleConfirmLost = async () => {
+    const project = confirmLostDialog.project;
+    if (!project) return;
+
+    const { error } = await supabase
+      .from("projects")
+      .update({ pipeline_status: "Lost" })
+      .eq("id", project.id);
+
+    if (error) {
+      toast({
+        title: "Error updating project",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else {
+      toast({ title: "Project marked as lost" });
+      fetchProjects();
+    }
+
+    setConfirmLostDialog({ isOpen: false, project: null });
   };
 
   const handleSaveProject = async (formData: any) => {
@@ -413,6 +441,31 @@ const Dashboard = () => {
         onSave={handleSaveProject}
         project={editingProject}
       />
+
+      <Dialog open={confirmLostDialog.isOpen} onOpenChange={(open) => !open && setConfirmLostDialog({ isOpen: false, project: null })}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Mark Project as Lost?</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to mark <strong>{confirmLostDialog.project?.name}</strong> as lost? This will remove it from the active pipeline.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button 
+              variant="outline" 
+              onClick={() => setConfirmLostDialog({ isOpen: false, project: null })}
+            >
+              Cancel
+            </Button>
+            <Button 
+              variant="destructive" 
+              onClick={handleConfirmLost}
+            >
+              Mark as Lost
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
