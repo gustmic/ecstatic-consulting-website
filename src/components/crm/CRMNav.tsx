@@ -3,6 +3,7 @@ import { Search, Users, Building2, Kanban, BarChart3, Settings } from "lucide-re
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { GlobalSearch } from "./GlobalSearch";
+import logo from "@/assets/logo.webp";
 
 export const CRMNav = () => {
   const location = useLocation();
@@ -16,9 +17,9 @@ export const CRMNav = () => {
         <div className="container mx-auto px-6">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-8">
-              <a href="https://ecstatic.consulting" className="font-serif text-xl font-bold hover:text-primary transition-colors">
-                Ecstatic
-              </a>
+              <Link to="/" className="hover:opacity-80 transition-opacity">
+                <img src={logo} alt="Ecstatic Consulting" className="h-8" />
+              </Link>
               
               <div className="flex items-center space-x-1">
                 <Button
