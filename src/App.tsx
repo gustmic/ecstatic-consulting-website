@@ -13,6 +13,9 @@ import Auth from "./pages/Auth";
 import SetupAdmin from "./pages/SetupAdmin";
 import Dashboard from "./pages/crm/Dashboard";
 import NewCompanies from "./pages/crm/NewCompanies";
+import Contacts from "./pages/crm/Contacts";
+import Companies from "./pages/crm/Companies";
+import Analytics from "./pages/crm/Analytics";
 import Settings from "./pages/crm/Settings";
 
 const queryClient = new QueryClient();
@@ -31,8 +34,10 @@ const App = () => (
             <Route path="/en" element={<IndexEN />} />
             <Route path="/admin" element={<Auth />} />
             <Route path="/admin/setup" element={<SetupAdmin />} />
-            <Route path="/admin/crm" element={<Dashboard />} />
-            <Route path="/admin/crm/companies" element={<NewCompanies />} />
+          <Route path="/admin/crm" element={<Dashboard />} />
+          <Route path="/admin/crm/contacts" element={<Contacts />} />
+          <Route path="/admin/crm/companies" element={<Companies />} />
+          <Route path="/admin/crm/analytics" element={<Analytics />} />
             <Route path="/admin/crm/settings" element={<Settings />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
