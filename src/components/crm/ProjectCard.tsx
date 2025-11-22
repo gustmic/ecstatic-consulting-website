@@ -22,7 +22,7 @@ const TYPE_COLORS = {
   Assessment: "bg-blue-500",
   Pilot: "bg-green-500",
   Integration: "bg-purple-500",
-};
+} as const;
 
 export const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
   const {
