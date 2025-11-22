@@ -19,10 +19,10 @@ const Settings = () => {
   const [userId, setUserId] = useState<string | null>(null);
   const [preferences, setPreferences] = useState({
     items_per_page: 25,
-    date_format: "MM/dd/yyyy",
+    date_format: "dd MMM yyyy",
     theme: "system",
-    default_contacts_view: "table",
   });
+  const [saving, setSaving] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -57,7 +57,6 @@ const Settings = () => {
         items_per_page: data.items_per_page,
         date_format: data.date_format,
         theme: data.theme,
-        default_contacts_view: data.default_contacts_view,
       });
     }
   };
@@ -65,6 +64,7 @@ const Settings = () => {
   const handleSave = async () => {
     if (!userId) return;
 
+    setSaving(true);
     const { error } = await supabase
       .from("user_preferences")
       .upsert({
@@ -72,7 +72,6 @@ const Settings = () => {
         items_per_page: preferences.items_per_page,
         date_format: preferences.date_format,
         theme: preferences.theme,
-        default_contacts_view: preferences.default_contacts_view,
       })
       .eq("user_id", userId);
 
@@ -88,13 +87,14 @@ const Settings = () => {
         description: "Preferences saved",
       });
     }
+    setSaving(false);
   };
 
   if (loading) {
     return (
       <div className="min-h-screen bg-background">
         <CRMNav />
-        <div className="container mx-auto px-6 py-8">
+        <div className="container mx-auto px-6 py-8 pt-24">
           <p className="text-muted-foreground">Loading...</p>
         </div>
       </div>
@@ -105,7 +105,7 @@ const Settings = () => {
     <div className="min-h-screen bg-background">
       <CRMNav />
 
-      <div className="container mx-auto px-6 py-8 max-w-2xl">
+      <div className="container mx-auto px-6 py-8 pt-24 max-w-2xl">
         <h1 className="font-serif text-4xl font-bold mb-6">Settings</h1>
 
         <Card className="p-6">
@@ -149,8 +149,8 @@ const Settings = () => {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="dd MMM yyyy">dd MMM yyyy</SelectItem>
-                  <SelectItem value="yyyy-MM-dd">yyyy-MM-dd</SelectItem>
+                  <SelectItem value="dd MMM yyyy">dd MMM yyyy (12 Jun 2025)</SelectItem>
+                  <SelectItem value="yyyy-MM-dd">yyyy-MM-dd (2025-06-12)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -174,29 +174,8 @@ const Settings = () => {
               </Select>
             </div>
 
-            <div>
-              <Label htmlFor="default_contacts_view">Default Contacts View</Label>
-              <Select
-                value={preferences.default_contacts_view}
-                onValueChange={(value) =>
-                  setPreferences({
-                    ...preferences,
-                    default_contacts_view: value,
-                  })
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="table">Table</SelectItem>
-                  <SelectItem value="kanban">Kanban</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <Button onClick={handleSave} className="w-full">
-              Save Preferences
+            <Button onClick={handleSave} disabled={saving} className="w-full">
+              {saving ? "Saving..." : "Save Preferences"}
             </Button>
           </div>
         </Card>

@@ -97,7 +97,7 @@ const Auth = () => {
           </div>
 
           <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? "Processing..." : "Sign In"}
+            {loading ? "Signing in..." : "Sign In"}
           </Button>
         </form>
       </Card>
