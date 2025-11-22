@@ -180,6 +180,11 @@ export const ProjectModal = ({ isOpen, onClose, onSave, project }: ProjectModalP
   };
 
   const requiresProjectStatus = formData.pipeline_status === "Won";
+  
+  // Filter contacts based on selected companies
+  const filteredContacts = formData.company_ids.length > 0 
+    ? contacts.filter(contact => formData.company_ids.includes(contact.company_id))
+    : contacts;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -190,6 +195,7 @@ export const ProjectModal = ({ isOpen, onClose, onSave, project }: ProjectModalP
         
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-2 gap-4">
+            {/* Row 1: Project Name (full width) */}
             <div className="col-span-2">
               <Label htmlFor="name">Project Name *</Label>
               <Input
@@ -201,6 +207,7 @@ export const ProjectModal = ({ isOpen, onClose, onSave, project }: ProjectModalP
               />
             </div>
 
+            {/* Row 2: Type | Value */}
             <div>
               <Label htmlFor="type">Type *</Label>
               <Select
@@ -230,68 +237,13 @@ export const ProjectModal = ({ isOpen, onClose, onSave, project }: ProjectModalP
               />
             </div>
 
-            <div>
-              <Label htmlFor="pipeline_status">Pipeline Status *</Label>
-              <Select
-                value={formData.pipeline_status}
-                onValueChange={(value: any) => setFormData({ ...formData, pipeline_status: value })}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Meeting Booked">Meeting Booked</SelectItem>
-                  <SelectItem value="Proposal Sent">Proposal Sent</SelectItem>
-                  <SelectItem value="Won">Won</SelectItem>
-                  <SelectItem value="Lost">Lost</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {requiresProjectStatus && (
-              <div>
-                <Label htmlFor="project_status">Project Status *</Label>
-                <Select
-                  value={formData.project_status || ""}
-                  onValueChange={(value: any) => setFormData({ ...formData, project_status: value })}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Planned">Planned</SelectItem>
-                    <SelectItem value="Ongoing">Ongoing</SelectItem>
-                    <SelectItem value="Completed">Completed</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
-
-            <div>
-              <Label htmlFor="primary_contact">Primary Contact *</Label>
-              <Select
-                value={formData.primary_contact_id}
-                onValueChange={(value) => setFormData({ ...formData, primary_contact_id: value })}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select primary contact" />
-                </SelectTrigger>
-                <SelectContent>
-                  {contacts.map((contact) => (
-                    <SelectItem key={contact.id} value={contact.id}>
-                      {contact.name} ({(contact.companies as any)?.name})
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
+            {/* Row 3: Companies (multi-select) | Pipeline Status */}
             <div>
               <Label htmlFor="companies">Companies * (hold Ctrl/Cmd for multiple)</Label>
               <select
                 id="companies"
                 multiple
-                className="flex h-20 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                className="flex h-32 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                 value={formData.company_ids}
                 onChange={(e) => {
                   const selected = Array.from(e.target.selectedOptions, option => option.value);
@@ -309,19 +261,83 @@ export const ProjectModal = ({ isOpen, onClose, onSave, project }: ProjectModalP
               </p>
             </div>
 
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="pipeline_status">Pipeline Status *</Label>
+                <Select
+                  value={formData.pipeline_status}
+                  onValueChange={(value: any) => setFormData({ ...formData, pipeline_status: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Meeting Booked">Meeting Booked</SelectItem>
+                    <SelectItem value="Proposal Sent">Proposal Sent</SelectItem>
+                    <SelectItem value="Won">Won</SelectItem>
+                    <SelectItem value="Lost">Lost</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {requiresProjectStatus && (
+                <div>
+                  <Label htmlFor="project_status">Project Status *</Label>
+                  <Select
+                    value={formData.project_status || ""}
+                    onValueChange={(value: any) => setFormData({ ...formData, project_status: value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Planned">Planned</SelectItem>
+                      <SelectItem value="Ongoing">Ongoing</SelectItem>
+                      <SelectItem value="Completed">Completed</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+            </div>
+
+            {/* Row 4: Primary Contact (filtered) | Related Contacts (filtered) */}
+            <div>
+              <Label htmlFor="primary_contact">Primary Contact *</Label>
+              <Select
+                value={formData.primary_contact_id}
+                onValueChange={(value) => setFormData({ ...formData, primary_contact_id: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select primary contact" />
+                </SelectTrigger>
+                <SelectContent>
+                  {filteredContacts.map((contact) => (
+                    <SelectItem key={contact.id} value={contact.id}>
+                      {contact.name} ({(contact.companies as any)?.name})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {formData.company_ids.length > 0 && (
+                <p className="text-xs text-muted-foreground mt-1">
+                  Filtered by selected companies
+                </p>
+              )}
+            </div>
+
             <div>
               <Label htmlFor="related_contacts">Related Contacts (optional, hold Ctrl/Cmd for multiple)</Label>
               <select
                 id="related_contacts"
                 multiple
-                className="flex h-20 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                className="flex h-32 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                 value={formData.related_contact_ids}
                 onChange={(e) => {
                   const selected = Array.from(e.target.selectedOptions, option => option.value);
                   setFormData({ ...formData, related_contact_ids: selected });
                 }}
               >
-                {contacts
+                {filteredContacts
                   .filter(c => c.id !== formData.primary_contact_id)
                   .map((contact) => (
                     <option key={contact.id} value={contact.id}>
@@ -331,9 +347,11 @@ export const ProjectModal = ({ isOpen, onClose, onSave, project }: ProjectModalP
               </select>
               <p className="text-xs text-muted-foreground mt-1">
                 Selected: {formData.related_contact_ids.length}
+                {formData.company_ids.length > 0 && " (filtered by companies)"}
               </p>
             </div>
 
+            {/* Row 5: Start Date | End Date (only when Won) */}
             {requiresProjectStatus && (
               <>
                 <div>
@@ -397,6 +415,7 @@ export const ProjectModal = ({ isOpen, onClose, onSave, project }: ProjectModalP
               </>
             )}
 
+            {/* Row 6: Notes (full width) */}
             <div className="col-span-2">
               <Label htmlFor="notes">Notes</Label>
               <Textarea
