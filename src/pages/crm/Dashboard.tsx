@@ -164,6 +164,25 @@ const Dashboard = () => {
 
     if (!over) return;
 
+    console.log('=== FULL DRAG DATA ===');
+    console.log('active:', active);
+    console.log('active.id:', active.id);
+    console.log('over:', over);
+    console.log('over.id:', over.id);
+    console.log('over.data:', over.data);
+    console.log('over.data?.current:', over.data?.current);
+    
+    // Try multiple possible paths to get column ID
+    const possiblePaths = {
+      'over.id': over.id,
+      'over.data.current.sortable.containerId': (over.data?.current as any)?.sortable?.containerId,
+      'over.data.current.containerId': (over.data?.current as any)?.containerId,
+      'over.data.containerId': (over.data as any)?.containerId,
+    };
+    
+    console.log('Possible column ID paths:', possiblePaths);
+    console.log('=== END DEBUG ===');
+
     const projectId = active.id as string;
     
     // FIX: Get the column ID from the droppable container, not the dragged item
