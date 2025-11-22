@@ -6,11 +6,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CalendarIcon } from "lucide-react";
-import { format } from "date-fns";
-import { cn } from "@/lib/utils";
 
 interface ProjectModalProps {
   isOpen: boolean;
@@ -81,8 +76,6 @@ export const ProjectModal = ({ isOpen, onClose, onSave, project }: ProjectModalP
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [companies, setCompanies] = useState<Company[]>([]);
   const [saving, setSaving] = useState(false);
-  const [startDate, setStartDate] = useState<Date | undefined>(undefined);
-  const [endDate, setEndDate] = useState<Date | undefined>(undefined);
   const [valueDisplay, setValueDisplay] = useState<string>("");
 
   // Format number with Swedish thousand separators
@@ -118,8 +111,6 @@ export const ProjectModal = ({ isOpen, onClose, onSave, project }: ProjectModalP
         end_date: "",
         notes: "",
       });
-      setStartDate(undefined);
-      setEndDate(undefined);
       setValueDisplay(formatNumberDisplay(DEFAULT_VALUES.Assessment));
     }
   }, [project, isOpen]);
@@ -150,9 +141,6 @@ export const ProjectModal = ({ isOpen, onClose, onSave, project }: ProjectModalP
     });
 
     setValueDisplay(formatNumberDisplay(project.project_value_kr));
-
-    if (project.start_date) setStartDate(new Date(project.start_date));
-    if (project.end_date) setEndDate(new Date(project.end_date));
   };
 
   const fetchContactsAndCompanies = async () => {
@@ -381,62 +369,26 @@ export const ProjectModal = ({ isOpen, onClose, onSave, project }: ProjectModalP
             {requiresProjectStatus && (
               <>
                 <div>
-                  <Label>Start Date *</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="w-full justify-start text-left font-normal"
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {startDate ? format(startDate, "PPP") : "Pick a date"}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0">
-                      <Calendar
-                        mode="single"
-                        selected={startDate}
-                        onSelect={(date) => {
-                          setStartDate(date);
-                          if (date) {
-                            setFormData({ ...formData, start_date: format(date, "yyyy-MM-dd") });
-                          }
-                        }}
-                        initialFocus
-                        className={cn("p-3 pointer-events-auto")}
-                      />
-                    </PopoverContent>
-                  </Popover>
+                  <Label htmlFor="start_date">Start Date *</Label>
+                  <Input
+                    id="start_date"
+                    type="date"
+                    value={formData.start_date}
+                    onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
+                    required
+                  />
                 </div>
 
                 <div>
-                  <Label>End Date *</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="w-full justify-start text-left font-normal"
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {endDate ? format(endDate, "PPP") : "Pick a date"}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0">
-                      <Calendar
-                        mode="single"
-                        selected={endDate}
-                        onSelect={(date) => {
-                          setEndDate(date);
-                          if (date) {
-                            setFormData({ ...formData, end_date: format(date, "yyyy-MM-dd") });
-                          }
-                        }}
-                        initialFocus
-                        disabled={(date) => startDate ? date < startDate : false}
-                        className={cn("p-3 pointer-events-auto")}
-                      />
-                    </PopoverContent>
-                  </Popover>
+                  <Label htmlFor="end_date">End Date *</Label>
+                  <Input
+                    id="end_date"
+                    type="date"
+                    value={formData.end_date}
+                    onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
+                    min={formData.start_date}
+                    required
+                  />
                 </div>
               </>
             )}
