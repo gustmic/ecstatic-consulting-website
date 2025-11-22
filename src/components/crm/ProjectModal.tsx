@@ -237,30 +237,7 @@ export const ProjectModal = ({ isOpen, onClose, onSave, project }: ProjectModalP
               />
             </div>
 
-            {/* Row 3: Companies (multi-select) | Pipeline Status */}
-            <div>
-              <Label htmlFor="companies">Companies * (hold Ctrl/Cmd for multiple)</Label>
-              <select
-                id="companies"
-                multiple
-                className="flex h-32 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                value={formData.company_ids}
-                onChange={(e) => {
-                  const selected = Array.from(e.target.selectedOptions, option => option.value);
-                  setFormData({ ...formData, company_ids: selected });
-                }}
-              >
-                {companies.map((company) => (
-                  <option key={company.id} value={company.id}>
-                    {company.name}
-                  </option>
-                ))}
-              </select>
-              <p className="text-xs text-muted-foreground mt-1">
-                Selected: {formData.company_ids.length}
-              </p>
-            </div>
-
+            {/* Row 3: Pipeline Status | Companies (multi-select) */}
             <div className="space-y-4">
               <div>
                 <Label htmlFor="pipeline_status">Pipeline Status *</Label>
@@ -298,6 +275,29 @@ export const ProjectModal = ({ isOpen, onClose, onSave, project }: ProjectModalP
                   </Select>
                 </div>
               )}
+            </div>
+
+            <div>
+              <Label htmlFor="companies">Companies * (hold Ctrl/Cmd for multiple)</Label>
+              <select
+                id="companies"
+                multiple
+                className="flex h-32 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                value={formData.company_ids}
+                onChange={(e) => {
+                  const selected = Array.from(e.target.selectedOptions, option => option.value);
+                  setFormData({ ...formData, company_ids: selected });
+                }}
+              >
+                {companies.map((company) => (
+                  <option key={company.id} value={company.id}>
+                    {company.name}
+                  </option>
+                ))}
+              </select>
+              <p className="text-xs text-muted-foreground mt-1">
+                Selected: {formData.company_ids.length}
+              </p>
             </div>
 
             {/* Row 4: Primary Contact (filtered) | Related Contacts (filtered) */}
