@@ -183,8 +183,10 @@ export const ProjectModal = ({ isOpen, onClose, onSave, project }: ProjectModalP
       return;
     }
 
-    if (formData.pipeline_status === "Won" && (!formData.start_date || !formData.end_date)) {
-      return;
+    if (formData.pipeline_status === "Won") {
+      if (!formData.project_status || !formData.start_date || !formData.end_date) {
+        return;
+      }
     }
     
     setSaving(true);
