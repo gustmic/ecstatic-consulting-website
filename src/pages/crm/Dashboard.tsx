@@ -165,22 +165,21 @@ const Dashboard = () => {
     if (!over) return;
 
     const projectId = active.id as string;
-    const newStatus = over.id as string;
     
-    // Debug logging
-    console.log('=== DRAG DEBUG ===');
+    // FIX: Get the column ID from the droppable container, not the dragged item
+    const newStatus = (over.data?.current?.sortable?.containerId || over.id) as string;
+    
     console.log('Project ID:', projectId);
-    console.log('New Status:', newStatus);
-    console.log('New Status Type:', typeof newStatus);
-    console.log('New Status Length:', newStatus.length);
-    console.log('New Status Bytes:', [...newStatus].map(c => c.charCodeAt(0)));
+    console.log('New Status (Column ID):', newStatus);
+    
+    const validStatuses = ['Meeting Booked', 'Proposal Sent', 'Won', 'Lost'];
+    
+    if (!validStatuses.includes(newStatus)) {
+      console.error('Invalid status:', newStatus);
+      return;
+    }
     
     const project = projects.find(p => p.id === projectId);
-    console.log('Current Project:', project);
-    console.log('Current pipeline_status:', project?.pipeline_status);
-    console.log('Are they equal?', project?.pipeline_status === newStatus);
-    console.log('=== END DEBUG ===');
-    
     if (!project || project.pipeline_status === newStatus) return;
 
     // If dragging to Lost, show confirmation dialog
