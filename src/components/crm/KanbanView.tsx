@@ -10,7 +10,6 @@ interface Contact {
   email: string;
   stage: string;
   next_followup?: string;
-  has_overdue_followup?: boolean;
 }
 
 interface KanbanViewProps {
@@ -30,7 +29,8 @@ const KanbanView = ({ contacts, onContactClick, onStageChange, stages }: KanbanV
   }, [contacts, stages]);
 
   const getOverdueCount = (stage: string) => {
-    return groupedContacts[stage].filter(c => c.has_overdue_followup).length;
+    const today = new Date().toISOString().split('T')[0];
+    return groupedContacts[stage].filter(c => c.next_followup && c.next_followup < today).length;
   };
 
   const handleDragStart = (e: React.DragEvent, contactId: string) => {
@@ -96,7 +96,7 @@ const KanbanView = ({ contacts, onContactClick, onStageChange, stages }: KanbanV
                 <p className="text-xs text-muted-foreground mb-2">{contact.email}</p>
 
                 {contact.next_followup && (
-                  <p className={`text-xs ${contact.has_overdue_followup ? 'text-destructive font-medium' : 'text-muted-foreground'}`}>
+                  <p className={`text-xs ${contact.next_followup < new Date().toISOString().split('T')[0] ? 'text-destructive font-medium' : 'text-muted-foreground'}`}>
                     📅 {formatDate(contact.next_followup)}
                   </p>
                 )}
