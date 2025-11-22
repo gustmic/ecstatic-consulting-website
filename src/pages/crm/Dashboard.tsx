@@ -171,15 +171,7 @@ const Dashboard = () => {
       if (!confirmed) return;
     }
 
-    // If dragging to Won, open modal to set project_status and dates
-    if (newStatus === "Won") {
-      const projectToEdit = projects.find(p => p.id === projectId);
-      setEditingProject(projectToEdit);
-      setIsModalOpen(true);
-      return;
-    }
-
-    // Update pipeline status
+    // Update pipeline status first
     const { error } = await supabase
       .from("projects")
       .update({ pipeline_status: newStatus })
@@ -191,6 +183,15 @@ const Dashboard = () => {
         description: error.message,
         variant: "destructive",
       });
+      return;
+    }
+
+    // If dragging to Won, open modal to set project_status and dates
+    if (newStatus === "Won") {
+      await fetchProjects();
+      const projectToEdit = projects.find(p => p.id === projectId);
+      setEditingProject(projectToEdit);
+      setIsModalOpen(true);
     } else {
       toast({ title: "Project updated" });
       fetchProjects();
