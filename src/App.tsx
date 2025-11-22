@@ -11,6 +11,7 @@ import IndexEN from "./pages/IndexEN";
 import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
 import SetupAdmin from "./pages/SetupAdmin";
+import Dashboard from "./pages/crm/Dashboard";
 import NewCompanies from "./pages/crm/NewCompanies";
 import Settings from "./pages/crm/Settings";
 
@@ -30,7 +31,7 @@ const App = () => (
             <Route path="/en" element={<IndexEN />} />
             <Route path="/admin" element={<Auth />} />
             <Route path="/admin/setup" element={<SetupAdmin />} />
-            <Route path="/admin/crm" element={<NewCompanies />} />
+            <Route path="/admin/crm" element={<Dashboard />} />
             <Route path="/admin/crm/companies" element={<NewCompanies />} />
             <Route path="/admin/crm/settings" element={<Settings />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
