@@ -1,140 +1,129 @@
-import { useState, useEffect } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
 interface ContactModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (contact: any) => void;
-  contact?: any;
+  onSave: (data: ContactFormData) => Promise<void>;
+  contact?: Contact | null;
 }
 
-const ContactModal = ({ isOpen, onClose, onSave, contact }: ContactModalProps) => {
-  const [stages, setStages] = useState<string[]>([]);
-  const [formData, setFormData] = useState({
+interface Contact {
+  id: string;
+  name: string;
+  title: string | null;
+  email: string;
+  phone: string | null;
+  linkedin_url: string | null;
+  company_id: string | null;
+  is_primary: boolean;
+  notes: string | null;
+}
+
+interface ContactFormData {
+  name: string;
+  title: string;
+  email: string;
+  phone: string;
+  linkedin_url: string;
+  company_id: string;
+  is_primary: boolean;
+  notes: string;
+}
+
+interface Company {
+  id: string;
+  name: string;
+}
+
+export const ContactModal = ({ isOpen, onClose, onSave, contact }: ContactModalProps) => {
+  const [formData, setFormData] = useState<ContactFormData>({
     name: "",
-    email: "",
-    company: "",
     title: "",
+    email: "",
     phone: "",
-    linkedin: "",
-    stage: "Lead",
+    linkedin_url: "",
+    company_id: "",
+    is_primary: false,
     notes: "",
-    next_followup: "",
   });
+  const [companies, setCompanies] = useState<Company[]>([]);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    const fetchStages = async () => {
-      const { data } = await supabase
-        .from('settings')
-        .select('value')
-        .eq('key', 'stages')
-        .single();
-      
-      if (data) {
-        setStages(data.value as string[]);
-      }
-    };
-
-    fetchStages();
-
-    // Set up realtime subscription for settings changes
-    const channel = supabase
-      .channel('contact-modal-settings')
-      .on('postgres_changes', {
-        event: '*',
-        schema: 'public',
-        table: 'settings'
-      }, () => {
-        fetchStages();
-      })
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
+    fetchCompanies();
   }, []);
 
   useEffect(() => {
     if (contact) {
       setFormData({
-        name: contact.name || "",
-        email: contact.email || "",
-        company: contact.company || "",
+        name: contact.name,
         title: contact.title || "",
+        email: contact.email,
         phone: contact.phone || "",
-        linkedin: contact.linkedin || "",
-        stage: contact.stage || (stages[0] || "Lead"),
+        linkedin_url: contact.linkedin_url || "",
+        company_id: contact.company_id || "",
+        is_primary: contact.is_primary,
         notes: contact.notes || "",
-        next_followup: contact.next_followup || "",
       });
     } else {
       setFormData({
         name: "",
-        email: "",
-        company: "",
         title: "",
+        email: "",
         phone: "",
-        linkedin: "",
-        stage: stages[0] || "Lead",
+        linkedin_url: "",
+        company_id: "",
+        is_primary: false,
         notes: "",
-        next_followup: "",
       });
     }
-  }, [contact, isOpen, stages]);
+  }, [contact, isOpen]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const fetchCompanies = async () => {
+    const { data } = await supabase
+      .from("companies")
+      .select("id, name")
+      .order("name");
+    if (data) setCompanies(data);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!formData.name.trim() || !formData.email.trim() || !formData.company_id) {
+      return;
+    }
     
-    const contactData = {
-      ...formData,
-      next_followup: formData.next_followup || null,
-    };
-
-    onSave(contactData);
+    setSaving(true);
+    await onSave(formData);
+    setSaving(false);
+    onClose();
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{contact ? "Edit Contact" : "Add New Contact"}</DialogTitle>
+          <DialogTitle>{contact ? "Edit Contact" : "New Contact"}</DialogTitle>
         </DialogHeader>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid md:grid-cols-2 gap-4">
+        
+        <form onSubmit={handleSubmit}>
+          <div className="grid grid-cols-2 gap-4">
             <div>
               <Label htmlFor="name">Name *</Label>
               <Input
                 id="name"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                placeholder="Full name"
                 required
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="email">Email *</Label>
-              <Input
-                id="email"
-                type="email"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                required
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="company">Company</Label>
-              <Input
-                id="company"
-                value={formData.company}
-                onChange={(e) => setFormData({ ...formData, company: e.target.value })}
               />
             </div>
 
@@ -144,6 +133,38 @@ const ContactModal = ({ isOpen, onClose, onSave, contact }: ContactModalProps) =
                 id="title"
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                placeholder="Job title"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="company">Company *</Label>
+              <Select
+                value={formData.company_id}
+                onValueChange={(value) => setFormData({ ...formData, company_id: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select company" />
+                </SelectTrigger>
+                <SelectContent>
+                  {companies.map((company) => (
+                    <SelectItem key={company.id} value={company.id}>
+                      {company.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label htmlFor="email">Email *</Label>
+              <Input
+                id="email"
+                type="email"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                placeholder="email@example.com"
+                required
               />
             </div>
 
@@ -153,62 +174,56 @@ const ContactModal = ({ isOpen, onClose, onSave, contact }: ContactModalProps) =
                 id="phone"
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                placeholder="+46 70 123 4567"
               />
             </div>
 
             <div>
-              <Label htmlFor="linkedin">LinkedIn</Label>
+              <Label htmlFor="linkedin">LinkedIn URL</Label>
               <Input
                 id="linkedin"
-                value={formData.linkedin}
-                onChange={(e) => setFormData({ ...formData, linkedin: e.target.value })}
-                placeholder="https://linkedin.com/in/..."
+                type="url"
+                value={formData.linkedin_url}
+                onChange={(e) => setFormData({ ...formData, linkedin_url: e.target.value })}
+                placeholder="https://linkedin.com/in/username"
               />
             </div>
 
-            <div>
-              <Label htmlFor="stage">Stage</Label>
-              <Select value={formData.stage} onValueChange={(value) => setFormData({ ...formData, stage: value })}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {stages.map(stage => (
-                    <SelectItem key={stage} value={stage}>{stage}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+            <div className="col-span-2">
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="is_primary"
+                  checked={formData.is_primary}
+                  onCheckedChange={(checked) =>
+                    setFormData({ ...formData, is_primary: !!checked })
+                  }
+                />
+                <Label htmlFor="is_primary" className="cursor-pointer">
+                  Primary contact for this company
+                </Label>
+              </div>
             </div>
 
-            <div>
-              <Label htmlFor="next_followup">Next Follow-Up</Label>
-              <Input
-                id="next_followup"
-                type="date"
-                value={formData.next_followup}
-                onChange={(e) => setFormData({ ...formData, next_followup: e.target.value })}
+            <div className="col-span-2">
+              <Label htmlFor="notes">Notes</Label>
+              <Textarea
+                id="notes"
+                value={formData.notes}
+                onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                placeholder="Additional notes..."
+                rows={3}
               />
             </div>
           </div>
 
-          <div>
-            <Label htmlFor="notes">Notes</Label>
-            <Textarea
-              id="notes"
-              value={formData.notes}
-              onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-              rows={4}
-            />
-          </div>
-
-          <div className="flex gap-3 justify-end">
+          <DialogFooter className="mt-6">
             <Button type="button" variant="outline" onClick={onClose}>
               Cancel
             </Button>
-            <Button type="submit">
-              {contact ? "Update" : "Create"} Contact
+            <Button type="submit" disabled={saving}>
+              {saving ? "Saving..." : contact ? "Update" : "Create"}
             </Button>
-          </div>
+          </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>

@@ -13,10 +13,10 @@ import { Users, Building2, Kanban } from "lucide-react";
 
 interface GlobalSearchProps {
   open: boolean;
-  setOpen: (open: boolean) => void;
+  onOpenChange: (open: boolean) => void;
 }
 
-export const GlobalSearch = ({ open, setOpen }: GlobalSearchProps) => {
+export const GlobalSearch = ({ open, onOpenChange }: GlobalSearchProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [contacts, setContacts] = useState<any[]>([]);
   const [companies, setCompanies] = useState<any[]>([]);
@@ -27,13 +27,13 @@ export const GlobalSearch = ({ open, setOpen }: GlobalSearchProps) => {
     const down = (e: KeyboardEvent) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
-        setOpen(!open);
+        onOpenChange(!open);
       }
     };
 
     document.addEventListener("keydown", down);
     return () => document.removeEventListener("keydown", down);
-  }, [open, setOpen]);
+  }, [open, onOpenChange]);
 
   useEffect(() => {
     if (open && searchQuery) {
@@ -70,7 +70,7 @@ export const GlobalSearch = ({ open, setOpen }: GlobalSearchProps) => {
   };
 
   const handleSelect = (type: string, id?: string) => {
-    setOpen(false);
+    onOpenChange(false);
     setSearchQuery("");
 
     if (type === "contacts") {
@@ -83,7 +83,7 @@ export const GlobalSearch = ({ open, setOpen }: GlobalSearchProps) => {
   };
 
   return (
-    <CommandDialog open={open} onOpenChange={setOpen}>
+    <CommandDialog open={open} onOpenChange={onOpenChange}>
       <CommandInput 
         placeholder="Search contacts, companies, projects..." 
         value={searchQuery}
@@ -139,3 +139,5 @@ export const GlobalSearch = ({ open, setOpen }: GlobalSearchProps) => {
     </CommandDialog>
   );
 };
+
+export default GlobalSearch;
