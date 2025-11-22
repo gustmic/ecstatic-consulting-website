@@ -202,7 +202,7 @@ const Dashboard = () => {
 
     const projectData = {
       name: formData.name,
-      client_name: formData.name,
+      client_name: formData.client_name || formData.name,
       type: formData.type,
       pipeline_status: formData.pipeline_status,
       project_status: formData.project_status,
