@@ -370,7 +370,7 @@ const Dashboard = () => {
   const groupedProjects = {
     "Meeting Booked": filteredProjects.filter(p => p.pipeline_status === "Meeting Booked"),
     "Proposal Sent": filteredProjects.filter(p => p.pipeline_status === "Proposal Sent"),
-    "Won": filteredProjects.filter(p => p.pipeline_status === "Won"),
+    "Won": filteredProjects.filter(p => p.pipeline_status === "Won" && p.project_status !== "Completed"),
     "Lost": filteredProjects.filter(p => p.pipeline_status === "Lost"),
   };
 
