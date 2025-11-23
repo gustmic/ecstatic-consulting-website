@@ -1,15 +1,37 @@
-import { Link, useLocation } from "react-router-dom";
-import { Search, Users, Building2, BarChart3, Archive as ArchiveIcon, Settings as SettingsIcon, LayoutDashboard } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Search, Users, Building2, BarChart3, Archive as ArchiveIcon, Settings as SettingsIcon, LayoutDashboard, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import logo from "@/assets/logo.webp";
 import { useState } from "react";
 import { GlobalSearch } from "./GlobalSearch";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 export const CRMNav = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const [searchOpen, setSearchOpen] = useState(false);
   
   const isActive = (path: string) => location.pathname === path;
+  
+  const handleLogout = async () => {
+    try {
+      localStorage.removeItem('session_start_time');
+      await supabase.auth.signOut();
+      navigate("/admin");
+      toast({
+        title: "Logged out",
+        description: "You have been successfully logged out.",
+      });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to log out. Please try again.",
+      });
+    }
+  };
   
   return (
     <>
@@ -98,6 +120,19 @@ export const CRMNav = () => {
                   Settings
                 </Button>
               </Link>
+            </div>
+            
+            {/* Logout Button */}
+            <div className="ml-auto">
+              <Button 
+                variant="ghost"
+                size="sm"
+                onClick={handleLogout}
+                className="gap-2"
+              >
+                <LogOut className="h-4 w-4" />
+                Logout
+              </Button>
             </div>
           </div>
         </div>
