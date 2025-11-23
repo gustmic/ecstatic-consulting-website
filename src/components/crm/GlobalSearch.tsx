@@ -103,7 +103,19 @@ export const GlobalSearch = ({ open, onOpenChange }: GlobalSearchProps) => {
   };
 
   return (
-    <CommandDialog open={open} onOpenChange={onOpenChange} shouldFilter={false}>
+    <CommandDialog 
+      open={open} 
+      onOpenChange={(isOpen) => {
+        onOpenChange(isOpen);
+        if (!isOpen) {
+          setSearchQuery('');
+          setContacts([]);
+          setCompanies([]);
+          setProjects([]);
+        }
+      }}
+      shouldFilter={false}
+    >
       <CommandInput
         placeholder="Search contacts, companies, projects..." 
         value={searchQuery}
