@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "./components/ThemeProvider";
 import ScrollToTop from "./components/ScrollToTop";
+import ProtectedRoute from "./components/ProtectedRoute";
 import Index from "./pages/Index";
 import IndexEN from "./pages/IndexEN";
 import NotFound from "./pages/NotFound";
@@ -34,12 +35,12 @@ const App = () => (
             <Route path="/en" element={<IndexEN />} />
             <Route path="/admin" element={<Auth />} />
             <Route path="/admin/setup" element={<SetupAdmin />} />
-          <Route path="/admin/crm" element={<Dashboard />} />
-          <Route path="/admin/crm/contacts" element={<Contacts />} />
-          <Route path="/admin/crm/companies" element={<Companies />} />
-          <Route path="/admin/crm/analytics" element={<Analytics />} />
-          <Route path="/admin/crm/archive" element={<Archive />} />
-            <Route path="/admin/crm/settings" element={<Settings />} />
+            <Route path="/admin/crm" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/admin/crm/contacts" element={<ProtectedRoute><Contacts /></ProtectedRoute>} />
+            <Route path="/admin/crm/companies" element={<ProtectedRoute><Companies /></ProtectedRoute>} />
+            <Route path="/admin/crm/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
+            <Route path="/admin/crm/archive" element={<ProtectedRoute><Archive /></ProtectedRoute>} />
+            <Route path="/admin/crm/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

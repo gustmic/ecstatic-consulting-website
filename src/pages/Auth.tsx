@@ -44,6 +44,9 @@ const Auth = () => {
 
       if (error) throw error;
 
+      // Set session start time for 8-hour expiration tracking
+      localStorage.setItem('session_start_time', Date.now().toString());
+
       toast({
         title: "Welcome back!",
         description: "Successfully logged in.",
