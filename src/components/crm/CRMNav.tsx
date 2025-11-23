@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Search, Users, Building2, BarChart3, Settings as SettingsIcon, LayoutDashboard } from "lucide-react";
+import { Search, Users, Building2, BarChart3, Archive as ArchiveIcon, Settings as SettingsIcon, LayoutDashboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import logo from "@/assets/logo.webp";
 import { useState } from "react";
@@ -74,6 +74,17 @@ export const CRMNav = () => {
                 >
                   <BarChart3 className="h-4 w-4" />
                   Analytics
+                </Button>
+              </Link>
+              
+              <Link to="/admin/crm/archive">
+                <Button 
+                  variant={isActive("/admin/crm/archive") ? "default" : "ghost"}
+                  size="sm"
+                  className="gap-2"
+                >
+                  <ArchiveIcon className="h-4 w-4" />
+                  Archive
                 </Button>
               </Link>
               

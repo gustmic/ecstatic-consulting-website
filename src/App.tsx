@@ -15,6 +15,7 @@ import Dashboard from "./pages/crm/Dashboard";
 import Contacts from "./pages/crm/Contacts";
 import Companies from "./pages/crm/Companies";
 import Analytics from "./pages/crm/Analytics";
+import Archive from "./pages/crm/Archive";
 import Settings from "./pages/crm/Settings";
 
 const queryClient = new QueryClient();
@@ -37,6 +38,7 @@ const App = () => (
           <Route path="/admin/crm/contacts" element={<Contacts />} />
           <Route path="/admin/crm/companies" element={<Companies />} />
           <Route path="/admin/crm/analytics" element={<Analytics />} />
+          <Route path="/admin/crm/archive" element={<Archive />} />
             <Route path="/admin/crm/settings" element={<Settings />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
