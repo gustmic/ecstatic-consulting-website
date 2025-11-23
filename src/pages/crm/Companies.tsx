@@ -5,9 +5,10 @@ import { CRMNav } from "@/components/crm/CRMNav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { Plus, Pencil, Trash2, ExternalLink } from "lucide-react";
+import { Plus, Pencil, Trash2, ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { CompanyModal } from "@/components/crm/CompanyModal";
+import { useUserPreferences } from "@/hooks/useUserPreferences";
 import {
   Table,
   TableBody,
@@ -41,8 +42,10 @@ const Companies = () => {
   const [editingCompany, setEditingCompany] = useState<Company | null>(null);
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
   const [selectedCompany, setSelectedCompany] = useState<any>(null);
+  const [currentPage, setCurrentPage] = useState(1);
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { preferences } = useUserPreferences();
 
   useEffect(() => {
     checkAuth();
@@ -57,6 +60,7 @@ const Companies = () => {
 
   useEffect(() => {
     filterCompanies();
+    setCurrentPage(1); // Reset to first page when filters change
   }, [companies, searchQuery]);
 
   const checkAuth = async () => {
@@ -212,6 +216,12 @@ const Companies = () => {
     setDetailDialogOpen(true);
   };
 
+  const itemsPerPage = preferences?.items_per_page || 25;
+  const totalPages = Math.ceil(filteredCompanies.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedCompanies = filteredCompanies.slice(startIndex, endIndex);
+
   return (
     <div className="min-h-screen bg-secondary">
       <CRMNav />
@@ -249,14 +259,14 @@ const Companies = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredCompanies.length === 0 ? (
+              {paginatedCompanies.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
                     No companies found
                   </TableCell>
                 </TableRow>
               ) : (
-                filteredCompanies.map((company) => (
+                paginatedCompanies.map((company) => (
                   <TableRow key={company.id}>
                     <TableCell className="font-medium">
                       <Button
@@ -308,6 +318,37 @@ const Companies = () => {
               )}
             </TableBody>
           </Table>
+
+          {totalPages > 1 && (
+            <div className="flex items-center justify-between px-4 py-4 border-t">
+              <div className="text-sm text-muted-foreground">
+                Showing {startIndex + 1}-{Math.min(endIndex, filteredCompanies.length)} of {filteredCompanies.length} companies
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                  Previous
+                </Button>
+                <div className="text-sm">
+                  Page {currentPage} of {totalPages}
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                  disabled={currentPage === totalPages}
+                >
+                  Next
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          )}
         </Card>
       </div>
 
