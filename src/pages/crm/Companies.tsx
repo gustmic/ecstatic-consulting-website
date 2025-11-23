@@ -213,7 +213,7 @@ const Companies = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-secondary">
       <CRMNav />
 
       <div className="container mx-auto px-6 py-8 pt-24">
