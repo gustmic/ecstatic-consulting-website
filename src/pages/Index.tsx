@@ -90,7 +90,7 @@ const Index = () => {
       </section>
 
       {/* Så arbetar vi med er */}
-      <section className="py-24 px-6 bg-muted/30">
+      <section className="py-24 px-6 bg-secondary border-t border-border shadow-[inset_0_1px_2px_rgba(0,0,0,0.04)]">
         <div className="container mx-auto max-w-6xl">
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-6 observe">Så arbetar vi med er</h2>
 
@@ -172,7 +172,7 @@ const Index = () => {
       </section>
 
       {/* Ecosystem Section */}
-      <section className="py-16 px-6 bg-gradient-to-br from-muted/20 to-muted/40">
+      <section className="py-16 px-6 bg-background border-t border-border shadow-[inset_0_1px_2px_rgba(0,0,0,0.04)]">
         <div className="container mx-auto max-w-5xl">
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-6 observe">
             Del av Sveriges Ekosystem inom AM
@@ -193,7 +193,7 @@ const Index = () => {
       </section>
 
       {/* Om oss Section */}
-      <section id="om-oss" className="py-24 px-6 bg-background">
+      <section id="om-oss" className="py-24 px-6 bg-secondary border-t border-border shadow-[inset_0_1px_2px_rgba(0,0,0,0.04)]">
         <div className="container mx-auto max-w-5xl">
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-center mb-8 observe">
             Beprövad expertis – strategiskt och tekniskt
@@ -257,7 +257,7 @@ const Index = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 px-6 bg-linkedin/5">
+      <section className="py-24 px-6 bg-background border-t border-border shadow-[inset_0_1px_2px_rgba(0,0,0,0.04)]">
         <div className="container mx-auto max-w-4xl text-center">
           <h2 className="font-serif text-3xl md:text-4xl font-bold mb-6 observe">
             Inled samtal med oss -<br />
