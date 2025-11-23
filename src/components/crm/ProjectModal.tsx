@@ -115,6 +115,13 @@ export const ProjectModal = ({ isOpen, onClose, onSave, project }: ProjectModalP
     }
   }, [project, isOpen]);
 
+  useEffect(() => {
+    console.log('Form data start_date:', formData.start_date);
+    console.log('Form data end_date:', formData.end_date);
+    console.log('Type of start_date:', typeof formData.start_date);
+    console.log('Type of end_date:', typeof formData.end_date);
+  }, [formData.start_date, formData.end_date]);
+
   const loadProjectData = async (project: Project) => {
     const { data: projectCompanies } = await supabase
       .from("project_companies")
