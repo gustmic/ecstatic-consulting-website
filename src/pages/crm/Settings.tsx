@@ -20,7 +20,6 @@ const Settings = () => {
   const [preferences, setPreferences] = useState({
     items_per_page: 25,
     date_format: "dd MMM yyyy",
-    theme: "system",
   });
   const [saving, setSaving] = useState(false);
   const { toast } = useToast();
@@ -56,7 +55,6 @@ const Settings = () => {
       setPreferences({
         items_per_page: data.items_per_page,
         date_format: data.date_format,
-        theme: data.theme,
       });
     }
   };
@@ -71,7 +69,7 @@ const Settings = () => {
         user_id: userId,
         items_per_page: preferences.items_per_page,
         date_format: preferences.date_format,
-        theme: preferences.theme,
+        theme: 'light',
       })
       .eq("user_id", userId);
 
@@ -151,25 +149,6 @@ const Settings = () => {
                 <SelectContent>
                   <SelectItem value="dd MMM yyyy">dd MMM yyyy (12 Jun 2025)</SelectItem>
                   <SelectItem value="yyyy-MM-dd">yyyy-MM-dd (2025-06-12)</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <Label htmlFor="theme">Theme</Label>
-              <Select
-                value={preferences.theme}
-                onValueChange={(value) =>
-                  setPreferences({ ...preferences, theme: value })
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="light">Light</SelectItem>
-                  <SelectItem value="dark">Dark</SelectItem>
-                  <SelectItem value="system">System</SelectItem>
                 </SelectContent>
               </Select>
             </div>
