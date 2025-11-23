@@ -149,138 +149,36 @@ const Archive = () => {
   return (
     <>
       <CRMNav />
-      <div className="container mx-auto px-6 pt-24 pb-8">
-        <h1 className="text-3xl font-bold mb-6">Archived Projects</h1>
+      <div className="min-h-screen bg-secondary">
+        <div className="container mx-auto px-6 pt-24 pb-8">
 
-        <div className="mb-6">
-          <div className="relative max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search projects..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9"
-            />
+          <div className="mb-6">
+            <div className="relative max-w-sm">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search projects..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-9"
+              />
+            </div>
           </div>
+
+          <Tabs defaultValue="lost" className="w-full">
+            <TabsList>
+              <TabsTrigger value="lost">Lost Projects</TabsTrigger>
+              <TabsTrigger value="completed">Completed Projects</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="lost" className="mt-6">
+...
+            </TabsContent>
+
+            <TabsContent value="completed" className="mt-6">
+...
+            </TabsContent>
+          </Tabs>
         </div>
-
-        <Tabs defaultValue="lost" className="w-full">
-          <TabsList>
-            <TabsTrigger value="lost">Lost Projects</TabsTrigger>
-            <TabsTrigger value="completed">Completed Projects</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="lost" className="mt-6">
-            <div className="rounded-md border">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Type</TableHead>
-                    <TableHead>Primary Contact</TableHead>
-                    <TableHead>Company</TableHead>
-                    <TableHead>Value</TableHead>
-                    <TableHead>Date Lost</TableHead>
-                    <TableHead>Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredLost.length === 0 ? (
-                    <TableRow>
-                      <TableCell colSpan={7} className="text-center text-muted-foreground py-8">
-                        {searchQuery ? "No projects match your search" : "No lost projects. Great work!"}
-                      </TableCell>
-                    </TableRow>
-                  ) : (
-                    filteredLost.map((project) => (
-                      <TableRow key={project.id}>
-                        <TableCell className="font-medium">{project.name}</TableCell>
-                        <TableCell>
-                          <Badge variant={getTypeBadgeVariant(project.type)}>
-                            {project.type}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>{project.contacts?.name || "-"}</TableCell>
-                        <TableCell>{project.client_name}</TableCell>
-                        <TableCell>{formatCurrencySEK(project.project_value_kr)}</TableCell>
-                        <TableCell>{formatDate(project.updated_at)}</TableCell>
-                        <TableCell>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => {
-                              setSelectedProject(project);
-                              setRestoreStatus("Meeting Booked");
-                              setRestoreModalOpen(true);
-                            }}
-                          >
-                            Restore
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  )}
-                </TableBody>
-              </Table>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="completed" className="mt-6">
-            <div className="rounded-md border">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Type</TableHead>
-                    <TableHead>Primary Contact</TableHead>
-                    <TableHead>Company</TableHead>
-                    <TableHead>Value</TableHead>
-                    <TableHead>Start Date</TableHead>
-                    <TableHead>End Date</TableHead>
-                    <TableHead>Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredCompleted.length === 0 ? (
-                    <TableRow>
-                      <TableCell colSpan={8} className="text-center text-muted-foreground py-8">
-                        {searchQuery ? "No projects match your search" : "No completed projects yet."}
-                      </TableCell>
-                    </TableRow>
-                  ) : (
-                    filteredCompleted.map((project) => (
-                      <TableRow key={project.id}>
-                        <TableCell className="font-medium">{project.name}</TableCell>
-                        <TableCell>
-                          <Badge variant={getTypeBadgeVariant(project.type)}>
-                            {project.type}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>{project.contacts?.name || "-"}</TableCell>
-                        <TableCell>{project.client_name}</TableCell>
-                        <TableCell>{formatCurrencySEK(project.project_value_kr)}</TableCell>
-                        <TableCell>{project.start_date ? formatDate(project.start_date) : "-"}</TableCell>
-                        <TableCell>{project.end_date ? formatDate(project.end_date) : "-"}</TableCell>
-                        <TableCell>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => {
-                              setSelectedProject(project);
-                              setReopenModalOpen(true);
-                            }}
-                          >
-                            Reopen
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  )}
-                </TableBody>
-              </Table>
-            </div>
-          </TabsContent>
-        </Tabs>
       </div>
 
       {/* Restore Modal */}
