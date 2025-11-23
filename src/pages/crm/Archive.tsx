@@ -1,15 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CRMNav } from "@/components/crm/CRMNav";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { useEffect } from "react";
 import { formatCurrencySEK, formatDate } from "@/lib/formatters";
+import { Search } from "lucide-react";
 
 interface Project {
   id: string;
@@ -22,13 +24,22 @@ interface Project {
   start_date: string | null;
   end_date: string | null;
   updated_at: string;
+  primary_contact_id: string | null;
+  contacts?: {
+    name: string;
+  };
 }
 
 const Archive = () => {
   const { toast } = useToast();
   const [lostProjects, setLostProjects] = useState<Project[]>([]);
   const [completedProjects, setCompletedProjects] = useState<Project[]>([]);
+  const [filteredLost, setFilteredLost] = useState<Project[]>([]);
+  const [filteredCompleted, setFilteredCompleted] = useState<Project[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  
   const [restoreModalOpen, setRestoreModalOpen] = useState(false);
+  const [reopenModalOpen, setReopenModalOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [restoreStatus, setRestoreStatus] = useState<string>("Meeting Booked");
 
@@ -36,21 +47,46 @@ const Archive = () => {
     fetchArchivedProjects();
   }, []);
 
+  useEffect(() => {
+    filterProjects();
+  }, [searchQuery, lostProjects, completedProjects]);
+
   const fetchArchivedProjects = async () => {
     const { data: lost } = await supabase
       .from("projects")
-      .select("*")
+      .select("*, contacts(name)")
       .eq("pipeline_status", "Lost")
       .order("updated_at", { ascending: false });
 
     const { data: completed } = await supabase
       .from("projects")
-      .select("*")
+      .select("*, contacts(name)")
       .eq("project_status", "Completed")
       .order("updated_at", { ascending: false });
 
     if (lost) setLostProjects(lost);
     if (completed) setCompletedProjects(completed);
+  };
+
+  const filterProjects = () => {
+    const query = searchQuery.toLowerCase();
+    
+    const filteredLostList = lostProjects.filter(p => 
+      p.name.toLowerCase().includes(query) ||
+      p.type.toLowerCase().includes(query) ||
+      p.client_name.toLowerCase().includes(query) ||
+      (p.contacts?.name || "").toLowerCase().includes(query)
+    );
+    
+    const filteredCompletedList = completedProjects.filter(p => 
+      p.name.toLowerCase().includes(query) ||
+      p.type.toLowerCase().includes(query) ||
+      p.client_name.toLowerCase().includes(query) ||
+      (p.contacts?.name || "").toLowerCase().includes(query)
+    );
+    
+    setFilteredLost(filteredLostList);
+    setFilteredCompleted(filteredCompletedList);
   };
 
   const handleRestore = async () => {
@@ -70,15 +106,18 @@ const Archive = () => {
     } else {
       toast({ title: "Project restored successfully" });
       setRestoreModalOpen(false);
+      setSelectedProject(null);
       fetchArchivedProjects();
     }
   };
 
-  const handleReopen = async (project: Project) => {
+  const handleReopen = async () => {
+    if (!selectedProject) return;
+
     const { error } = await supabase
       .from("projects")
       .update({ project_status: "Ongoing" })
-      .eq("id", project.id);
+      .eq("id", selectedProject.id);
 
     if (error) {
       toast({
@@ -88,7 +127,22 @@ const Archive = () => {
       });
     } else {
       toast({ title: "Project reopened successfully" });
+      setReopenModalOpen(false);
+      setSelectedProject(null);
       fetchArchivedProjects();
+    }
+  };
+
+  const getTypeBadgeVariant = (type: string) => {
+    switch (type) {
+      case "Assessment":
+        return "secondary";
+      case "Pilot":
+        return "default";
+      case "Integration":
+        return "outline";
+      default:
+        return "secondary";
     }
   };
 
@@ -97,6 +151,18 @@ const Archive = () => {
       <CRMNav />
       <div className="container mx-auto px-6 pt-24 pb-8">
         <h1 className="text-3xl font-bold mb-6">Archived Projects</h1>
+
+        <div className="mb-6">
+          <div className="relative max-w-sm">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search projects..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9"
+            />
+          </div>
+        </div>
 
         <Tabs defaultValue="lost" className="w-full">
           <TabsList>
@@ -111,24 +177,30 @@ const Archive = () => {
                   <TableRow>
                     <TableHead>Name</TableHead>
                     <TableHead>Type</TableHead>
+                    <TableHead>Primary Contact</TableHead>
                     <TableHead>Company</TableHead>
                     <TableHead>Value</TableHead>
-                    <TableHead>Lost Date</TableHead>
-                    <TableHead>Action</TableHead>
+                    <TableHead>Date Lost</TableHead>
+                    <TableHead>Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {lostProjects.length === 0 ? (
+                  {filteredLost.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={6} className="text-center text-muted-foreground">
-                        No lost projects
+                      <TableCell colSpan={7} className="text-center text-muted-foreground py-8">
+                        {searchQuery ? "No projects match your search" : "No lost projects. Great work!"}
                       </TableCell>
                     </TableRow>
                   ) : (
-                    lostProjects.map((project) => (
+                    filteredLost.map((project) => (
                       <TableRow key={project.id}>
                         <TableCell className="font-medium">{project.name}</TableCell>
-                        <TableCell>{project.type}</TableCell>
+                        <TableCell>
+                          <Badge variant={getTypeBadgeVariant(project.type)}>
+                            {project.type}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>{project.contacts?.name || "-"}</TableCell>
                         <TableCell>{project.client_name}</TableCell>
                         <TableCell>{formatCurrencySEK(project.project_value_kr)}</TableCell>
                         <TableCell>{formatDate(project.updated_at)}</TableCell>
@@ -138,6 +210,7 @@ const Archive = () => {
                             size="sm"
                             onClick={() => {
                               setSelectedProject(project);
+                              setRestoreStatus("Meeting Booked");
                               setRestoreModalOpen(true);
                             }}
                           >
@@ -159,25 +232,31 @@ const Archive = () => {
                   <TableRow>
                     <TableHead>Name</TableHead>
                     <TableHead>Type</TableHead>
+                    <TableHead>Primary Contact</TableHead>
                     <TableHead>Company</TableHead>
                     <TableHead>Value</TableHead>
                     <TableHead>Start Date</TableHead>
                     <TableHead>End Date</TableHead>
-                    <TableHead>Action</TableHead>
+                    <TableHead>Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {completedProjects.length === 0 ? (
+                  {filteredCompleted.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={7} className="text-center text-muted-foreground">
-                        No completed projects
+                      <TableCell colSpan={8} className="text-center text-muted-foreground py-8">
+                        {searchQuery ? "No projects match your search" : "No completed projects yet."}
                       </TableCell>
                     </TableRow>
                   ) : (
-                    completedProjects.map((project) => (
+                    filteredCompleted.map((project) => (
                       <TableRow key={project.id}>
                         <TableCell className="font-medium">{project.name}</TableCell>
-                        <TableCell>{project.type}</TableCell>
+                        <TableCell>
+                          <Badge variant={getTypeBadgeVariant(project.type)}>
+                            {project.type}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>{project.contacts?.name || "-"}</TableCell>
                         <TableCell>{project.client_name}</TableCell>
                         <TableCell>{formatCurrencySEK(project.project_value_kr)}</TableCell>
                         <TableCell>{project.start_date ? formatDate(project.start_date) : "-"}</TableCell>
@@ -186,7 +265,10 @@ const Archive = () => {
                           <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => handleReopen(project)}
+                            onClick={() => {
+                              setSelectedProject(project);
+                              setReopenModalOpen(true);
+                            }}
                           >
                             Reopen
                           </Button>
@@ -201,21 +283,18 @@ const Archive = () => {
         </Tabs>
       </div>
 
+      {/* Restore Modal */}
       <Dialog open={restoreModalOpen} onOpenChange={setRestoreModalOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Restore Project</DialogTitle>
+            <DialogTitle>Restore {selectedProject?.name}?</DialogTitle>
           </DialogHeader>
           
           <div className="space-y-4">
-            <p className="text-sm text-muted-foreground">
-              Restore "{selectedProject?.name}" to which pipeline status?
-            </p>
-            
             <div>
-              <Label htmlFor="restore_status">Pipeline Status</Label>
+              <Label htmlFor="restore_status">Restore to status:</Label>
               <Select value={restoreStatus} onValueChange={setRestoreStatus}>
-                <SelectTrigger>
+                <SelectTrigger id="restore_status" className="mt-2">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -232,6 +311,27 @@ const Archive = () => {
             </Button>
             <Button onClick={handleRestore}>
               Restore
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Reopen Modal */}
+      <Dialog open={reopenModalOpen} onOpenChange={setReopenModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Reopen {selectedProject?.name}?</DialogTitle>
+            <DialogDescription>
+              This will set the project status back to Ongoing.
+            </DialogDescription>
+          </DialogHeader>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setReopenModalOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleReopen}>
+              Reopen
             </Button>
           </DialogFooter>
         </DialogContent>
