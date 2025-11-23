@@ -46,23 +46,43 @@ export const GlobalSearch = ({ open, onOpenChange }: GlobalSearchProps) => {
   }, [searchQuery, open]);
 
   const searchData = async (query: string) => {
-    const { data: contactResults } = await supabase
+    console.log('=== GLOBAL SEARCH DEBUG ===');
+    console.log('Search query:', query);
+
+    // Search contacts
+    console.log('Searching contacts with query:', query);
+    const { data: contactResults, error: contactsError } = await supabase
       .from("contacts")
       .select("*, companies(name)")
       .or(`name.ilike.%${query}%,email.ilike.%${query}%`)
       .limit(5);
+    
+    console.log('Contacts result:', contactResults);
+    console.log('Contacts error:', contactsError);
 
-    const { data: companyResults } = await supabase
+    // Search companies
+    console.log('Searching companies with query:', query);
+    const { data: companyResults, error: companiesError } = await supabase
       .from("companies")
       .select("*")
       .ilike("name", `%${query}%`)
       .limit(5);
+    
+    console.log('Companies result:', companyResults);
+    console.log('Companies error:', companiesError);
 
-    const { data: projectResults } = await supabase
+    // Search projects
+    console.log('Searching projects with query:', query);
+    const { data: projectResults, error: projectsError } = await supabase
       .from("projects")
       .select("*")
       .ilike("name", `%${query}%`)
       .limit(5);
+    
+    console.log('Projects result:', projectResults);
+    console.log('Projects error:', projectsError);
+    
+    console.log('=== END DEBUG ===');
 
     setContacts(contactResults || []);
     setCompanies(companyResults || []);
