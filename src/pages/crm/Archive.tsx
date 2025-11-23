@@ -171,11 +171,105 @@ const Archive = () => {
             </TabsList>
 
             <TabsContent value="lost" className="mt-6">
-...
+              {filteredLost.length === 0 ? (
+                <div className="text-center py-12 text-muted-foreground">
+                  No lost projects found
+                </div>
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Project Name</TableHead>
+                      <TableHead>Type</TableHead>
+                      <TableHead>Client</TableHead>
+                      <TableHead>Contact</TableHead>
+                      <TableHead>Value</TableHead>
+                      <TableHead>Last Updated</TableHead>
+                      <TableHead className="text-right">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredLost.map((project) => (
+                      <TableRow key={project.id}>
+                        <TableCell className="font-medium">{project.name}</TableCell>
+                        <TableCell>
+                          <Badge variant={getTypeBadgeVariant(project.type)}>
+                            {project.type}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>{project.client_name}</TableCell>
+                        <TableCell>{project.contacts?.name || "-"}</TableCell>
+                        <TableCell>{formatCurrencySEK(project.project_value_kr)}</TableCell>
+                        <TableCell>{formatDate(project.updated_at)}</TableCell>
+                        <TableCell className="text-right">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                              setSelectedProject(project);
+                              setRestoreModalOpen(true);
+                            }}
+                          >
+                            Restore to Pipeline
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
             </TabsContent>
 
             <TabsContent value="completed" className="mt-6">
-...
+              {filteredCompleted.length === 0 ? (
+                <div className="text-center py-12 text-muted-foreground">
+                  No completed projects found
+                </div>
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Project Name</TableHead>
+                      <TableHead>Type</TableHead>
+                      <TableHead>Client</TableHead>
+                      <TableHead>Contact</TableHead>
+                      <TableHead>Value</TableHead>
+                      <TableHead>Start Date</TableHead>
+                      <TableHead>End Date</TableHead>
+                      <TableHead className="text-right">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredCompleted.map((project) => (
+                      <TableRow key={project.id}>
+                        <TableCell className="font-medium">{project.name}</TableCell>
+                        <TableCell>
+                          <Badge variant={getTypeBadgeVariant(project.type)}>
+                            {project.type}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>{project.client_name}</TableCell>
+                        <TableCell>{project.contacts?.name || "-"}</TableCell>
+                        <TableCell>{formatCurrencySEK(project.project_value_kr)}</TableCell>
+                        <TableCell>{project.start_date ? formatDate(project.start_date) : "-"}</TableCell>
+                        <TableCell>{project.end_date ? formatDate(project.end_date) : "-"}</TableCell>
+                        <TableCell className="text-right">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                              setSelectedProject(project);
+                              setReopenModalOpen(true);
+                            }}
+                          >
+                            Reopen Project
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
             </TabsContent>
           </Tabs>
         </div>
