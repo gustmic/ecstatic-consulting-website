@@ -11,7 +11,6 @@ import Index from "./pages/Index";
 import IndexEN from "./pages/IndexEN";
 import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
-import SetupAdmin from "./pages/SetupAdmin";
 import Dashboard from "./pages/crm/Dashboard";
 import Contacts from "./pages/crm/Contacts";
 import Companies from "./pages/crm/Companies";
@@ -34,7 +33,6 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/en" element={<IndexEN />} />
             <Route path="/admin" element={<Auth />} />
-            <Route path="/admin/setup" element={<SetupAdmin />} />
             <Route path="/admin/crm" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/admin/crm/contacts" element={<ProtectedRoute><Contacts /></ProtectedRoute>} />
             <Route path="/admin/crm/companies" element={<ProtectedRoute><Companies /></ProtectedRoute>} />
