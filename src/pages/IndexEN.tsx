@@ -257,7 +257,7 @@ const IndexEN = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 px-6 bg-background border-t border-border shadow-[inset_0_1px_2px_rgba(0,0,0,0.04)]">
+      <section id="contact" className="py-24 px-6 bg-background border-t border-border shadow-[inset_0_1px_2px_rgba(0,0,0,0.04)]">
         <div className="container mx-auto max-w-4xl text-center">
           <h2 className="font-serif text-3xl md:text-4xl font-bold mb-6 observe">
             Start a Conversation With Us —<br />
