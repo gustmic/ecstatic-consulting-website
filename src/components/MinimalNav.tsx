@@ -56,7 +56,7 @@ const MinimalNav = () => {
                   !isEnglish ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
-                🇸🇪 SV
+                <span className="font-semibold">SV</span>
               </Link>
               <Link
                 to="/en"
@@ -64,7 +64,7 @@ const MinimalNav = () => {
                   isEnglish ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
-                🇬🇧 EN
+                <span className="font-semibold">EN</span>
               </Link>
             </div>
             
@@ -97,7 +97,7 @@ const MinimalNav = () => {
                 }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
-                🇸🇪 Swedish
+                Swedish
               </Link>
               <Link
                 to="/en"
@@ -106,7 +106,7 @@ const MinimalNav = () => {
                 }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
-                🇬🇧 English
+                English
               </Link>
             </div>
             
