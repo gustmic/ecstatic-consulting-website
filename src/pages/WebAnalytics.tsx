@@ -143,6 +143,26 @@ const WebAnalytics = () => {
               </ul>
             </CardContent>
           </Card>
+
+          {/* Live Event Stream */}
+          <Card className="mt-8">
+            <CardHeader>
+              <CardTitle>Live Event Stream</CardTitle>
+              <CardDescription>
+                Real-time tracking events from PostHog (requires PostHog dashboard URL)
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="w-full h-[800px] border rounded-lg overflow-hidden">
+                <iframe
+                  src="Add your PostHog embed URL here after creating dashboard"
+                  className="w-full h-full"
+                  frameBorder="0"
+                  title="PostHog Analytics Dashboard"
+                />
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </main>
     </div>
