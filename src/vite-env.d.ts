@@ -9,6 +9,7 @@ declare global {
     posthog?: {
       capture: (event: string, properties?: Record<string, any>) => void;
       init: (key: string, options: Record<string, any>) => void;
+      [key: string]: any;
     };
   }
 }

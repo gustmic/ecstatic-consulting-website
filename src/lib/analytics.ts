@@ -1,7 +1,11 @@
 // analytics.ts - PostHog tracking module
 // Assumes window.posthog is already loaded via snippet in <head>
 
-export function initAnalytics() {
+/**
+ * Initialize PostHog analytics tracking
+ * Tracks scroll depth, CTA clicks, and page loads
+ */
+export function initAnalytics(): void {
   if (!window.posthog) {
     console.warn('PostHog not loaded - analytics disabled');
     return;
