@@ -2,10 +2,14 @@
 // Assumes window.posthog is already loaded via snippet in <head>
 
 export function initAnalytics() {
+  console.log('🔍 initAnalytics() called');
+  
   if (!window.posthog) {
     console.warn('PostHog not loaded - analytics disabled');
     return;
   }
+  
+  console.log('✅ PostHog available:', !!window.posthog);
 
   // === SCROLL DEPTH TRACKING ===
   const thresholds = [25, 50, 75, 100];
@@ -28,6 +32,8 @@ export function initAnalytics() {
     if (docHeight <= 0) return; // page too short
     
     const percent = Math.min(100, Math.round((scrollTop / docHeight) * 100));
+    
+    console.log('📜 Scroll detected, percent:', percent);
     
     if (percent <= lastPercent) return; // only track forward scroll
     lastPercent = percent;
@@ -74,6 +80,8 @@ export function initAnalytics() {
     ctas.forEach(el => {
       el.addEventListener('click', () => {
         const location = el.getAttribute('data-cta-location') || 'unknown';
+        console.log('🖱️ CTA clicked, location:', location);
+        
         const scrollPercent = Math.round(
           (window.scrollY / (getDocHeight() - window.innerHeight || 1)) * 100
         ) || 0;
