@@ -1,201 +1,115 @@
-interface Contact {
-  id: string;
-  name: string;
-  company?: string;
-  stage: string;
-  created_at: string;
-  last_contacted?: string;
-  next_followup?: string;
-  engagement_score?: number;
-}
+// analytics.ts - PostHog tracking module
+// Assumes window.posthog is already loaded via snippet in <head>
 
-interface Interaction {
-  id: string;
-  contact_id: string;
-  type: string;
-  date: string;
-  created_at: string;
-}
-
-/**
- * Calculate engagement score for a contact based on interactions and activity
- * Algorithm:
- * - Recent interaction (within 30 days): +3 points
- * - Interaction frequency: +1 per interaction in last 90 days
- * - Has upcoming follow-up: +2 points
- * - Email/Call interaction: +2 points vs +1 for notes
- * - Max score: 10 points
- */
-export const calculateEngagementScore = (
-  contact: Contact,
-  interactions: Interaction[]
-): number => {
-  let score = 0;
-  const now = new Date();
-  const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-  const ninetyDaysAgo = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
-
-  // Filter interactions for this contact
-  const contactInteractions = interactions.filter(i => i.contact_id === contact.id);
-
-  // Recent interaction (within 30 days): +3 points
-  const hasRecentInteraction = contactInteractions.some(i => {
-    const interactionDate = new Date(i.date);
-    return interactionDate >= thirtyDaysAgo;
-  });
-  if (hasRecentInteraction) score += 3;
-
-  // Interaction frequency in last 90 days: +1 per interaction (max 3)
-  const recentInteractions = contactInteractions.filter(i => {
-    const interactionDate = new Date(i.date);
-    return interactionDate >= ninetyDaysAgo;
-  });
-  score += Math.min(recentInteractions.length, 3);
-
-  // Has upcoming follow-up: +2 points
-  if (contact.next_followup) {
-    const followupDate = new Date(contact.next_followup);
-    if (followupDate >= now) score += 2;
+export function initAnalytics() {
+  if (!window.posthog) {
+    console.warn('PostHog not loaded - analytics disabled');
+    return;
   }
 
-  // High-value interaction types: +2 for email/call vs +1 for notes
-  const highValueInteractions = contactInteractions.filter(i => 
-    i.type === 'Email' || i.type === 'Call'
-  ).length;
-  score += Math.min(highValueInteractions, 2);
+  // === SCROLL DEPTH TRACKING ===
+  const thresholds = [25, 50, 75, 100];
+  let reported = new Set<number>();
+  let lastPercent = 0;
+  let engagedTimer: ReturnType<typeof setTimeout> | null = null;
 
-  // Cap at 10
-  return Math.min(score, 10);
-};
+  function getDocHeight() {
+    return Math.max(
+      document.documentElement.scrollHeight,
+      document.body.scrollHeight
+    );
+  }
 
-/**
- * Get engagement tier based on score
- * A (8-10), B (5-7), C (2-4), D (0-1)
- */
-export const getEngagementTier = (score: number): string => {
-  if (score >= 8) return 'A';
-  if (score >= 5) return 'B';
-  if (score >= 2) return 'C';
-  return 'D';
-};
-
-/**
- * Calculate conversion rates between stages
- */
-export const calculateConversionRates = (contacts: Contact[]) => {
-  const stages = ['Lead', 'Prospect', 'Proposal', 'Contract', 'Client'];
-  const stageCounts: Record<string, number> = {};
-  
-  stages.forEach(stage => {
-    stageCounts[stage] = contacts.filter(c => c.stage === stage).length;
-  });
-
-  return stages.map((stage, idx) => {
-    const count = stageCounts[stage];
-    let conversionRate = undefined;
+  function checkScroll() {
+    const scrollTop = window.scrollY || window.pageYOffset;
+    const winHeight = window.innerHeight || document.documentElement.clientHeight;
+    const docHeight = getDocHeight() - winHeight;
     
-    if (idx > 0) {
-      const prevCount = stageCounts[stages[idx - 1]];
-      conversionRate = prevCount > 0 ? Math.round((count / prevCount) * 100) : 0;
+    if (docHeight <= 0) return; // page too short
+    
+    const percent = Math.min(100, Math.round((scrollTop / docHeight) * 100));
+    
+    if (percent <= lastPercent) return; // only track forward scroll
+    lastPercent = percent;
+
+    // Report threshold events
+    thresholds.forEach(t => {
+      if (percent >= t && !reported.has(t)) {
+        reported.add(t);
+        window.posthog?.capture('scroll_depth', {
+          depth: t,
+          percent: percent,
+          path: window.location.pathname,
+          timestamp: new Date().toISOString()
+        });
+      }
+    });
+
+    // Track engaged reading (30s near bottom = serious interest)
+    if (percent >= 75) {
+      if (engagedTimer) clearTimeout(engagedTimer);
+      engagedTimer = setTimeout(() => {
+        window.posthog?.capture('engaged_near_bottom', {
+          percent: percent,
+          path: window.location.pathname,
+          timestamp: new Date().toISOString()
+        });
+      }, 30000); // 30 seconds
     }
+  }
+
+  // Debounced scroll handler
+  let scrollTimer: ReturnType<typeof setTimeout>;
+  function onScroll() {
+    if (scrollTimer) clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(checkScroll, 150);
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // === CTA CLICK TRACKING ===
+  function registerCTAs() {
+    const ctas = document.querySelectorAll('[data-cta-location]');
     
-    return { stage, count, conversionRate };
+    ctas.forEach(el => {
+      el.addEventListener('click', () => {
+        const location = el.getAttribute('data-cta-location') || 'unknown';
+        const scrollPercent = Math.round(
+          (window.scrollY / (getDocHeight() - window.innerHeight || 1)) * 100
+        ) || 0;
+
+        window.posthog?.capture('cta_book_call_clicked', {
+          location: location,
+          label: (el as HTMLElement).innerText || el.getAttribute('aria-label') || null,
+          scroll_percent: scrollPercent,
+          path: window.location.pathname,
+          timestamp: new Date().toISOString()
+        });
+
+        // Track if Calendly link
+        if (el.tagName === 'A' && (el as HTMLAnchorElement).href && (el as HTMLAnchorElement).href.includes('calendly')) {
+          window.posthog?.capture('calendly_opened', {
+            source_location: location
+          });
+        }
+      }, { passive: true } as AddEventListenerOptions);
+    });
+  }
+
+  // Wait for DOM
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', registerCTAs);
+  } else {
+    registerCTAs();
+  }
+
+  // === PAGE LOAD EVENT ===
+  window.addEventListener('load', () => {
+    checkScroll(); // initial scroll check
+    window.posthog?.capture('page_loaded', {
+      path: window.location.pathname,
+      title: document.title,
+      timestamp: new Date().toISOString()
+    });
   });
-};
-
-/**
- * Calculate average deal velocity (time in each stage)
- */
-export const calculateDealVelocity = (contacts: Contact[], stages?: string[]) => {
-  const defaultStages = ['Lead', 'Prospect', 'Proposal', 'Contract'];
-  const velocityStages = stages || defaultStages;
-  
-  // Simplified calculation based on current stage and creation date
-  const velocityData = velocityStages.map(stage => {
-    const stageContacts = contacts.filter(c => c.stage === stage);
-    
-    if (stageContacts.length === 0) {
-      return { stage, avgDays: 0 };
-    }
-
-    const totalDays = stageContacts.reduce((sum, contact) => {
-      const created = new Date(contact.created_at);
-      const now = new Date();
-      const days = Math.floor((now.getTime() - created.getTime()) / (1000 * 60 * 60 * 24));
-      return sum + days;
-    }, 0);
-
-    const avgDays = Math.round(totalDays / stageContacts.length);
-    return { stage, avgDays };
-  });
-
-  return velocityData;
-};
-
-/**
- * Group projects by service type and calculate profitability metrics
- */
-interface Project {
-  id: string;
-  name: string;
-  type: string;
-  project_value_kr: number;
-  actual_hours?: number;
-  hourly_rate?: number;
-  status: string;
 }
-
-export const groupProjectsByServiceType = (projects: Project[]) => {
-  const serviceTypes: Record<string, {
-    projectCount: number;
-    totalRevenue: number;
-    estimatedHours: number;
-    actualHours: number;
-    totalCosts: number;
-  }> = {};
-
-  projects.forEach(project => {
-    const serviceType = project.type || 'Unspecified';
-    const hourlyRate = project.hourly_rate || 1500;
-    const revenue = project.project_value_kr || 0;
-    const estimatedHours = revenue / hourlyRate;
-    const actualHours = project.actual_hours || 0;
-    const costs = actualHours * hourlyRate * 0.7; // Assuming 70% cost ratio
-
-    if (!serviceTypes[serviceType]) {
-      serviceTypes[serviceType] = {
-        projectCount: 0,
-        totalRevenue: 0,
-        estimatedHours: 0,
-        actualHours: 0,
-        totalCosts: 0,
-      };
-    }
-
-    serviceTypes[serviceType].projectCount++;
-    serviceTypes[serviceType].totalRevenue += revenue;
-    serviceTypes[serviceType].estimatedHours += estimatedHours;
-    serviceTypes[serviceType].actualHours += actualHours;
-    serviceTypes[serviceType].totalCosts += costs;
-  });
-
-  return Object.entries(serviceTypes).map(([serviceType, data]) => {
-    const profitMargin = data.totalRevenue > 0 
-      ? Math.round(((data.totalRevenue - data.totalCosts) / data.totalRevenue) * 100)
-      : 0;
-    
-    const utilization = data.estimatedHours > 0 && data.actualHours > 0
-      ? Math.round((data.actualHours / data.estimatedHours) * 100)
-      : 0;
-
-    return {
-      serviceType,
-      projectCount: data.projectCount,
-      totalRevenue: data.totalRevenue,
-      estimatedHours: Math.round(data.estimatedHours),
-      actualHours: Math.round(data.actualHours),
-      profitMargin,
-      utilization,
-    };
-  });
-};
