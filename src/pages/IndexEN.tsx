@@ -8,6 +8,7 @@ import reinholdImage from "@/assets/reinhold-rutks.webp";
 import logo from "@/assets/logo.webp";
 import linkedinLogo from "@/assets/linkedin-logo.png";
 import { Helmet } from "react-helmet-async";
+import { initAnalytics } from "@/lib/analytics";
 
 const IndexEN = () => {
   useEffect(() => {
@@ -27,6 +28,9 @@ const IndexEN = () => {
     document.querySelectorAll(".observe").forEach((element) => {
       observer.observe(element);
     });
+
+    // Initialize PostHog analytics
+    initAnalytics();
 
     // Improved Calendly loading check
     if (window.Calendly) return; // Already loaded globally
@@ -52,6 +56,13 @@ const IndexEN = () => {
     if (!window.Calendly) {
       console.error("Calendly not loaded yet");
       return;
+    }
+
+    // Track Calendly widget open
+    if (window.posthog) {
+      window.posthog.capture('calendly_opened', {
+        source_location: 'direct_call'
+      });
     }
 
     window.Calendly.initPopupWidget({
@@ -281,7 +292,12 @@ const IndexEN = () => {
           </div>
 
           <div className="flex justify-center observe">
-            <Button size="lg" onClick={openCalendly} className="bg-[#2D7A4F] hover:bg-[#246841] text-white">
+            <Button 
+              size="lg" 
+              onClick={openCalendly} 
+              data-cta-location="footer"
+              className="bg-[#2D7A4F] hover:bg-[#246841] text-white"
+            >
               Book a Call
             </Button>
           </div>
