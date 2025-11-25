@@ -55,7 +55,7 @@ const Index = () => {
     }
 
     window.Calendly.initPopupWidget({
-      url: "https://calendly.com/micael-gustavsson-ecstatic/utforskande-mote",
+      url: "https://calendly.com/micael-gustavsson-ecstatic/exploratory-meeting",
     });
   };
 
