@@ -8,7 +8,7 @@ import reinholdImage from "@/assets/reinhold-rutks.webp";
 import logo from "@/assets/logo.webp";
 import linkedinLogo from "@/assets/linkedin-logo.png";
 import { Helmet } from "react-helmet-async";
-import { initAnalytics } from "@/lib/analytics";
+import { initAnalytics } from "../lib/analytics";
 
 const IndexEN = () => {
   useEffect(() => {
