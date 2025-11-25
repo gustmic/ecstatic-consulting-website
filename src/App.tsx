@@ -11,6 +11,8 @@ import Index from "./pages/Index";
 import IndexEN from "./pages/IndexEN";
 import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
+import AdminDashboard from "./pages/AdminDashboard";
+import WebAnalytics from "./pages/WebAnalytics";
 import Dashboard from "./pages/crm/Dashboard";
 import Contacts from "./pages/crm/Contacts";
 import Companies from "./pages/crm/Companies";
@@ -33,6 +35,8 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/en" element={<IndexEN />} />
             <Route path="/admin" element={<Auth />} />
+            <Route path="/admin/dashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+            <Route path="/admin/analytics" element={<ProtectedRoute><WebAnalytics /></ProtectedRoute>} />
             <Route path="/admin/crm" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/admin/crm/contacts" element={<ProtectedRoute><Contacts /></ProtectedRoute>} />
             <Route path="/admin/crm/companies" element={<ProtectedRoute><Companies /></ProtectedRoute>} />
