@@ -95,16 +95,6 @@ const WebAnalytics = () => {
               </a>
             </Button>
           </div>
-
-          {/* Optional: Instructions if dashboard not yet configured */}
-          <Card className="mt-6 border-dashed">
-            <CardContent className="pt-6">
-              <p className="text-sm text-muted-foreground text-center">
-                Replace <code className="bg-muted px-2 py-1 rounded">POSTHOG_DASHBOARD_URL</code> with your PostHog
-                dashboard share link
-              </p>
-            </CardContent>
-          </Card>
         </div>
       </main>
     </div>
