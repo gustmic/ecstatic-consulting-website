@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, BarChart3, TrendingUp, Users, MousePointerClick } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import logo from "@/assets/logo.webp";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
@@ -38,129 +38,72 @@ const WebAnalytics = () => {
 
       {/* Main Content */}
       <main className="container mx-auto px-6 py-8">
-        {/* Placeholder Content */}
-        <div className="max-w-6xl mx-auto">
-          <div className="mb-8">
-            <h1 className="font-serif text-3xl font-bold mb-2">Website Analytics Dashboard</h1>
+        <div className="max-w-[1600px] mx-auto">
+          {/* Page Header */}
+          <div className="mb-6">
+            <h1 className="font-serif text-3xl font-bold mb-2">Analytics Dashboard</h1>
             <p className="text-muted-foreground">
-              PostHog analytics integration coming soon
+              Real-time insights from PostHog • Updated live
             </p>
           </div>
 
-          {/* Stats Grid - Placeholder */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <Card>
-              <CardHeader className="pb-3">
-                <CardDescription>Total Visitors</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center gap-4">
-                  <Users className="w-8 h-8 text-primary" />
-                  <div>
-                    <div className="text-3xl font-bold">---</div>
-                    <p className="text-xs text-muted-foreground">Awaiting data</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-3">
-                <CardDescription>CTA Clicks</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center gap-4">
-                  <MousePointerClick className="w-8 h-8 text-secondary" />
-                  <div>
-                    <div className="text-3xl font-bold">---</div>
-                    <p className="text-xs text-muted-foreground">Awaiting data</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-3">
-                <CardDescription>Avg. Scroll Depth</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center gap-4">
-                  <TrendingUp className="w-8 h-8 text-primary" />
-                  <div>
-                    <div className="text-3xl font-bold">---</div>
-                    <p className="text-xs text-muted-foreground">Awaiting data</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-3">
-                <CardDescription>Engagement Rate</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center gap-4">
-                  <BarChart3 className="w-8 h-8 text-secondary" />
-                  <div>
-                    <div className="text-3xl font-bold">---</div>
-                    <p className="text-xs text-muted-foreground">Awaiting data</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Info Card */}
-          <Card className="border-primary/20">
-            <CardHeader>
-              <CardTitle>Ready for PostHog Integration</CardTitle>
-              <CardDescription>
-                This dashboard is prepared to display PostHog analytics data once the integration is complete.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-2 text-sm">
-                <li className="flex items-start gap-2">
-                  <span className="text-primary">✓</span>
-                  <span>Scroll depth tracking (25/50/75/100%)</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary">✓</span>
-                  <span>CTA button click tracking with location data</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary">✓</span>
-                  <span>Engagement detection (30s near bottom)</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary">✓</span>
-                  <span>Calendly widget open tracking</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary">✓</span>
-                  <span>Page load event tracking</span>
-                </li>
-              </ul>
+          {/* PostHog Dashboard Embed */}
+          <Card className="overflow-hidden">
+            <CardContent className="p-0">
+              <div className="w-full" style={{ height: '2000px' }}>
+                <iframe
+                  src="POSTHOG_DASHBOARD_URL"
+                  className="w-full h-full border-0"
+                  title="PostHog Analytics Dashboard"
+                  allow="clipboard-write"
+                  loading="lazy"
+                />
+              </div>
             </CardContent>
           </Card>
 
-          {/* Live Event Stream */}
-          <Card className="mt-8">
-            <CardHeader>
-              <CardTitle>Live Event Stream</CardTitle>
-              <CardDescription>
-                Real-time tracking events from PostHog (requires PostHog dashboard URL)
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="w-full h-[800px] border rounded-lg overflow-hidden">
-                <iframe
-                  src="Add your PostHog embed URL here after creating dashboard"
-                  className="w-full h-full"
-                  frameBorder="0"
-                  title="PostHog Analytics Dashboard"
-                />
-              </div>
+          {/* Quick Actions */}
+          <div className="mt-6 flex flex-wrap gap-4">
+            <Button variant="outline" asChild>
+              <a 
+                href="https://app.posthog.com/events" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center gap-2"
+              >
+                View Events →
+              </a>
+            </Button>
+            
+            <Button variant="outline" asChild>
+              <a 
+                href="https://app.posthog.com/recordings" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center gap-2"
+              >
+                Session Recordings →
+              </a>
+            </Button>
+            
+            <Button variant="outline" asChild>
+              <a 
+                href="https://app.posthog.com/dashboard" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center gap-2"
+              >
+                Open in PostHog →
+              </a>
+            </Button>
+          </div>
+
+          {/* Optional: Instructions if dashboard not yet configured */}
+          <Card className="mt-6 border-dashed">
+            <CardContent className="pt-6">
+              <p className="text-sm text-muted-foreground text-center">
+                Replace <code className="bg-muted px-2 py-1 rounded">POSTHOG_DASHBOARD_URL</code> with your PostHog dashboard share link
+              </p>
             </CardContent>
           </Card>
         </div>
