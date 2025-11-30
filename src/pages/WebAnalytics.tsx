@@ -86,7 +86,7 @@ const WebAnalytics = () => {
 
             <Button variant="outline" asChild>
               <a
-                href="https://app.posthog.com/dashboard"
+                href="https://app.posthog.com/dashboard/439260"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2"
