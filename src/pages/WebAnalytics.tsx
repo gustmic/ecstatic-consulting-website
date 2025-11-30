@@ -42,17 +42,15 @@ const WebAnalytics = () => {
           {/* Page Header */}
           <div className="mb-6">
             <h1 className="font-serif text-3xl font-bold mb-2">Analytics Dashboard</h1>
-            <p className="text-muted-foreground">
-              Real-time insights from PostHog • Updated live
-            </p>
+            <p className="text-muted-foreground">Real-time insights from PostHog • Updated live</p>
           </div>
 
           {/* PostHog Dashboard Embed */}
           <Card className="overflow-hidden">
             <CardContent className="p-0">
-              <div className="w-full" style={{ height: '2000px' }}>
+              <div className="w-full" style={{ height: "2000px" }}>
                 <iframe
-                  src="POSTHOG_DASHBOARD_URL"
+                  src="https://eu.posthog.com/shared/AmFjDQl-Gy0dgRojmaEaWG2bz5J8sQ"
                   className="w-full h-full border-0"
                   title="PostHog Analytics Dashboard"
                   allow="clipboard-write"
@@ -65,31 +63,31 @@ const WebAnalytics = () => {
           {/* Quick Actions */}
           <div className="mt-6 flex flex-wrap gap-4">
             <Button variant="outline" asChild>
-              <a 
-                href="https://app.posthog.com/events" 
-                target="_blank" 
+              <a
+                href="https://app.posthog.com/events"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2"
               >
                 View Events →
               </a>
             </Button>
-            
+
             <Button variant="outline" asChild>
-              <a 
-                href="https://app.posthog.com/recordings" 
-                target="_blank" 
+              <a
+                href="https://app.posthog.com/recordings"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2"
               >
                 Session Recordings →
               </a>
             </Button>
-            
+
             <Button variant="outline" asChild>
-              <a 
-                href="https://app.posthog.com/dashboard" 
-                target="_blank" 
+              <a
+                href="https://app.posthog.com/dashboard"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2"
               >
@@ -102,7 +100,8 @@ const WebAnalytics = () => {
           <Card className="mt-6 border-dashed">
             <CardContent className="pt-6">
               <p className="text-sm text-muted-foreground text-center">
-                Replace <code className="bg-muted px-2 py-1 rounded">POSTHOG_DASHBOARD_URL</code> with your PostHog dashboard share link
+                Replace <code className="bg-muted px-2 py-1 rounded">POSTHOG_DASHBOARD_URL</code> with your PostHog
+                dashboard share link
               </p>
             </CardContent>
           </Card>
